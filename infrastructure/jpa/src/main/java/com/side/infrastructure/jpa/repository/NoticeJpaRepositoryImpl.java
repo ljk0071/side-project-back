@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class NoticeRepositoryImpl implements NoticeRepository {
+public class NoticeJpaRepositoryImpl implements NoticeRepository {
 
 	private final NoticeJpaRepository repository;
 
