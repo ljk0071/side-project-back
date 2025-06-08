@@ -25,15 +25,7 @@ public class NoticeController {
 
 	private final NoticeUseCase noticeUseCase;
 
-	@GetMapping("/test")
-	public ResponseEntity<Object> getAuthToken() {
-		return ResponseEntity.ok(Map.of("hello", "world"));
-	}
 
-	@PostMapping("/test")
-	public ResponseEntity<Object> getAuthToken2() {
-		return ResponseEntity.ok(Map.of("hello", "world2"));
-	}
 
 	// @PostMapping
 	// public ResponseEntity<Void> create(@RequestBody(required = false) NoticeRequestDto noticeRequestDto) {
