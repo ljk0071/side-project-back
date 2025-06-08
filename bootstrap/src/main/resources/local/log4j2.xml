@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <Property name="LOG_LEVEL_PATTERN">{%5p}{FATAL=red blink, ERROR=red bold, WARN=yellow bold, INFO=green bold,
+            DEBUG=blue bold, TRACE=blue}
+        </Property>
+    </Properties>
+    <Appenders>
+        <!-- 콘솔에 로그를 출력하는 Appender 설정 (기존 형식 유지) -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8"
+                           disableAnsi="false"
+                           pattern="%style{%d{MM-dd HH:mm:ss}}{magenta} %highlight${LOG_LEVEL_PATTERN} %tid - %style{[%t]}{blue} %style{[%c{1.1.1.*}]}{cyan} %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+
+        <!-- 루트 로거 설정 -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <!-- 프로젝트 로그 레벨 설정 -->
+        <Logger name="com.side" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- 컨트롤러 로그 레벨 설정 -->
+        <Logger name="com.side.rest.controller" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Redis 로그 레벨 설정 -->
+        <Logger name="com.side.domain.memory" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Redis 구현체 로그 레벨 설정 -->
+        <Logger name="com.side.infrastructure.valkey" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,74 @@
+plugins {
+    id "java"
+    id "org.springframework.boot" version "${springBootVersion}" apply false
+    id "io.spring.dependency-management" version "${springDependencyManagementVersion}" apply false
+}
+
+allprojects {
+    group = "${projectGroup}"
+    version = "${applicationVersion}"
+}
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: "org.springframework.boot"
+    apply plugin: "io.spring.dependency-management"
+
+    dependencyManagement {
+        imports {
+            // ✅ Spring Boot BOM (기본적으로 포함)
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        }
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.toVersion(javaVersion)
+    }
+
+    dependencies {
+        // Jackson
+        implementation("com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}")
+
+        implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+        // lombok
+        annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+        // annotation processor
+        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+    }
+
+    configurations {
+        configureEach {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+            exclude group: 'ch.qos.logback', module: 'logback-classic'
+            exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
+        }
+        compileOnly {
+            extendsFrom(annotationProcessor)
+        }
+    }
+
+    tasks.named("bootJar") {
+        enabled = false
+    }
+
+    tasks.named("jar") {
+        enabled = true
+    }
+
+    tasks.named("test") {
+        useJUnitPlatform()
+        systemProperties = ["spring.profiles.active": "test"]
+    }
+}
+
+// 공통 의존성 정의
+ext {
+    domains = ["board", "external", "memory", "metadata", "user", "util"]
+}
+
+// 함수로 정의해서 선택적으로 사용할 수 있게 만들기
+ext.addDomainDependencies = { prj ->
+    domains.each { domain -> prj.dependencies.implementation prj.project(":domain:${domain}") }
+}

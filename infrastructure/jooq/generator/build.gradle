@@ -1,0 +1,13 @@
+plugins {
+    id "java"
+    id "nu.studer.jooq" version "9.0"
+}
+
+dependencies {
+
+    implementation(project(":infrastructure:datasource"))
+
+    // Module
+    implementation 'org.jooq:jooq-meta'
+    implementation 'org.jooq:jooq-codegen'
+}

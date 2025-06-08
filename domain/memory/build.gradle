@@ -1,0 +1,11 @@
+plugins {
+    id "java-library"
+    id "io.spring.dependency-management"
+}
+
+dependencies {
+
+    implementation("org.springframework:spring-context")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}

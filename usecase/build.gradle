@@ -1,0 +1,22 @@
+plugins {
+    id "java-library"
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
+}
+
+dependencies {
+
+    implementation project(":security")
+
+    // 도메인 의존성 추가
+    rootProject.addDomainDependencies(project)
+
+    implementation("org.springframework:spring-tx")
+
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.mockito:mockito-core")
+    testImplementation("org.mockito:mockito-junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+}

@@ -1,0 +1,34 @@
+plugins {
+    id "java"
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
+}
+
+dependencies {
+
+    implementation project(":security")
+
+    implementation project(":client:rest")
+    implementation project(":client:websocket")
+
+    implementation project(":usecase")
+    rootProject.addDomainDependencies(project)
+
+    implementation project(":infrastructure:datasource")
+    implementation project(":infrastructure:valkey")
+
+    implementation project(":infrastructure:jooq:repository")
+    implementation project(":infrastructure:jpa")
+
+    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+tasks.named("bootJar") {
+    enabled = true
+}

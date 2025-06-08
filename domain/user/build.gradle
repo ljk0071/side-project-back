@@ -1,0 +1,11 @@
+plugins {
+    id "java"
+}
+
+dependencies {
+    implementation(project(":domain:metadata"))
+
+    implementation("org.springframework:spring-context")
+
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}

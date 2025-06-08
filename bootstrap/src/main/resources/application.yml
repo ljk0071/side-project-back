@@ -1,0 +1,69 @@
+spring:
+  profiles:
+    default: local
+
+  application:
+    name: side
+
+  config:
+    import: classpath:jwt.yml
+
+  jpa:
+    open-in-view: false
+
+  jmx:
+    enabled: false
+
+logging:
+  level:
+    org.springframework.security.config.annotation.authentication.configuration: ERROR
+    sun.rmi: WARN
+    javax.management.remote.rmi: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info,metrics
+  endpoint:
+    metrics:
+      access: read_only
+    prometheus:
+      access: read_only
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: my-spring-app
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+        http.client.requests: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+---
+# local 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: local, test
+
+    import: classpath:local/valkey.yml, classpath:local/mysql.yml
+
+
+logging:
+  config: classpath:local/log4j2.xml
+---
+
+# prod 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+    import: classpath:prod/valkey.yml, classpath:prod/mysql.yml
+
+logging:
+  config: classpath:prod/log4j2.xml

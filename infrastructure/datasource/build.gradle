@@ -1,0 +1,17 @@
+plugins {
+    id "java-library"
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
+}
+
+dependencies {
+
+    // Spring
+    api("org.springframework.boot:spring-boot-starter-data-jdbc")
+
+    // DB
+    runtimeOnly("com.mysql:mysql-connector-j")
+
+    // Test
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
