@@ -2,11 +2,8 @@ package com.side.rest.board.controller;
 
 import static com.side.rest.mapper.NoticeMapper.*;
 
-import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,23 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 public class NoticeController {
 
 	private final NoticeUseCase noticeUseCase;
-
-
-
-	// @PostMapping
-	// public ResponseEntity<Void> create(@RequestBody(required = false) NoticeRequestDto noticeRequestDto) {
-	//
-	// 	noticeUseCase.create(Notice.builder()
-	// 										  .article(Article.builder()
-	// 														  .title("Test Title")
-	// 														  .contents("Test Contents")
-	// 														  .build())
-	// 										  .build());
-	//
-	// 	// noticeUseCase.create(NoticeMapper.toDomain(noticeRequestDto));
-	//
-	// 	return ResponseEntity.ok().build();
-	// }
 
 	@GetMapping
 	public ResponseEntity<NoticeResponseDto> get(NoticeRequestDto noticeRequestDto) {
