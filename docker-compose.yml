@@ -201,26 +201,26 @@ services:
 volumes:
   mysql-data:
   valkey1-data:
-  prometheus-data:
-  grafana-data:
   redis-insight-data:
-  influxdb-data:
-  k6:
-
-configs:
-  promtail_config:
-    content: |
-      server:
-        http_listen_port: 9080
-      positions:
-        filename: /tmp/positions.yaml
-      clients:
-        - url: http://loki:3100/loki/api/v1/push
-      scrape_configs:
-        - job_name: system
-          static_configs:
-            - targets:
-                - localhost
-              labels:
-                job: varlogs
-                __path__: /var/log/*.log
+#  prometheus-data:
+#  grafana-data:
+#  influxdb-data:
+#  k6:
+#
+#configs:
+#  promtail_config:
+#    content: |
+#      server:
+#        http_listen_port: 9080
+#      positions:
+#        filename: /tmp/positions.yaml
+#      clients:
+#        - url: http://loki:3100/loki/api/v1/push
+#      scrape_configs:
+#        - job_name: system
+#          static_configs:
+#            - targets:
+#                - localhost
+#              labels:
+#                job: varlogs
+#                __path__: /var/log/*.log
