@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.side.security.exception.InvalidTokenException;
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class CustomCsrfFilter extends OncePerRequestFilter {
 
 	private static final Set<String> STATE_MODIFIABLE_METHODS = Set.of("POST", "PATCH", "PUT");

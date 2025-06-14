@@ -2,6 +2,7 @@ package com.side.security.filter;
 
 import static com.side.security.constant.FilterConstant.*;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class SecurityFilterChainExceptionHandler extends OncePerRequestFilter {
 
 	@Override
