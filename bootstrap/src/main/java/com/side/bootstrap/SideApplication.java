@@ -16,6 +16,7 @@ import com.side.security.jwt.config.JwtProperties;
 	"com.side.security.config",
 	"com.side.security.service",
 	"com.side.security.util",
+	"com.side.security.filter",
 	"com.side.security.jwt.config",
 	"com.side.security.jwt.filter",
 	"com.side.security.jwt.service",

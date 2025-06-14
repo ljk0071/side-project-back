@@ -1,7 +1,10 @@
 package com.side.security.config;
 
+import static org.springframework.core.Ordered.*;
+
 import java.util.List;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -25,14 +28,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.domain.memory.service.MemoryService;
-import com.side.domain.service.UserService;
 import com.side.security.filter.CustomCsrfFilter;
 import com.side.security.filter.IdAndPasswordAuthenticationFilter;
 import com.side.security.filter.SecurityFilterChainExceptionHandler;
 import com.side.security.jwt.filter.JwtAuthenticationFilter;
 import com.side.security.jwt.filter.JwtRefreshFilter;
 import com.side.security.jwt.service.JwtService;
-import com.side.security.service.RoleHierarchyService;
 import com.side.security.service.SecurityService;
 import com.side.security.util.ResponseUtils;
 
@@ -47,17 +48,17 @@ public class SecurityConfig {
 	private final ObjectMapper objectMapper;
 	private final ResponseUtils responseUtils;
 	private final JwtService jwtService;
-	private final UserService userService;
-	private final RoleHierarchyService roleHierarchyService;
 	private final MemoryService memoryService;
 	private final SecurityService securityService;
+
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final CustomCsrfFilter csrfFilter;
+	private final SecurityFilterChainExceptionHandler exceptionHandler;
 
 	/**
 	 * 공통 보안 설정 적용
 	 */
 	private HttpSecurity applyCommonSecurity(HttpSecurity http) throws Exception {
-
-		SecurityFilterChainExceptionHandler exceptionHandler = new SecurityFilterChainExceptionHandler();
 
 		return http.formLogin(AbstractHttpConfigurer::disable)
 				   .httpBasic(AbstractHttpConfigurer::disable)
@@ -72,16 +73,20 @@ public class SecurityConfig {
 	 */
 	private HttpSecurity applyAuthenticationFilters(HttpSecurity http) {
 
-		JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
-			jwtService,
-			roleHierarchyService,
-			userService
-		);
-
-		CustomCsrfFilter csrfFilter = new CustomCsrfFilter(jwtService);
-
 		return http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				   .addFilterAfter(csrfFilter, JwtAuthenticationFilter.class);
+	}
+
+	@Bean
+	@Order(HIGHEST_PRECEDENCE)
+	public SecurityFilterChain swaggerFilterChain(HttpSecurity http) throws Exception {
+
+		return applyCommonSecurity(http).securityMatcher("/swagger-*",
+											"/*.png",
+											"/index.css",
+											"/swagger-ui/openapi3.yaml")
+										.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+										.build();
 	}
 
 	@Bean
@@ -95,7 +100,7 @@ public class SecurityConfig {
 			responseUtils
 		);
 
-		return applyCommonSecurity(http).securityMatcher("/api/auth/refresh")
+		return applyCommonSecurity(http).securityMatcher("/api/auth/refresh", "/swagger-ui")
 										.addFilterBefore(refreshFilter, UsernamePasswordAuthenticationFilter.class)
 										.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 										.build();
@@ -103,15 +108,11 @@ public class SecurityConfig {
 
 	@Bean
 	@Order(2)
-	public SecurityFilterChain loginFilterChain(
-		HttpSecurity http,
-		AuthenticationManager authenticationManager) throws Exception {
+	public SecurityFilterChain loginFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws
+		Exception {
 
-		IdAndPasswordAuthenticationFilter loginFilter = new IdAndPasswordAuthenticationFilter(
-			authenticationManager,
-			objectMapper,
-			responseUtils
-		);
+		IdAndPasswordAuthenticationFilter loginFilter = new IdAndPasswordAuthenticationFilter(authenticationManager,
+			objectMapper, responseUtils);
 
 		return applyCommonSecurity(http).securityMatcher("/api/sign/in")
 										.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
@@ -123,13 +124,8 @@ public class SecurityConfig {
 	@Order(3)
 	public SecurityFilterChain generalSecurityFilterChain(HttpSecurity http) throws Exception {
 
-		return applyAuthenticationFilters(applyCommonSecurity(http).securityMatcher("/**"))
-				   .authorizeHttpRequests(auth ->
-											  auth.requestMatchers(HttpMethod.OPTIONS, "/**")
-												  .permitAll()
-												  .anyRequest()
-												  .authenticated())
-				   .build();
+		return applyAuthenticationFilters(applyCommonSecurity(http).securityMatcher("/**")).authorizeHttpRequests(
+			auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated()).build();
 	}
 
 	@Bean
@@ -163,11 +159,34 @@ public class SecurityConfig {
 		config.setAllowCredentials(true);
 
 		// 브라우저가 JavaScript로 접근할 수 있는 응답 헤더를 지정
-		config.setExposedHeaders(List.of("Authorization"));
+		config.setExposedHeaders(List.of("Authorization", "Access-Control-Allow-*"));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
 
 		return source;
+	}
+
+	@Bean
+	public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegistration(
+		JwtAuthenticationFilter filter) {
+		FilterRegistrationBean<JwtAuthenticationFilter> registration = new FilterRegistrationBean<>(filter);
+		registration.setEnabled(false);
+		return registration;
+	}
+
+	@Bean
+	public FilterRegistrationBean<CustomCsrfFilter> customCsrfFilterRegistration(CustomCsrfFilter filter) {
+		FilterRegistrationBean<CustomCsrfFilter> registration = new FilterRegistrationBean<>(filter);
+		registration.setEnabled(false);
+		return registration;
+	}
+
+	@Bean
+	public FilterRegistrationBean<SecurityFilterChainExceptionHandler> securityFilterChainExceptionHandlerRegistration(
+		SecurityFilterChainExceptionHandler filter) {
+		FilterRegistrationBean<SecurityFilterChainExceptionHandler> registration = new FilterRegistrationBean<>(filter);
+		registration.setEnabled(false);
+		return registration;
 	}
 }
