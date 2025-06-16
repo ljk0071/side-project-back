@@ -3,52 +3,54 @@
  */
 package com.side.infrastructure.jooq.generated.enums;
 
+
 import org.jooq.Catalog;
 import org.jooq.EnumType;
 import org.jooq.Schema;
 
+
 /**
  * 타입
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes", "this-escape"})
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public enum UserType implements EnumType {
 
-	ADMIN("ADMIN"),
+    ADMIN("ADMIN"),
 
-	NORMAL("NORMAL");
+    NORMAL("NORMAL");
 
-	private final String literal;
+    private final String literal;
 
-	private UserType(String literal) {
-		this.literal = literal;
-	}
+    private UserType(String literal) {
+        this.literal = literal;
+    }
 
-	/**
-	 * Lookup a value of this EnumType by its literal. Returns
-	 * <code>null</code>, if no such value could be found, see {@link
-	 * EnumType#lookupLiteral(Class, String)}.
-	 */
-	public static UserType lookupLiteral(String literal) {
-		return EnumType.lookupLiteral(UserType.class, literal);
-	}
+    @Override
+    public Catalog getCatalog() {
+        return null;
+    }
 
-	@Override
-	public Catalog getCatalog() {
-		return null;
-	}
+    @Override
+    public Schema getSchema() {
+        return null;
+    }
 
-	@Override
-	public Schema getSchema() {
-		return null;
-	}
+    @Override
+    public String getName() {
+        return null;
+    }
 
-	@Override
-	public String getName() {
-		return null;
-	}
+    @Override
+    public String getLiteral() {
+        return literal;
+    }
 
-	@Override
-	public String getLiteral() {
-		return literal;
-	}
+    /**
+     * Lookup a value of this EnumType by its literal. Returns
+     * <code>null</code>, if no such value could be found, see {@link
+     * EnumType#lookupLiteral(Class, String)}.
+     */
+    public static UserType lookupLiteral(String literal) {
+        return EnumType.lookupLiteral(UserType.class, literal);
+    }
 }

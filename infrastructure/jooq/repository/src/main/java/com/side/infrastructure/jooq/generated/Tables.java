@@ -3,46 +3,54 @@
  */
 package com.side.infrastructure.jooq.generated;
 
+
 import com.side.infrastructure.jooq.generated.tables.Comment;
 import com.side.infrastructure.jooq.generated.tables.Notice;
+import com.side.infrastructure.jooq.generated.tables.PartyRecruit;
 import com.side.infrastructure.jooq.generated.tables.Role;
 import com.side.infrastructure.jooq.generated.tables.RoleHierarchy;
 import com.side.infrastructure.jooq.generated.tables.User;
 import com.side.infrastructure.jooq.generated.tables.UserRole;
 
+
 /**
  * Convenience access to all tables in test_db.
  */
-@SuppressWarnings({"all", "unchecked", "rawtypes", "this-escape"})
+@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
 public class Tables {
 
-	/**
-	 * The table <code>test_db.comment</code>.
-	 */
-	public static final Comment COMMENT = Comment.COMMENT;
+    /**
+     * The table <code>test_db.comment</code>.
+     */
+    public static final Comment COMMENT = Comment.COMMENT;
 
-	/**
-	 * The table <code>test_db.notice</code>.
-	 */
-	public static final Notice NOTICE = Notice.NOTICE;
+    /**
+     * The table <code>test_db.notice</code>.
+     */
+    public static final Notice NOTICE = Notice.NOTICE;
 
-	/**
-	 * The table <code>test_db.role</code>.
-	 */
-	public static final Role ROLE = Role.ROLE;
+    /**
+     * The table <code>test_db.party_recruit</code>.
+     */
+    public static final PartyRecruit PARTY_RECRUIT = PartyRecruit.PARTY_RECRUIT;
 
-	/**
-	 * The table <code>test_db.role_hierarchy</code>.
-	 */
-	public static final RoleHierarchy ROLE_HIERARCHY = RoleHierarchy.ROLE_HIERARCHY;
+    /**
+     * The table <code>test_db.role</code>.
+     */
+    public static final Role ROLE = Role.ROLE;
 
-	/**
-	 * The table <code>test_db.user</code>.
-	 */
-	public static final User USER = User.USER;
+    /**
+     * The table <code>test_db.role_hierarchy</code>.
+     */
+    public static final RoleHierarchy ROLE_HIERARCHY = RoleHierarchy.ROLE_HIERARCHY;
 
-	/**
-	 * The table <code>test_db.user_role</code>.
-	 */
-	public static final UserRole USER_ROLE = UserRole.USER_ROLE;
+    /**
+     * The table <code>test_db.user</code>.
+     */
+    public static final User USER = User.USER;
+
+    /**
+     * The table <code>test_db.user_role</code>.
+     */
+    public static final UserRole USER_ROLE = UserRole.USER_ROLE;
 }
