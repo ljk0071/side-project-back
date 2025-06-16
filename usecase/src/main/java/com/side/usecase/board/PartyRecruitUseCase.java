@@ -10,12 +10,17 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PartyUseCase {
+public class PartyRecruitUseCase {
 
 	private final PartyRecruitService partyRecruitService;
 
 	@Transactional
 	public void create(PartyRecruit partyRecruit) {
 		partyRecruitService.create(partyRecruit);
+	}
+
+	@Transactional
+	public void delete(long partyId) {
+		partyRecruitService.delete(partyId);
 	}
 }

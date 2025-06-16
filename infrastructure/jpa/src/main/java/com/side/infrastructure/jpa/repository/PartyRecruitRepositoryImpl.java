@@ -3,6 +3,8 @@ package com.side.infrastructure.jpa.repository;
 import static com.side.domain.enums.RepositoryTypeEnum.*;
 import static com.side.infrastructure.jpa.mapper.PartyRecruitMapper.*;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.springframework.stereotype.Repository;
 
 import com.side.domain.model.PartyRecruit;
@@ -30,5 +32,10 @@ public class PartyRecruitRepositoryImpl implements PartyRecruitRepository {
 		PartyRecruitEntity entity = PartyRecruitMapper.toEntity(partyRecruit);
 
 		repository.save(entity);
+	}
+
+	@Override
+	public void delete(long partyId) {
+		throw new UnsupportedOperationException("jpa에서는 비효율적이므로 soft delete를 하지 않음");
 	}
 }
