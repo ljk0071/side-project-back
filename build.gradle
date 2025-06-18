@@ -1,7 +1,9 @@
 plugins {
     id "java"
+    id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
     id "org.springframework.boot" version "${springBootVersion}" apply false
-    id "io.spring.dependency-management" version "${springDependencyManagementVersion}" apply false
+    id 'org.asciidoctor.jvm.convert' version "${asciidoctorConvertVersion}" apply false
+    id 'com.epages.restdocs-api-spec' version "${epagesRestdocsApiSpec}" apply false
 }
 
 allprojects {
@@ -11,12 +13,10 @@ allprojects {
 
 subprojects {
     apply plugin: "java"
-    apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
 
     dependencyManagement {
         imports {
-            // ✅ Spring Boot BOM (기본적으로 포함)
             mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
         }
     }
@@ -36,9 +36,12 @@ subprojects {
 
         // annotation processor
         annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
 
     configurations {
+        asciidoctorExt
         configureEach {
             exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
             exclude group: 'ch.qos.logback', module: 'logback-classic'
@@ -49,17 +52,12 @@ subprojects {
         }
     }
 
-    tasks.named("bootJar") {
-        enabled = false
-    }
-
     tasks.named("jar") {
         enabled = true
     }
 
     tasks.named("test") {
         useJUnitPlatform()
-        systemProperties = ["spring.profiles.active": "test"]
     }
 }
 

@@ -1,7 +1,5 @@
 plugins {
     id "java-library"
-    id "org.springframework.boot"
-    id "io.spring.dependency-management"
 }
 
 dependencies {
@@ -12,11 +10,4 @@ dependencies {
     rootProject.addDomainDependencies(project)
 
     implementation("org.springframework:spring-tx")
-
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.mockito:mockito-core")
-    testImplementation("org.mockito:mockito-junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
