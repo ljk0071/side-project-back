@@ -7,6 +7,7 @@ package com.side.infrastructure.jooq.generated;
 import com.side.infrastructure.jooq.generated.tables.Comment;
 import com.side.infrastructure.jooq.generated.tables.Notice;
 import com.side.infrastructure.jooq.generated.tables.PartyRecruit;
+import com.side.infrastructure.jooq.generated.tables.Resume;
 import com.side.infrastructure.jooq.generated.tables.Role;
 import com.side.infrastructure.jooq.generated.tables.RoleHierarchy;
 import com.side.infrastructure.jooq.generated.tables.User;
@@ -33,6 +34,11 @@ public class Tables {
      * The table <code>test_db.party_recruit</code>.
      */
     public static final PartyRecruit PARTY_RECRUIT = PartyRecruit.PARTY_RECRUIT;
+
+    /**
+     * The table <code>test_db.resume</code>.
+     */
+    public static final Resume RESUME = Resume.RESUME;
 
     /**
      * The table <code>test_db.role</code>.
