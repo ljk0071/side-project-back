@@ -72,14 +72,33 @@ tasks.register('copyAsciidoc', Copy) {
 
 // 'openapi3' 태스크 실행 후 생성된 YAML 파일을 Swagger UI 폴더로 복사하는 태스크입니다.
 tasks.register('copyOasToSwagger', Copy) {
-    // 복사하기 전, 기존에 존재할 수 있는 파일을 삭제합니다.
-    delete 'src/main/resources/static/swagger/swagger-ui/openapi3.yaml'
+    // 'openapi3' 태스크가 먼저 실행되어야 YAML 파일이 생성되므로 의존성을 설정합니다.
+    dependsOn 'openapi3'
+
+    doFirst {
+        // 복사하기 전, 기존에 존재할 수 있는 파일을 삭제합니다.
+        delete 'src/main/resources/static/swagger/swagger-ui/openapi3.yaml'
+
+        def jwtSchemes = "  securitySchemes:\n" +
+                "    Authorization:\n" +
+                "      type: http\n" +
+                "      scheme: bearer\n" +
+                "      bearerFormat: JWT\n" +
+                "    X-CSRF-TOKEN:\n" +
+                "      type: apiKey\n" +
+                "      in: header\n" +
+                "      name: X-CSRF-TOKEN\n" +
+                "security:\n" +
+                "  - Authorization: []\n" +
+                "  - X-CSRF-TOKEN: []"
+
+        file("build/api-spec/openapi3.yaml").append(jwtSchemes)
+    }
+
     // 'openapi3' 태스크가 생성한 YAML 파일의 위치를 소스로 지정합니다.
     from layout.buildDirectory.file("api-spec/openapi3.yaml")
     // 복사할 위치를 지정합니다.
     into 'src/main/resources/static/swagger/swagger-ui/.'
-    // 'openapi3' 태스크가 먼저 실행되어야 YAML 파일이 생성되므로 의존성을 설정합니다.
-    dependsOn 'openapi3'
 }
 
 openapi3 {

@@ -1,0 +1,61 @@
+openapi: 3.0.1
+info:
+  title: 메이플 파티
+  description: 메이플 파티 서버 API 목록
+  version: 0.1.0
+servers:
+- url: http://localhost:8080
+tags: []
+paths:
+  /v1/party:
+    post:
+      tags:
+      - 게시글 정보
+      summary: 게시글을 등록합니다.
+      description: 제목과 내용을 전송받아 게시글을 등록합니다.
+      operationId: 게시글 등록하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/게시글 등록 요청"
+            examples:
+              게시글 등록하기:
+                value: "{\r\n  \"id\" : null,\r\n  \"article\" : {\r\n    \"title\"\
+                  \ : \"test\",\r\n    \"contents\" : \"testBody\"\r\n  }\r\n}"
+      responses:
+        "200":
+          description: "200"
+components:
+  schemas:
+    게시글 등록 요청:
+      title: 게시글 등록 요청
+      required:
+      - article
+      type: object
+      properties:
+        article:
+          required:
+          - contents
+          - title
+          type: object
+          properties:
+            contents:
+              type: string
+              description: 게시글 내용
+            title:
+              type: string
+              description: 게시글 제목
+          description: 게시글 정보
+  securitySchemes:
+    ACCESS-TOKEN:
+      type: apiKey
+      in: cookie
+      name: Authorization
+    X-CSRF-TOKEN:
+      type: apiKey
+      in: header
+      name: X-CSRF-TOKEN
+security:
+  - ACCESS-TOKEN: []
+  - X-CSRF-TOKEN: []

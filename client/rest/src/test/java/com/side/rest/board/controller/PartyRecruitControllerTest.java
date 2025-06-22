@@ -6,7 +6,6 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -33,8 +32,6 @@ import com.side.bootstrap.SideApplication;
 import com.side.rest.board.dto.request.ArticleRequestDto;
 import com.side.rest.board.dto.request.PartyRecruitRequestDto;
 
-import jakarta.servlet.http.Cookie;
-
 @SpringBootTest(classes = SideApplication.class)
 @AutoConfigureMockMvc
 @DisplayName("파티 모집 테스트")
@@ -54,7 +51,6 @@ class PartyRecruitControllerTest {
 												 .operationPreprocessors()
 												 .withRequestDefaults(prettyPrint())
 												 .withResponseDefaults(prettyPrint()))
-									  .apply(springSecurity())
 									  .build();
 	}
 
@@ -70,8 +66,6 @@ class PartyRecruitControllerTest {
 
 		dto.setArticle(articleRequestDto);
 		this.mockMvc.perform(post("/v1/party")
-								 .header("X-CSRF-TOKEN", "")
-								 .cookie(new Cookie("Authorization", ""))
 								 .accept(MediaType.APPLICATION_JSON)
 								 .contentType(MediaType.APPLICATION_JSON)
 								 .content(objectMapper.writeValueAsString(dto)))
@@ -84,10 +78,6 @@ class PartyRecruitControllerTest {
 															  .summary("게시글을 등록합니다.")
 															  .description("제목과 내용을 전송받아 게시글을 등록합니다.")
 															  .requestSchema(Schema.schema("게시글 등록 요청"))
-															  .requestHeaders(
-																  headerWithName("X-CSRF-TOKEN")
-																	  .description("csrf token입니다.")
-															  )
 															  .requestFields(
 																  fieldWithPath("id").type(JsonFieldType.NULL)
 																					 .description("게시글 ID (등록 시 null)")
