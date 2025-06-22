@@ -56,14 +56,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		JwtClaims jwtClaims = jwtService.getJwtClaims(accessToken.substring(7));
+		JwtClaims jwtClaims = jwtService.getJwtClaims(accessToken);
 
 		String userId = jwtClaims.getUserId();
 		Collection<String> roles = jwtClaims.getRoles();
 		JwtTokenType tokenType = jwtClaims.getTokenType();
 
 		if (JwtTokenType.ACCESS != (tokenType)) {
-			log.error("[Not Access Token] token : {}, userId : {}, tokenType : {}", accessToken, userId, tokenType);
+			log.error("[It's Not Access Token] token : {}, userId : {}, tokenType : {}", accessToken, userId, tokenType);
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -71,7 +71,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		User user = userService.findByUserId(userId);
 
 		if (UserStatus.ACTIVE != user.status()) {
-			log.error("[Not ACTIVE USER] token : {}, userId : {}", accessToken, userId);
+			log.error("[It's Not ACTIVE USER] token : {}, userId : {}", accessToken, userId);
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -123,7 +123,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private String extractToken(HttpServletRequest request) {
 		return Optional.ofNullable(extractAccessTokenFromCookie(request))
-					   .or(() -> Optional.ofNullable(extractAccessTokenFromHeader(request)))
+					   .or(() -> extractBearerTokenFromHeader(request))
 					   .orElseThrow(() -> new NotFoundTokenException("Access Token을 찾을 수 없습니다"));
 	}
 
@@ -140,7 +140,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					 .orElse(null);
 	}
 
-	private String extractAccessTokenFromHeader(HttpServletRequest request) {
-		return request.getHeader(HttpHeaders.AUTHORIZATION);
+	private Optional<String> extractBearerTokenFromHeader(HttpServletRequest request) {
+		return Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
+					   .filter(header -> header.startsWith("Bearer "))
+					   .map(header -> header.substring(7));
 	}
 }

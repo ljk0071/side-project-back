@@ -33,7 +33,6 @@ public class ResponseUtils {
 	private final JwtProperties jwtProperties;
 	private final ObjectMapper objectMapper;
 	private final MemoryService memoryService;
-	private final static String BEARER = "Bearer ";
 
 	public void addHttpOnlyCookie(
 		String scheme,
@@ -41,7 +40,7 @@ public class ResponseUtils {
 		String value,
 		HttpServletResponse response
 	) {
-		Cookie cookie = new Cookie(key, BEARER + value);
+		Cookie cookie = new Cookie(key, value);
 		cookie.setPath(ALL_PATH);
 		cookie.setHttpOnly(true);
 		if (HTTPS.equals(scheme)) {
