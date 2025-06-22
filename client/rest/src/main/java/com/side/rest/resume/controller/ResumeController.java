@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.side.rest.resume.dto.request.ResumeRequestDto;
+import com.side.security.service.SecurityHelper;
 import com.side.usecase.resume.ResumeUseCase;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,8 @@ public class ResumeController {
 
 	@PostMapping
 	public ResponseEntity<Void> create(@RequestBody ResumeRequestDto resumeRequestDto) {
+
+		resumeRequestDto.setUserUniqueId(SecurityHelper.getAuthenticatedUser().uniqueId());
 
 		resumeUseCase.create(ResumeMapper.toDomain(resumeRequestDto));
 
