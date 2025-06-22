@@ -3,8 +3,6 @@ package com.side.infrastructure.jpa.repository;
 import static com.side.domain.enums.RepositoryTypeEnum.*;
 import static com.side.infrastructure.jpa.mapper.PartyRecruitMapper.*;
 
-import javax.naming.OperationNotSupportedException;
-
 import org.springframework.stereotype.Repository;
 
 import com.side.domain.model.PartyRecruit;

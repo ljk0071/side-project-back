@@ -4,6 +4,7 @@
 package com.side.infrastructure.jooq.generated.tables.records;
 
 
+import com.side.infrastructure.jooq.generated.enums.PartyRecruitStatus;
 import com.side.infrastructure.jooq.generated.tables.PartyRecruit;
 
 import java.time.Instant;
@@ -37,15 +38,15 @@ public class PartyRecruitRecord extends UpdatableRecordImpl<PartyRecruitRecord> 
     /**
      * Setter for <code>test_db.party_recruit.status</code>. 게시글 상태
      */
-    public void setStatus(String value) {
+    public void setStatus(PartyRecruitStatus value) {
         set(1, value);
     }
 
     /**
      * Getter for <code>test_db.party_recruit.status</code>. 게시글 상태
      */
-    public String getStatus() {
-        return (String) get(1);
+    public PartyRecruitStatus getStatus() {
+        return (PartyRecruitStatus) get(1);
     }
 
     /**
@@ -183,7 +184,7 @@ public class PartyRecruitRecord extends UpdatableRecordImpl<PartyRecruitRecord> 
     /**
      * Create a detached, initialised PartyRecruitRecord
      */
-    public PartyRecruitRecord(Long id, String status, String title, String contents, Long likes, Long dislikes, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy) {
+    public PartyRecruitRecord(Long id, PartyRecruitStatus status, String title, String contents, Long likes, Long dislikes, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy) {
         super(PartyRecruit.PARTY_RECRUIT);
 
         setId(id);

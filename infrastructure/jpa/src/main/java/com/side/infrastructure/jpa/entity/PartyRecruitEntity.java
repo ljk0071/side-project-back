@@ -6,12 +6,16 @@ import java.util.List;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.side.domain.enums.BoardStatusTypeEnum;
 import com.side.infrastructure.jpa.common.MetadataEntity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +40,10 @@ public class PartyRecruitEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Comment("파티 모집글 ID")
 	private Long id;
+
+	@Column(name = "status", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private BoardStatusTypeEnum status;
 
 	@Embedded
 	private ArticleEntity article;

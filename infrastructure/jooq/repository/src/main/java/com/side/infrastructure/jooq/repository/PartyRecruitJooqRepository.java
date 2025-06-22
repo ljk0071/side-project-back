@@ -13,11 +13,11 @@ import org.jooq.RecordListener;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
-import com.side.domain.enums.BoardStatusTypeEnum;
 import com.side.domain.model.PartyRecruit;
 import com.side.domain.repository.PartyRecruitRepository;
 import com.side.domain.repository.PartyRecruitRepositoryManager;
 import com.side.infrastructure.jooq.config.RecordAuditListenerGenerator;
+import com.side.infrastructure.jooq.generated.enums.PartyRecruitStatus;
 import com.side.infrastructure.jooq.generated.tables.records.PartyRecruitRecord;
 
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +62,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitRepository {
 	@Override
 	public void delete(long partyId) {
 		dsl.update(PARTY_RECRUIT)
-		   .set(PARTY_RECRUIT.STATUS, BoardStatusTypeEnum.D.name())
+		   .set(PARTY_RECRUIT.STATUS, PartyRecruitStatus.D)
 		   .where(PARTY_RECRUIT.ID.eq(partyId))
 		   .execute();
 	}

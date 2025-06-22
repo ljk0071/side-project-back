@@ -39,7 +39,7 @@ create table if not exists notice
 create table if not exists party_recruit
 (
     id          bigint auto_increment primary key comment '파티 모집글 ID',
-    status      varchar(1)   not null comment '게시글 상태',
+    status      enum ('Y', 'N', 'D')   not null comment '게시글 상태',
     title       varchar(255) not null comment '게시글 제목',
     contents    text         not null comment '게시글 내용',
     likes       bigint       not null comment '좋아요 수',
@@ -71,18 +71,18 @@ create table if not exists role_hierarchy
 create table if not exists user
 (
     unique_id    bigint auto_increment primary key comment '유저 고유 ID',
-    user_id      varchar(50)                                    not null comment '유저 ID',
-    password     varchar(255)                                   not null comment '비밀번호',
-    name         varchar(50)                                    null comment '이름',
-    phone_number varchar(15)                                    null comment '핸드폰번호',
-    email        varchar(255)                                   not null comment '이메일',
-    status       enum('ACTIVE', 'DELETED', 'LOCKED', 'PENDING') not null comment '상태',
-    type         enum('ADMIN', 'NORMAL')                        not null comment '타입',
-    description  text                                           null comment '설명',
-    created_at   timestamp                                      not null comment '생성일시',
-    created_by   bigint                                         not null comment '생성자',
-    modified_at  timestamp                                      null comment '수정일시',
-    modified_by  bigint                                         null comment '수정자'
+    user_id      varchar(50)                                     not null comment '유저 ID',
+    password     varchar(255)                                    not null comment '비밀번호',
+    name         varchar(50)                                     null comment '이름',
+    phone_number varchar(15)                                     null comment '핸드폰번호',
+    email        varchar(255)                                    not null comment '이메일',
+    status       enum ('ACTIVE', 'DELETED', 'LOCKED', 'PENDING') not null comment '상태',
+    type         enum ('ADMIN', 'NORMAL')                        not null comment '타입',
+    description  text                                            null comment '설명',
+    created_at   timestamp                                       not null comment '생성일시',
+    created_by   bigint                                          not null comment '생성자',
+    modified_at  timestamp                                       null comment '수정일시',
+    modified_by  bigint                                          null comment '수정자'
 );
 
 create table if not exists user_role

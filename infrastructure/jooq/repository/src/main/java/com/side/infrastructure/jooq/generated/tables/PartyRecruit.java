@@ -6,6 +6,7 @@ package com.side.infrastructure.jooq.generated.tables;
 
 import com.side.infrastructure.jooq.generated.Keys;
 import com.side.infrastructure.jooq.generated.TestDb;
+import com.side.infrastructure.jooq.generated.enums.PartyRecruitStatus;
 import com.side.infrastructure.jooq.generated.tables.records.PartyRecruitRecord;
 
 import java.time.Instant;
@@ -61,7 +62,7 @@ public class PartyRecruit extends TableImpl<PartyRecruitRecord> {
     /**
      * The column <code>test_db.party_recruit.status</code>. 게시글 상태
      */
-    public final TableField<PartyRecruitRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR(1).nullable(false), this, "게시글 상태");
+    public final TableField<PartyRecruitRecord, PartyRecruitStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR(1).nullable(false).asEnumDataType(PartyRecruitStatus.class), this, "게시글 상태");
 
     /**
      * The column <code>test_db.party_recruit.title</code>. 게시글 제목
