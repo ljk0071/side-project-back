@@ -12,9 +12,10 @@ public interface ResumeMapper {
 
 	ResumeMapper ResumeMapper = Mappers.getMapper(ResumeMapper.class);
 
+	@Mapping(source = "userEntity.uniqueId", target = "userUniqueId")
 	Resume toDomain(ResumeEntity entity);
 
 	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "status", ignore = true)
+	@Mapping(source = "userUniqueId", target = "userEntity.uniqueId")
 	ResumeEntity toEntity(Resume resume);
 }

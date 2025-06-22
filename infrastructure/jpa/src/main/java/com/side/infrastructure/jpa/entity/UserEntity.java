@@ -10,6 +10,7 @@ import com.side.domain.enums.UserStatus;
 import com.side.domain.enums.UserType;
 import com.side.infrastructure.jpa.common.MetadataEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -69,6 +71,9 @@ public class UserEntity {
 	@Comment("설명")
 	@Column(columnDefinition = "TEXT")
 	private String description;
+
+	@OneToOne(mappedBy = "userEntity", cascade = CascadeType.ALL)
+	private ResumeEntity resume;
 
 	@Embedded
 	private MetadataEntity metadata;

@@ -28,11 +28,7 @@ public class ResumeRepositoryImpl implements ResumeRepository {
 	@Override
 	public void create(Resume resume) {
 
-		ResumeEntity entity = ResumeMapper.toEntity(resume);
-
-		repository.save(entity.toBuilder()
-							.status(BoardStatusTypeEnum.Y)
-							.build());
+		repository.save(ResumeMapper.toEntity(resume));
 	}
 
 	@Override

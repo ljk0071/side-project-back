@@ -5,7 +5,7 @@ import static com.side.domain.enums.RepositoryTypeEnum.*;
 import org.springframework.stereotype.Service;
 
 import com.side.domain.Metadata;
-import com.side.domain.enums.RepositoryTypeEnum;
+import com.side.domain.StatusTypeEnum;
 import com.side.domain.model.Resume;
 import com.side.domain.repository.ResumeRepositoryManager;
 
@@ -16,8 +16,9 @@ public class ResumeService {
 
 		ResumeRepositoryManager.getDefaultResumeRepository()
 							   .create(resume.toBuilder()
-										     .metadata(Metadata.builder().build())
-										     .build());
+											 .status(StatusTypeEnum.Y)
+											 .metadata(Metadata.builder().build())
+											 .build());
 	}
 
 	public void delete(long resumeId) {

@@ -8,58 +8,7 @@ SET character_set_server = utf8mb4;
 SET collation_connection = utf8mb4_unicode_ci;
 SET collation_server = utf8mb4_unicode_ci;
 
-create table if not exists comment
-(
-    id                bigint auto_increment primary key comment '댓글 ID',
-    parent_comment_id bigint comment '부모 댓글 ID',
-    contents          varchar(500) not null comment '댓글 내용',
-    board_id          bigint       not null comment '게시판 ID',
-    party_recruit_id  bigint       not null comment '파티 모집글 ID',
-    likes             bigint       not null comment '좋아요 수',
-    dislikes          bigint       not null comment '싫어요 수',
-    created_at        timestamp    not null comment '생성일시',
-    created_by        bigint       not null comment '생성자',
-    modified_at       timestamp    null comment '수정일시',
-    modified_by       bigint       null comment '수정자'
-);
 
-create table if not exists notice
-(
-    id          bigint auto_increment primary key comment '공지사항 ID',
-    title       varchar(255) not null comment '게시글 제목',
-    contents    text         not null comment '게시글 내용',
-    likes       bigint       not null comment '좋아요 수',
-    dislikes    bigint       not null comment '싫어요 수',
-    created_at  timestamp    not null comment '생성일시',
-    created_by  bigint       not null comment '생성자',
-    modified_at timestamp    null comment '수정일시',
-    modified_by bigint       null comment '수정자'
-);
-
-create table if not exists party_recruit
-(
-    id          bigint auto_increment primary key comment '파티 모집글 ID',
-    status      enum ('Y', 'N', 'D') not null comment '게시글 상태',
-    title       varchar(255)         not null comment '게시글 제목',
-    contents    text                 not null comment '게시글 내용',
-    likes       bigint               not null comment '좋아요 수',
-    dislikes    bigint               not null comment '싫어요 수',
-    created_at  timestamp            not null comment '생성일시',
-    created_by  bigint               not null comment '생성자',
-    modified_at timestamp            null comment '수정일시',
-    modified_by bigint               null comment '수정자'
-);
-
-create table if not exists resume
-(
-    id          bigint auto_increment primary key comment '이력서 ID',
-    status      enum ('Y', 'N', 'D') not null comment '이력서 상태',
-    contents    text                 not null comment '이력서 내용',
-    created_at  timestamp            not null comment '생성일시',
-    created_by  bigint               not null comment '생성자',
-    modified_at timestamp            null comment '수정일시',
-    modified_by bigint               null comment '수정자'
-);
 
 create table if not exists role
 (
@@ -105,6 +54,61 @@ create table if not exists user_role
     modified_at    timestamp   null comment '수정일시',
     modified_by    bigint      null comment '수정자',
     primary key (role_id, user_unique_id)
+);
+
+create table if not exists comment
+(
+    id                bigint auto_increment primary key comment '댓글 ID',
+    parent_comment_id bigint comment '부모 댓글 ID',
+    contents          varchar(500) not null comment '댓글 내용',
+    board_id          bigint       not null comment '게시판 ID',
+    party_recruit_id  bigint       not null comment '파티 모집글 ID',
+    likes             bigint       not null comment '좋아요 수',
+    dislikes          bigint       not null comment '싫어요 수',
+    created_at        timestamp    not null comment '생성일시',
+    created_by        bigint       not null comment '생성자',
+    modified_at       timestamp    null comment '수정일시',
+    modified_by       bigint       null comment '수정자'
+);
+
+create table if not exists notice
+(
+    id          bigint auto_increment primary key comment '공지사항 ID',
+    title       varchar(255) not null comment '게시글 제목',
+    contents    text         not null comment '게시글 내용',
+    likes       bigint       not null comment '좋아요 수',
+    dislikes    bigint       not null comment '싫어요 수',
+    created_at  timestamp    not null comment '생성일시',
+    created_by  bigint       not null comment '생성자',
+    modified_at timestamp    null comment '수정일시',
+    modified_by bigint       null comment '수정자'
+);
+
+create table if not exists party_recruit
+(
+    id          bigint auto_increment primary key comment '파티 모집글 ID',
+    status      enum ('Y', 'N', 'D') not null comment '게시글 상태',
+    title       varchar(255)         not null comment '게시글 제목',
+    contents    text                 not null comment '게시글 내용',
+    likes       bigint               not null comment '좋아요 수',
+    dislikes    bigint               not null comment '싫어요 수',
+    created_at  timestamp            not null comment '생성일시',
+    created_by  bigint               not null comment '생성자',
+    modified_at timestamp            null comment '수정일시',
+    modified_by bigint               null comment '수정자'
+);
+
+create table if not exists resume
+(
+    id             bigint auto_increment primary key comment '이력서 ID',
+    user_unique_id bigint               not null comment '유저 고유 ID',
+    status         enum ('Y', 'N', 'D') not null comment '이력서 상태',
+    contents       text                 not null comment '이력서 내용',
+    created_at     timestamp            not null comment '생성일시',
+    created_by     bigint               not null comment '생성자',
+    modified_at    timestamp            null comment '수정일시',
+    modified_by    bigint               null comment '수정자',
+    constraint fk_resume_user_unique_id foreign key (user_unique_id) references user (unique_id)
 );
 
 insert into role (id, name, description, created_at, created_by)
