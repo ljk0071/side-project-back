@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		JwtClaims jwtClaims = jwtService.getJwtClaims(accessToken);
+		JwtClaims jwtClaims = jwtService.getJwtClaims(accessToken.substring(7));
 
 		String userId = jwtClaims.getUserId();
 		Collection<String> roles = jwtClaims.getRoles();
