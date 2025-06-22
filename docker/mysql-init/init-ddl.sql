@@ -39,15 +39,26 @@ create table if not exists notice
 create table if not exists party_recruit
 (
     id          bigint auto_increment primary key comment '파티 모집글 ID',
-    status      enum ('Y', 'N', 'D')   not null comment '게시글 상태',
-    title       varchar(255) not null comment '게시글 제목',
-    contents    text         not null comment '게시글 내용',
-    likes       bigint       not null comment '좋아요 수',
-    dislikes    bigint       not null comment '싫어요 수',
-    created_at  timestamp    not null comment '생성일시',
-    created_by  bigint       not null comment '생성자',
-    modified_at timestamp    null comment '수정일시',
-    modified_by bigint       null comment '수정자'
+    status      enum ('Y', 'N', 'D') not null comment '게시글 상태',
+    title       varchar(255)         not null comment '게시글 제목',
+    contents    text                 not null comment '게시글 내용',
+    likes       bigint               not null comment '좋아요 수',
+    dislikes    bigint               not null comment '싫어요 수',
+    created_at  timestamp            not null comment '생성일시',
+    created_by  bigint               not null comment '생성자',
+    modified_at timestamp            null comment '수정일시',
+    modified_by bigint               null comment '수정자'
+);
+
+create table if not exists resume
+(
+    id          bigint auto_increment primary key comment '이력서 ID',
+    status      enum ('Y', 'N', 'D') not null comment '이력서 상태',
+    contents    text                 not null comment '이력서 내용',
+    created_at  timestamp            not null comment '생성일시',
+    created_by  bigint               not null comment '생성자',
+    modified_at timestamp            null comment '수정일시',
+    modified_by bigint               null comment '수정자'
 );
 
 create table if not exists role

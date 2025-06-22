@@ -7,6 +7,7 @@ package com.side.infrastructure.jooq.generated;
 import com.side.infrastructure.jooq.generated.tables.Comment;
 import com.side.infrastructure.jooq.generated.tables.Notice;
 import com.side.infrastructure.jooq.generated.tables.PartyRecruit;
+import com.side.infrastructure.jooq.generated.tables.Resume;
 import com.side.infrastructure.jooq.generated.tables.Role;
 import com.side.infrastructure.jooq.generated.tables.RoleHierarchy;
 import com.side.infrastructure.jooq.generated.tables.User;
@@ -49,6 +50,11 @@ public class TestDb extends SchemaImpl {
     public final PartyRecruit PARTY_RECRUIT = PartyRecruit.PARTY_RECRUIT;
 
     /**
+     * The table <code>test_db.resume</code>.
+     */
+    public final Resume RESUME = Resume.RESUME;
+
+    /**
      * The table <code>test_db.role</code>.
      */
     public final Role ROLE = Role.ROLE;
@@ -87,6 +93,7 @@ public class TestDb extends SchemaImpl {
             Comment.COMMENT,
             Notice.NOTICE,
             PartyRecruit.PARTY_RECRUIT,
+            Resume.RESUME,
             Role.ROLE,
             RoleHierarchy.ROLE_HIERARCHY,
             User.USER,
