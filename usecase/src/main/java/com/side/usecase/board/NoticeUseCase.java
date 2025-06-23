@@ -14,22 +14,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NoticeUseCase {
 
-	private final NoticeService noticeService;
+    private final NoticeService noticeService;
 
-	@Transactional
-	public void create(Notice notice) {
-		noticeService.create(notice);
-	}
+    @Transactional
+    public void create(Notice notice) {
 
-	@Transactional
-	public void bulkCreate(List<Notice> notices) {
+        noticeService.create(notice);
 
-		noticeService.bulkCreate(notices);
-	}
+    }
 
-	public Notice find(Notice notice) {
+    @Transactional
+    public void bulkCreate(List<Notice> notices) {
 
-		return noticeService.find(notice);
-	}
+        noticeService.bulkCreate(notices);
+    }
+
+    public Notice find(Notice notice) {
+
+        return noticeService.find(notice);
+    }
 
 }
