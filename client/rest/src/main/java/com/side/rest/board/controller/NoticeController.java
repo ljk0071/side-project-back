@@ -3,6 +3,7 @@ package com.side.rest.board.controller;
 import static com.side.rest.mapper.NoticeMapper.*;
 
 import com.side.domain.model.Notice;
+
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 public class NoticeController {
 
     private final NoticeUseCase noticeUseCase;
-
 
 
     // @PostMapping
