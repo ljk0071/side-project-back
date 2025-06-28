@@ -24,32 +24,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JpaConfig {
 
-	private final Environment env;
+    private final Environment env;
 
-	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
 
-		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		em.setDataSource(dataSource);
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
 
-		em.setPackagesToScan("com.side.infrastructure.jpa.common", "com.side.infrastructure.jpa.entity");
+        em.setPackagesToScan("com.side.infrastructure.jpa.common", "com.side.infrastructure.jpa.entity");
 
-		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		em.setJpaVendorAdapter(vendorAdapter);
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
 
-		boolean isProd = env.acceptsProfiles(Profiles.of("prod"));
+        boolean isProd = env.acceptsProfiles(Profiles.of("prod"));
 
-		Properties jpaProperties = new Properties();
-		jpaProperties.put("hibernate.hbm2ddl.auto", "validate");
-		jpaProperties.put("hibernate.show_sql", isProd ? "false" : "true");
-		jpaProperties.put("hibernate.format_sql", isProd ? "false" : "true");
-		em.setJpaProperties(jpaProperties);
+        Properties jpaProperties = new Properties();
+        jpaProperties.put("hibernate.hbm2ddl.auto", isProd ? "validate" : "none");
+        jpaProperties.put("hibernate.show_sql", isProd ? "false" : "true");
+        jpaProperties.put("hibernate.format_sql", isProd ? "false" : "true");
+        em.setJpaProperties(jpaProperties);
 
-		return em;
-	}
+        return em;
+    }
 
-	@Bean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-		return new JpaTransactionManager(emf);
-	}
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
+        return new JpaTransactionManager(emf);
+    }
 }
