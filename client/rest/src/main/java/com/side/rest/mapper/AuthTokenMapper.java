@@ -1,12 +1,11 @@
 package com.side.rest.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-
 import com.side.domain.model.AuthToken;
 import com.side.rest.domain.user.dto.request.AuthTokenRequestDto;
 import com.side.rest.domain.user.dto.response.AuthTokenResponseDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 /**
  * Mapper for converting between AuthToken domain model and DTOs.

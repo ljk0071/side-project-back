@@ -1,12 +1,11 @@
 package com.side.domain.service;
 
-import static com.side.domain.RepositoryTypeEnum.JOOQ;
-
-import org.springframework.stereotype.Service;
-
 import com.side.domain.enums.UserStatus;
 import com.side.domain.model.User;
 import com.side.domain.repository.UserRepositoryManager;
+import org.springframework.stereotype.Service;
+
+import static com.side.domain.RepositoryTypeEnum.JOOQ;
 
 @Service
 public class UserService {

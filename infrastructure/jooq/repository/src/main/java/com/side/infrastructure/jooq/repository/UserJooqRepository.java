@@ -1,18 +1,17 @@
 package com.side.infrastructure.jooq.repository;
 
-import static com.side.domain.RepositoryTypeEnum.JOOQ;
-import static com.side.infrastructure.jooq.generated.Tables.*;
-import static com.side.infrastructure.jooq.generated.tables.Role.ROLE;
-import static com.side.infrastructure.jooq.generated.tables.User.USER;
-
-import org.jooq.DSLContext;
-import org.springframework.stereotype.Repository;
-
 import com.side.domain.enums.UserStatus;
 import com.side.domain.model.Role;
 import com.side.domain.model.User;
 import com.side.domain.repository.UserRepository;
 import com.side.domain.repository.UserRepositoryManager;
+import org.jooq.DSLContext;
+import org.springframework.stereotype.Repository;
+
+import static com.side.domain.RepositoryTypeEnum.JOOQ;
+import static com.side.infrastructure.jooq.generated.Tables.USER_ROLE;
+import static com.side.infrastructure.jooq.generated.tables.Role.ROLE;
+import static com.side.infrastructure.jooq.generated.tables.User.USER;
 
 @Repository
 public class UserJooqRepository implements UserRepository {

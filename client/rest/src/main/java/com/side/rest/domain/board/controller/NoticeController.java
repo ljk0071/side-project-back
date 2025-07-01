@@ -1,22 +1,15 @@
 package com.side.rest.domain.board.controller;
 
-import static com.side.rest.mapper.NoticeMapper.*;
-
 import com.side.domain.model.Notice;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.side.rest.domain.board.dto.request.NoticeRequestDto;
 import com.side.rest.domain.board.dto.response.NoticeResponseDto;
 import com.side.usecase.board.NoticeUseCase;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import static com.side.rest.mapper.NoticeMapper.NoticeMapper;
 
 @Slf4j
 @RestController

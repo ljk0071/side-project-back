@@ -6,10 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Setter
@@ -17,9 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "user_role", 
-       uniqueConstraints = @UniqueConstraint(name = "uk_user_role_role_id_user_unique_id", 
-                                           columnNames = {"role_id", "user_unique_id"}))
+@Table(name = "user_role",
+        uniqueConstraints = @UniqueConstraint(name = "uk_user_role_role_id_user_unique_id",
+                columnNames = {"role_id", "user_unique_id"}))
 @EntityListeners(AuditingEntityListener.class)
 public class UserRoleEntity {
 

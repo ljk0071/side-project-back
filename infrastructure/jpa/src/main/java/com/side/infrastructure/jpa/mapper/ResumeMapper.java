@@ -1,11 +1,10 @@
 package com.side.infrastructure.jpa.mapper;
 
+import com.side.domain.model.Resume;
+import com.side.infrastructure.jpa.entity.ResumeEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
-import com.side.domain.model.Resume;
-import com.side.infrastructure.jpa.entity.ResumeEntity;
 
 @Mapper
 public interface ResumeMapper {

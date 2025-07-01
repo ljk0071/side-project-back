@@ -2,7 +2,6 @@ package com.side.infrastructure.jpa.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import org.hibernate.annotations.Comment;
 @Builder(toBuilder = true)
 @Embeddable
 public class ArticleEntity {
-    
+
     @Column(name = "title", length = 100, nullable = false)
     @Comment("게시글제목")
     private String title;

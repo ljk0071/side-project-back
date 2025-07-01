@@ -1,12 +1,11 @@
 package com.side.rest.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-
 import com.side.domain.model.PartyRecruit;
 import com.side.rest.domain.board.dto.request.PartyRecruitRequestDto;
 import com.side.rest.domain.board.dto.response.PartyRecruitResponseDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface PartyRecruitMapper {

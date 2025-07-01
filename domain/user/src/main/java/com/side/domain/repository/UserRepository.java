@@ -5,12 +5,12 @@ import com.side.domain.model.User;
 
 public interface UserRepository {
 
-	void create(User user);
+    void create(User user);
 
-	User findById(long uniqueId);
+    User findById(long uniqueId);
 
-	User findByUserId(String userId);
+    User findByUserId(String userId);
 
-	User findByUserIdAndStatus(String userId, UserStatus status);
+    User findByUserIdAndStatus(String userId, UserStatus status);
 }
 

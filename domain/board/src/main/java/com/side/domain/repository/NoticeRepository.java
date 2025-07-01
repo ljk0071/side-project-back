@@ -1,15 +1,15 @@
 package com.side.domain.repository;
 
-import java.util.List;
-
 import com.side.domain.model.Notice;
+
+import java.util.List;
 
 public interface NoticeRepository {
 
-	void create(Notice notice);
+    void create(Notice notice);
 
-	void bulkcreate(List<Notice> notices);
+    void bulkcreate(List<Notice> notices);
 
-	Notice find(Notice notice);
+    Notice find(Notice notice);
 }
 

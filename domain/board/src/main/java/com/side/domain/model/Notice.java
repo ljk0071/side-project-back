@@ -2,7 +2,6 @@ package com.side.domain.model;
 
 import com.side.domain.Metadata;
 import com.side.domain.StatusTypeEnum;
-
 import lombok.Builder;
 
 @Builder(toBuilder = true)

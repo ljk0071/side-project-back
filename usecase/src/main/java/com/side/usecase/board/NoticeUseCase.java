@@ -1,14 +1,12 @@
 package com.side.usecase.board;
 
-import java.util.List;
-
+import com.side.domain.model.Notice;
+import com.side.domain.service.NoticeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.side.domain.model.Notice;
-import com.side.domain.service.NoticeService;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

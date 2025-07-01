@@ -1,12 +1,11 @@
 package com.side.rest.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-
 import com.side.domain.model.Resume;
 import com.side.rest.domain.resume.dto.request.ResumeRequestDto;
 import com.side.rest.domain.resume.dto.response.ResumeResponseDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface ResumeMapper {

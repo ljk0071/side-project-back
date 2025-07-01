@@ -1,46 +1,44 @@
 package com.side.rest.util;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.Map;
-import java.util.Objects;
-
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.Objects;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TestLoginUtil {
 
-	private final MockMvc mockMvc;
+    private final MockMvc mockMvc;
 
-	private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-	public TestLoginUtil(MockMvc mockMvc, ObjectMapper objectMapper) {
-		this.mockMvc = mockMvc;
-		this.objectMapper = objectMapper;
-	}
+    public TestLoginUtil(MockMvc mockMvc, ObjectMapper objectMapper) {
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+    }
 
-	public Map<String, String> login() throws Exception {
-		MvcResult httpResult = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/sign/in")
-																		  .contentType(MediaType.APPLICATION_JSON)
-																		  .content(objectMapper.writeValueAsString(
-																			  Map.of("userId", "system",
-																				  "password", "gmlwls@9833"))))
-										   .andExpect(status().isOk())
-										   .andReturn();
+    public Map<String, String> login() throws Exception {
+        MvcResult httpResult = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/sign/in")
+                                                                          .contentType(MediaType.APPLICATION_JSON)
+                                                                          .content(objectMapper.writeValueAsString(
+                                                                                  Map.of("userId", "system",
+                                                                                          "password", "gmlwls@9833"))))
+                                           .andExpect(status().isOk())
+                                           .andReturn();
 
-		MockHttpServletResponse response = httpResult.getResponse();
+        MockHttpServletResponse response = httpResult.getResponse();
 
-		Map<String, String> result = objectMapper.readValue(response.getContentAsString(), new TypeReference<>() {});
+        Map<String, String> result = objectMapper.readValue(response.getContentAsString(), new TypeReference<>() {});
 
-		result.put("accessToken", Objects.requireNonNull(response.getCookie("Authorization")).getValue());
+        result.put("accessToken", Objects.requireNonNull(response.getCookie("Authorization")).getValue());
 
-		return result;
-	}
+        return result;
+    }
 }

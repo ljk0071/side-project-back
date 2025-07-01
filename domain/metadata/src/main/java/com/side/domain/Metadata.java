@@ -1,19 +1,19 @@
 package com.side.domain;
 
-import java.time.Instant;
-
 import lombok.Builder;
+
+import java.time.Instant;
 
 @Builder(toBuilder = true)
 public record Metadata(
-	long createdBy,
-	String createdByName,
-	Instant createdAt,
-	Long modifiedBy,
-	String modifiedByName,
-	Instant modifiedAt,
-	Long deletedBy,
-	String deletedByName,
-	Instant deletedAt
+        long createdBy,
+        String createdByName,
+        Instant createdAt,
+        Long modifiedBy,
+        String modifiedByName,
+        Instant modifiedAt,
+        Long deletedBy,
+        String deletedByName,
+        Instant deletedAt
 ) {
 }

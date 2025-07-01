@@ -10,24 +10,21 @@ import lombok.Setter;
 @Setter
 public class PartyRecruitRequestDto {
 
-    public interface Insert extends Default {}
-
-    public interface Update extends Default {}
-
     @Null(groups = Insert.class, message = "Insert 시 id는 null이어야 합니다")
     @NotNull(groups = Update.class, message = "Update 시 id는 필수입니다")
     @Positive(groups = Update.class)
     private Long id;
-
     @Null(groups = Insert.class, message = "Insert 시 id는 null이어야 합니다")
     private Long userUniqueId;
-
     @Valid
     @NotNull(message = "게시글 정보는 필수입니다")
     private ArticleRequestDto article;
-
     @NotNull(message = "최대 인원은 필수입니다")
     @Min(value = 2, message = "최대 인원은 2명 이상이어야 합니다")
     @Max(value = 6, message = "최대 인원은 6명 이하여야 합니다")
     private Integer maxMembers;
+
+    public interface Insert extends Default {}
+
+    public interface Update extends Default {}
 }

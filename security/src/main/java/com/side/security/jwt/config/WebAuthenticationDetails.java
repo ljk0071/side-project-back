@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class WebAuthenticationDetails extends org.springframework.security.web.authentication.WebAuthenticationDetails {
 
-	private final String userAgent;
+    private final String userAgent;
 
-	public WebAuthenticationDetails(HttpServletRequest request) {
-		super(request);
-		this.userAgent = request.getHeader("User-Agent");
-	}
+    public WebAuthenticationDetails(HttpServletRequest request) {
+        super(request);
+        this.userAgent = request.getHeader("User-Agent");
+    }
 
 }

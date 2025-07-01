@@ -1,12 +1,11 @@
 package com.side.bootstrap;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-
 import com.side.infrastructure.datasource.DataSourceProperties;
 import com.side.infrastructure.valkey.properties.RedisProperties;
 import com.side.security.jwt.config.JwtProperties;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 import java.util.TimeZone;
 

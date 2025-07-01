@@ -1,16 +1,14 @@
 package com.side.infrastructure.jpa.repository;
 
-import static com.side.domain.RepositoryTypeEnum.JPA;
-import static com.side.infrastructure.jpa.mapper.ResumeMapper.*;
-
-import org.springframework.stereotype.Repository;
-
 import com.side.domain.model.Resume;
 import com.side.domain.repository.ResumeRepository;
 import com.side.domain.repository.ResumeRepositoryManager;
-
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import static com.side.domain.RepositoryTypeEnum.JPA;
+import static com.side.infrastructure.jpa.mapper.ResumeMapper.ResumeMapper;
 
 @RequiredArgsConstructor
 @Repository

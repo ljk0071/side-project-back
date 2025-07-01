@@ -1,10 +1,10 @@
 package com.side.rest.domain.user.dto.response;
 
-import java.time.Instant;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.Instant;
 
 @Getter
 @AllArgsConstructor

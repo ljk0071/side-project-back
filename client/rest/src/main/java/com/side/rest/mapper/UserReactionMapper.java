@@ -1,11 +1,10 @@
 package com.side.rest.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-
 import com.side.domain.model.UserReaction;
 import com.side.rest.domain.user.dto.request.UserReactionRecordRequestDto;
 import com.side.rest.domain.user.dto.response.UserReactionRecordResponseDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface UserReactionMapper {

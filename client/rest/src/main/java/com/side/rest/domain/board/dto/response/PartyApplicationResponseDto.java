@@ -1,7 +1,6 @@
 package com.side.rest.domain.board.dto.response;
 
 import com.side.domain.StatusTypeEnum;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

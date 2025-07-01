@@ -1,15 +1,13 @@
 package com.side.security.service;
 
+import com.side.domain.model.User;
+import com.side.domain.service.UserService;
+import com.side.security.jwt.dto.SecurityDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.side.domain.model.User;
-import com.side.domain.service.UserService;
-import com.side.security.jwt.dto.SecurityDto;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

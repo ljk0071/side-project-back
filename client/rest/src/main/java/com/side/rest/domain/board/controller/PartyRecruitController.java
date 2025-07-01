@@ -1,22 +1,14 @@
 package com.side.rest.domain.board.controller;
 
-import static com.side.rest.mapper.PartyRecruitMapper.*;
-
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.side.rest.domain.board.dto.request.PartyRecruitRequestDto;
 import com.side.usecase.board.PartyRecruitUseCase;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import static com.side.rest.mapper.PartyRecruitMapper.PartyRecruitMapper;
 
 @Slf4j
 @RestController

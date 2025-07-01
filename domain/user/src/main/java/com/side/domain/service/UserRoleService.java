@@ -1,12 +1,11 @@
 package com.side.domain.service;
 
 
-import java.util.Collection;
-
-import org.springframework.stereotype.Service;
-
 import com.side.domain.model.Role;
 import com.side.domain.repository.UserRoleRepositoryManager;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 import static com.side.domain.RepositoryTypeEnum.JOOQ;
 

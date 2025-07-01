@@ -4,8 +4,8 @@ import com.side.domain.model.PartyRecruit;
 
 public interface PartyRecruitRepository {
 
-	void create(PartyRecruit partyRecruit);
+    void create(PartyRecruit partyRecruit);
 
-	void delete(long partyId);
+    void delete(long partyId);
 }
 

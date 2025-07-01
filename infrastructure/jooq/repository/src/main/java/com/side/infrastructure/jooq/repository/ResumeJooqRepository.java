@@ -1,26 +1,24 @@
 package com.side.infrastructure.jooq.repository;
 
-import static com.side.domain.RepositoryTypeEnum.JOOQ;
-import static com.side.infrastructure.jooq.generated.tables.Resume.*;
-import static com.side.security.service.SecurityHelper.*;
-
-import java.time.Instant;
-import java.util.function.Consumer;
-
 import com.side.domain.StatusTypeEnum;
+import com.side.domain.model.Resume;
+import com.side.domain.repository.ResumeRepository;
+import com.side.domain.repository.ResumeRepositoryManager;
+import com.side.infrastructure.jooq.config.RecordAuditListenerGenerator;
+import com.side.infrastructure.jooq.generated.tables.records.ResumeRecord;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.RecordListener;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
-import com.side.domain.model.Resume;
-import com.side.domain.repository.ResumeRepository;
-import com.side.domain.repository.ResumeRepositoryManager;
-import com.side.infrastructure.jooq.config.RecordAuditListenerGenerator;
-import com.side.infrastructure.jooq.generated.tables.records.ResumeRecord;
+import java.time.Instant;
+import java.util.function.Consumer;
 
-import lombok.extern.slf4j.Slf4j;
+import static com.side.domain.RepositoryTypeEnum.JOOQ;
+import static com.side.infrastructure.jooq.generated.tables.Resume.RESUME;
+import static com.side.security.service.SecurityHelper.getAuthenticatedUser;
 
 @Slf4j
 @Repository

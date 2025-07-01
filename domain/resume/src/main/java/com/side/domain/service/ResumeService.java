@@ -1,12 +1,11 @@
 package com.side.domain.service;
 
 
-import org.springframework.stereotype.Service;
-
 import com.side.domain.Metadata;
 import com.side.domain.StatusTypeEnum;
 import com.side.domain.model.Resume;
 import com.side.domain.repository.ResumeRepositoryManager;
+import org.springframework.stereotype.Service;
 
 import static com.side.domain.RepositoryTypeEnum.JOOQ;
 

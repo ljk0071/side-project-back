@@ -1,8 +1,17 @@
 package com.side.infrastructure.jooq.repository;
 
-import static com.side.domain.RepositoryTypeEnum.JOOQ;
-import static com.side.infrastructure.jooq.generated.tables.Notice.*;
-import static com.side.security.service.SecurityHelper.*;
+import com.side.domain.model.Notice;
+import com.side.domain.repository.NoticeRepository;
+import com.side.domain.repository.NoticeRepositoryManager;
+import com.side.infrastructure.jooq.config.RecordAuditListenerGenerator;
+import com.side.infrastructure.jooq.generated.tables.records.NoticeRecord;
+import lombok.extern.slf4j.Slf4j;
+import org.jooq.Configuration;
+import org.jooq.DSLContext;
+import org.jooq.InsertValuesStep6;
+import org.jooq.RecordListener;
+import org.jooq.impl.DSL;
+import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
@@ -11,20 +20,9 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import org.jooq.Configuration;
-import org.jooq.DSLContext;
-import org.jooq.InsertValuesStep6;
-import org.jooq.RecordListener;
-import org.jooq.impl.DSL;
-import org.springframework.stereotype.Repository;
-
-import com.side.domain.model.Notice;
-import com.side.domain.repository.NoticeRepository;
-import com.side.domain.repository.NoticeRepositoryManager;
-import com.side.infrastructure.jooq.config.RecordAuditListenerGenerator;
-import com.side.infrastructure.jooq.generated.tables.records.NoticeRecord;
-
-import lombok.extern.slf4j.Slf4j;
+import static com.side.domain.RepositoryTypeEnum.JOOQ;
+import static com.side.infrastructure.jooq.generated.tables.Notice.NOTICE;
+import static com.side.security.service.SecurityHelper.getAuthenticatedUser;
 
 @Slf4j
 @Repository

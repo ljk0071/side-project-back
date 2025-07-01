@@ -1,12 +1,11 @@
 package com.side.rest.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-
 import com.side.domain.model.Notification;
 import com.side.rest.domain.user.dto.request.NotificationRequestDto;
 import com.side.rest.domain.user.dto.response.NotificationResponseDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface NotificationMapper {

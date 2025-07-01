@@ -1,16 +1,11 @@
 package com.side.infrastructure.jpa.entity;
 
-import java.io.Serial;
-import java.io.Serializable;
-
+import jakarta.persistence.Embeddable;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
-import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.io.Serial;
+import java.io.Serializable;
 
 @Getter
 @EqualsAndHashCode
@@ -20,12 +15,12 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class RoleHierarchyKey implements Serializable {
 
-	@Serial
-	private static final long serialVersionUID = -5285826462359427736L;
+    @Serial
+    private static final long serialVersionUID = -5285826462359427736L;
 
-	@Comment("하위 역할")
-	private String lowerRole;
+    @Comment("하위 역할")
+    private String lowerRole;
 
-	@Comment("상위 역할")
-	private String higherRole;
+    @Comment("상위 역할")
+    private String higherRole;
 }

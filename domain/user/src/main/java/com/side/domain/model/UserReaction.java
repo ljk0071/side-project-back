@@ -1,8 +1,8 @@
 package com.side.domain.model;
 
-import java.time.Instant;
-
 import lombok.Builder;
+
+import java.time.Instant;
 
 @Builder(toBuilder = true)
 public record UserReaction(

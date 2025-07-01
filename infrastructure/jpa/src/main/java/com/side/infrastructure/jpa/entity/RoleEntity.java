@@ -1,17 +1,13 @@
 package com.side.infrastructure.jpa.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.side.infrastructure.jpa.common.MetadataEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
