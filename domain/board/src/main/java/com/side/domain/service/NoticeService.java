@@ -1,7 +1,7 @@
 package com.side.domain.service;
 
-import static com.side.domain.enums.RepositoryTypeEnum.JOOQ;
-import static com.side.domain.enums.RepositoryTypeEnum.JPA;
+import static com.side.domain.RepositoryTypeEnum.JOOQ;
+import static com.side.domain.RepositoryTypeEnum.JPA;
 
 import com.side.domain.Metadata;
 import com.side.domain.model.Article;
@@ -36,14 +36,6 @@ public class NoticeService {
         NoticeRepositoryManager.getNoticeRepository(JOOQ)
                                .bulkcreate(notices.stream()
                                                   .map(notice -> notice.toBuilder()
-                                                                       .article(notice.article().toBuilder()
-                                                                                      .userReaction(
-                                                                                              UserReaction
-                                                                                                      .builder()
-                                                                                                      .likes(0)
-                                                                                                      .dislikes(0)
-                                                                                                      .build())
-                                                                                      .build())
                                                                        .metadata(Metadata.builder()
                                                                                          .createdBy(1)
                                                                                          .createdAt(Instant.now())

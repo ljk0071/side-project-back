@@ -6,17 +6,26 @@ package com.side.infrastructure.jooq.generated.tables;
 
 import com.side.infrastructure.jooq.generated.Keys;
 import com.side.infrastructure.jooq.generated.TestDb;
+import com.side.infrastructure.jooq.generated.tables.Role.RolePath;
+import com.side.infrastructure.jooq.generated.tables.User.UserPath;
 import com.side.infrastructure.jooq.generated.tables.records.UserRoleRecord;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Identity;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -53,14 +62,30 @@ public class UserRole extends TableImpl<UserRoleRecord> {
     }
 
     /**
-     * The column <code>test_db.user_role.role_id</code>. 역할 ID
+     * The column <code>test_db.user_role.id</code>. 유저역할id
      */
-    public final TableField<UserRoleRecord, String> ROLE_ID = createField(DSL.name("role_id"), SQLDataType.VARCHAR(30).nullable(false), this, "역할 ID");
+    public final TableField<UserRoleRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "유저역할id");
 
     /**
-     * The column <code>test_db.user_role.user_unique_id</code>. 사용자 ID
+     * The column <code>test_db.user_role.revision</code>. 버전
      */
-    public final TableField<UserRoleRecord, Long> USER_UNIQUE_ID = createField(DSL.name("user_unique_id"), SQLDataType.BIGINT.nullable(false), this, "사용자 ID");
+    public final TableField<UserRoleRecord, Long> REVISION = createField(DSL.name("revision"), SQLDataType.BIGINT.nullable(false), this, "버전");
+
+    /**
+     * The column <code>test_db.user_role.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public final TableField<UserRoleRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.CHAR(1).nullable(false), this, "상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)");
+
+    /**
+     * The column <code>test_db.user_role.role_id</code>. 역할id
+     */
+    public final TableField<UserRoleRecord, Long> ROLE_ID = createField(DSL.name("role_id"), SQLDataType.BIGINT.nullable(false), this, "역할id");
+
+    /**
+     * The column <code>test_db.user_role.user_unique_id</code>. 사용자id
+     */
+    public final TableField<UserRoleRecord, Long> USER_UNIQUE_ID = createField(DSL.name("user_unique_id"), SQLDataType.BIGINT.nullable(false), this, "사용자id");
 
     /**
      * The column <code>test_db.user_role.created_at</code>. 생성일시
@@ -81,6 +106,16 @@ public class UserRole extends TableImpl<UserRoleRecord> {
      * The column <code>test_db.user_role.modified_by</code>. 수정자
      */
     public final TableField<UserRoleRecord, Long> MODIFIED_BY = createField(DSL.name("modified_by"), SQLDataType.BIGINT, this, "수정자");
+
+    /**
+     * The column <code>test_db.user_role.deleted_at</code>. 삭제일시
+     */
+    public final TableField<UserRoleRecord, Instant> DELETED_AT = createField(DSL.name("deleted_at"), SQLDataType.LOCALDATETIME(0), this, "삭제일시", new AutoConverter<LocalDateTime, Instant>(LocalDateTime.class, Instant.class));
+
+    /**
+     * The column <code>test_db.user_role.deleted_by</code>. 삭제자
+     */
+    public final TableField<UserRoleRecord, Long> DELETED_BY = createField(DSL.name("deleted_by"), SQLDataType.BIGINT, this, "삭제자");
 
     private UserRole(Name alias, Table<UserRoleRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -111,14 +146,86 @@ public class UserRole extends TableImpl<UserRoleRecord> {
         this(DSL.name("user_role"), null);
     }
 
+    public <O extends Record> UserRole(Table<O> path, ForeignKey<O, UserRoleRecord> childPath, InverseForeignKey<O, UserRoleRecord> parentPath) {
+        super(path, childPath, parentPath, USER_ROLE);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class UserRolePath extends UserRole implements Path<UserRoleRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> UserRolePath(Table<O> path, ForeignKey<O, UserRoleRecord> childPath, InverseForeignKey<O, UserRoleRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private UserRolePath(Name alias, Table<UserRoleRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public UserRolePath as(String alias) {
+            return new UserRolePath(DSL.name(alias), this);
+        }
+
+        @Override
+        public UserRolePath as(Name alias) {
+            return new UserRolePath(alias, this);
+        }
+
+        @Override
+        public UserRolePath as(Table<?> alias) {
+            return new UserRolePath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : TestDb.TEST_DB;
     }
 
     @Override
+    public Identity<UserRoleRecord, Long> getIdentity() {
+        return (Identity<UserRoleRecord, Long>) super.getIdentity();
+    }
+
+    @Override
     public UniqueKey<UserRoleRecord> getPrimaryKey() {
         return Keys.KEY_USER_ROLE_PRIMARY;
+    }
+
+    @Override
+    public List<UniqueKey<UserRoleRecord>> getUniqueKeys() {
+        return Arrays.asList(Keys.KEY_USER_ROLE_UK_USER_ROLE_ROLE_ID_USER_UNIQUE_ID);
+    }
+
+    @Override
+    public List<ForeignKey<UserRoleRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.FK_USER_ROLE_ROLE, Keys.FK_USER_ROLE_USER);
+    }
+
+    private transient RolePath _role;
+
+    /**
+     * Get the implicit join path to the <code>test_db.role</code> table.
+     */
+    public RolePath role() {
+        if (_role == null)
+            _role = new RolePath(this, Keys.FK_USER_ROLE_ROLE, null);
+
+        return _role;
+    }
+
+    private transient UserPath _user;
+
+    /**
+     * Get the implicit join path to the <code>test_db.user</code> table.
+     */
+    public UserPath user() {
+        if (_user == null)
+            _user = new UserPath(this, Keys.FK_USER_ROLE_USER, null);
+
+        return _user;
     }
 
     @Override

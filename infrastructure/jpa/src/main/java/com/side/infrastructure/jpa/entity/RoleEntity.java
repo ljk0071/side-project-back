@@ -1,49 +1,56 @@
 package com.side.infrastructure.jpa.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import com.side.infrastructure.jpa.common.MetadataEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.Comment;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Entity
 @Table(name = "role")
-@DynamicInsert
-@DynamicUpdate
+@EntityListeners(AuditingEntityListener.class)
 public class RoleEntity {
 
-	@Id
-	@Comment("역할 ID")
-	@Column(length = 30)
-	private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Comment("역할id")
+    private Long id;
 
-	@Comment("역할명")
-	@Column(length = 30)
-	private String name;
+    @Version
+    @Column(name = "revision", nullable = false)
+    @Comment("버전")
+    private Long revision;
 
-	@Comment("설명")
-	private String description;
+    @Column(name = "code", length = 30, nullable = false)
+    @Comment("역할코드")
+    private String code;
 
-	@Embedded
-	private MetadataEntity metadata;
+    @Column(name = "name", length = 50, nullable = false)
+    @Comment("역할명")
+    private String name;
 
-	@Transient
-	private List<UserRoleEntity> userRoles;
+    @Embedded
+    private MetadataEntity metadata;
+
+    // 양방향 연관관계
+    @OneToMany(mappedBy = "role", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<UserRoleEntity> userRoles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "higherRole", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<RoleHierarchyEntity> higherRoles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "lowerRole", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<RoleHierarchyEntity> lowerRoles = new ArrayList<>();
 }

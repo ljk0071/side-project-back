@@ -8,7 +8,7 @@ import com.side.infrastructure.jooq.generated.tables.UserRole;
 
 import java.time.Instant;
 
-import org.jooq.Record2;
+import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -21,87 +21,159 @@ public class UserRoleRecord extends UpdatableRecordImpl<UserRoleRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>test_db.user_role.role_id</code>. 역할 ID
+     * Setter for <code>test_db.user_role.id</code>. 유저역할id
      */
-    public void setRoleId(String value) {
+    public void setId(Long value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>test_db.user_role.role_id</code>. 역할 ID
+     * Getter for <code>test_db.user_role.id</code>. 유저역할id
      */
-    public String getRoleId() {
-        return (String) get(0);
+    public Long getId() {
+        return (Long) get(0);
     }
 
     /**
-     * Setter for <code>test_db.user_role.user_unique_id</code>. 사용자 ID
+     * Setter for <code>test_db.user_role.revision</code>. 버전
      */
-    public void setUserUniqueId(Long value) {
+    public void setRevision(Long value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>test_db.user_role.user_unique_id</code>. 사용자 ID
+     * Getter for <code>test_db.user_role.revision</code>. 버전
+     */
+    public Long getRevision() {
+        return (Long) get(1);
+    }
+
+    /**
+     * Setter for <code>test_db.user_role.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public void setStatus(String value) {
+        set(2, value);
+    }
+
+    /**
+     * Getter for <code>test_db.user_role.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public String getStatus() {
+        return (String) get(2);
+    }
+
+    /**
+     * Setter for <code>test_db.user_role.role_id</code>. 역할id
+     */
+    public void setRoleId(Long value) {
+        set(3, value);
+    }
+
+    /**
+     * Getter for <code>test_db.user_role.role_id</code>. 역할id
+     */
+    public Long getRoleId() {
+        return (Long) get(3);
+    }
+
+    /**
+     * Setter for <code>test_db.user_role.user_unique_id</code>. 사용자id
+     */
+    public void setUserUniqueId(Long value) {
+        set(4, value);
+    }
+
+    /**
+     * Getter for <code>test_db.user_role.user_unique_id</code>. 사용자id
      */
     public Long getUserUniqueId() {
-        return (Long) get(1);
+        return (Long) get(4);
     }
 
     /**
      * Setter for <code>test_db.user_role.created_at</code>. 생성일시
      */
     public void setCreatedAt(Instant value) {
-        set(2, value);
+        set(5, value);
     }
 
     /**
      * Getter for <code>test_db.user_role.created_at</code>. 생성일시
      */
     public Instant getCreatedAt() {
-        return (Instant) get(2);
+        return (Instant) get(5);
     }
 
     /**
      * Setter for <code>test_db.user_role.created_by</code>. 생성자
      */
     public void setCreatedBy(Long value) {
-        set(3, value);
+        set(6, value);
     }
 
     /**
      * Getter for <code>test_db.user_role.created_by</code>. 생성자
      */
     public Long getCreatedBy() {
-        return (Long) get(3);
+        return (Long) get(6);
     }
 
     /**
      * Setter for <code>test_db.user_role.modified_at</code>. 수정일시
      */
     public void setModifiedAt(Instant value) {
-        set(4, value);
+        set(7, value);
     }
 
     /**
      * Getter for <code>test_db.user_role.modified_at</code>. 수정일시
      */
     public Instant getModifiedAt() {
-        return (Instant) get(4);
+        return (Instant) get(7);
     }
 
     /**
      * Setter for <code>test_db.user_role.modified_by</code>. 수정자
      */
     public void setModifiedBy(Long value) {
-        set(5, value);
+        set(8, value);
     }
 
     /**
      * Getter for <code>test_db.user_role.modified_by</code>. 수정자
      */
     public Long getModifiedBy() {
-        return (Long) get(5);
+        return (Long) get(8);
+    }
+
+    /**
+     * Setter for <code>test_db.user_role.deleted_at</code>. 삭제일시
+     */
+    public void setDeletedAt(Instant value) {
+        set(9, value);
+    }
+
+    /**
+     * Getter for <code>test_db.user_role.deleted_at</code>. 삭제일시
+     */
+    public Instant getDeletedAt() {
+        return (Instant) get(9);
+    }
+
+    /**
+     * Setter for <code>test_db.user_role.deleted_by</code>. 삭제자
+     */
+    public void setDeletedBy(Long value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>test_db.user_role.deleted_by</code>. 삭제자
+     */
+    public Long getDeletedBy() {
+        return (Long) get(10);
     }
 
     // -------------------------------------------------------------------------
@@ -109,8 +181,8 @@ public class UserRoleRecord extends UpdatableRecordImpl<UserRoleRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Record2<String, Long> key() {
-        return (Record2) super.key();
+    public Record1<Long> key() {
+        return (Record1) super.key();
     }
 
     // -------------------------------------------------------------------------
@@ -127,15 +199,20 @@ public class UserRoleRecord extends UpdatableRecordImpl<UserRoleRecord> {
     /**
      * Create a detached, initialised UserRoleRecord
      */
-    public UserRoleRecord(String roleId, Long userUniqueId, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy) {
+    public UserRoleRecord(Long id, Long revision, String status, Long roleId, Long userUniqueId, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy, Instant deletedAt, Long deletedBy) {
         super(UserRole.USER_ROLE);
 
+        setId(id);
+        setRevision(revision);
+        setStatus(status);
         setRoleId(roleId);
         setUserUniqueId(userUniqueId);
         setCreatedAt(createdAt);
         setCreatedBy(createdBy);
         setModifiedAt(modifiedAt);
         setModifiedBy(modifiedBy);
+        setDeletedAt(deletedAt);
+        setDeletedBy(deletedBy);
         resetChangedOnNotNull();
     }
 }

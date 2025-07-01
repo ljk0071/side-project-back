@@ -5,10 +5,15 @@ import java.time.Instant;
 import lombok.Builder;
 
 @Builder(toBuilder = true)
-public record Metadata(long createdBy,
-					   String createdByName,
-					   Instant createdAt,
-					   Long modifiedBy,
-					   String modifiedByName,
-					   Instant modifiedAt) {
+public record Metadata(
+	long createdBy,
+	String createdByName,
+	Instant createdAt,
+	Long modifiedBy,
+	String modifiedByName,
+	Instant modifiedAt,
+	Long deletedBy,
+	String deletedByName,
+	Instant deletedAt
+) {
 }

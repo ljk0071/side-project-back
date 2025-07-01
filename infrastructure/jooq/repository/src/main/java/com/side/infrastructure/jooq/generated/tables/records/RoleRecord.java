@@ -21,101 +21,115 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>test_db.role.id</code>. 역할 ID
+     * Setter for <code>test_db.role.id</code>. 역할id
      */
-    public void setId(String value) {
+    public void setId(Long value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>test_db.role.id</code>. 역할 ID
+     * Getter for <code>test_db.role.id</code>. 역할id
      */
-    public String getId() {
-        return (String) get(0);
+    public Long getId() {
+        return (Long) get(0);
+    }
+
+    /**
+     * Setter for <code>test_db.role.revision</code>. 버전
+     */
+    public void setRevision(Long value) {
+        set(1, value);
+    }
+
+    /**
+     * Getter for <code>test_db.role.revision</code>. 버전
+     */
+    public Long getRevision() {
+        return (Long) get(1);
+    }
+
+    /**
+     * Setter for <code>test_db.role.code</code>. 역할코드
+     */
+    public void setCode(String value) {
+        set(2, value);
+    }
+
+    /**
+     * Getter for <code>test_db.role.code</code>. 역할코드
+     */
+    public String getCode() {
+        return (String) get(2);
     }
 
     /**
      * Setter for <code>test_db.role.name</code>. 역할명
      */
     public void setName(String value) {
-        set(1, value);
+        set(3, value);
     }
 
     /**
      * Getter for <code>test_db.role.name</code>. 역할명
      */
     public String getName() {
-        return (String) get(1);
-    }
-
-    /**
-     * Setter for <code>test_db.role.description</code>. 설명
-     */
-    public void setDescription(String value) {
-        set(2, value);
-    }
-
-    /**
-     * Getter for <code>test_db.role.description</code>. 설명
-     */
-    public String getDescription() {
-        return (String) get(2);
+        return (String) get(3);
     }
 
     /**
      * Setter for <code>test_db.role.created_at</code>. 생성일시
      */
     public void setCreatedAt(Instant value) {
-        set(3, value);
+        set(4, value);
     }
 
     /**
      * Getter for <code>test_db.role.created_at</code>. 생성일시
      */
     public Instant getCreatedAt() {
-        return (Instant) get(3);
+        return (Instant) get(4);
     }
 
     /**
      * Setter for <code>test_db.role.created_by</code>. 생성자
      */
     public void setCreatedBy(Long value) {
-        set(4, value);
+        set(5, value);
     }
 
     /**
      * Getter for <code>test_db.role.created_by</code>. 생성자
      */
     public Long getCreatedBy() {
-        return (Long) get(4);
+        return (Long) get(5);
     }
 
     /**
      * Setter for <code>test_db.role.modified_at</code>. 수정일시
      */
     public void setModifiedAt(Instant value) {
-        set(5, value);
+        set(6, value);
     }
 
     /**
      * Getter for <code>test_db.role.modified_at</code>. 수정일시
      */
     public Instant getModifiedAt() {
-        return (Instant) get(5);
+        return (Instant) get(6);
     }
 
     /**
      * Setter for <code>test_db.role.modified_by</code>. 수정자
      */
     public void setModifiedBy(Long value) {
-        set(6, value);
+        set(7, value);
     }
 
     /**
      * Getter for <code>test_db.role.modified_by</code>. 수정자
      */
     public Long getModifiedBy() {
-        return (Long) get(6);
+        return (Long) get(7);
     }
 
     // -------------------------------------------------------------------------
@@ -123,7 +137,7 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Record1<String> key() {
+    public Record1<Long> key() {
         return (Record1) super.key();
     }
 
@@ -141,12 +155,13 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> {
     /**
      * Create a detached, initialised RoleRecord
      */
-    public RoleRecord(String id, String name, String description, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy) {
+    public RoleRecord(Long id, Long revision, String code, String name, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy) {
         super(Role.ROLE);
 
         setId(id);
+        setRevision(revision);
+        setCode(code);
         setName(name);
-        setDescription(description);
         setCreatedAt(createdAt);
         setCreatedBy(createdBy);
         setModifiedAt(modifiedAt);

@@ -4,21 +4,30 @@
 package com.side.infrastructure.jooq.generated.tables;
 
 
+import com.side.infrastructure.jooq.generated.Indexes;
 import com.side.infrastructure.jooq.generated.Keys;
 import com.side.infrastructure.jooq.generated.TestDb;
-import com.side.infrastructure.jooq.generated.enums.ResumeStatus;
+import com.side.infrastructure.jooq.generated.tables.PartyApplication.PartyApplicationPath;
+import com.side.infrastructure.jooq.generated.tables.User.UserPath;
 import com.side.infrastructure.jooq.generated.tables.records.ResumeRecord;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
 import org.jooq.Identity;
+import org.jooq.Index;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -55,19 +64,30 @@ public class Resume extends TableImpl<ResumeRecord> {
     }
 
     /**
-     * The column <code>test_db.resume.id</code>. 이력서 ID
+     * The column <code>test_db.resume.id</code>. 이력서id
      */
-    public final TableField<ResumeRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "이력서 ID");
+    public final TableField<ResumeRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "이력서id");
 
     /**
-     * The column <code>test_db.resume.status</code>. 이력서 상태
+     * The column <code>test_db.resume.revision</code>. 버전
      */
-    public final TableField<ResumeRecord, ResumeStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR(1).nullable(false).asEnumDataType(ResumeStatus.class), this, "이력서 상태");
+    public final TableField<ResumeRecord, Long> REVISION = createField(DSL.name("revision"), SQLDataType.BIGINT.nullable(false), this, "버전");
 
     /**
-     * The column <code>test_db.resume.contents</code>. 이력서 내용
+     * The column <code>test_db.resume.user_unique_id</code>. 유저고유id
      */
-    public final TableField<ResumeRecord, String> CONTENTS = createField(DSL.name("contents"), SQLDataType.CLOB.nullable(false), this, "이력서 내용");
+    public final TableField<ResumeRecord, Long> USER_UNIQUE_ID = createField(DSL.name("user_unique_id"), SQLDataType.BIGINT.nullable(false), this, "유저고유id");
+
+    /**
+     * The column <code>test_db.resume.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public final TableField<ResumeRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.CHAR(1).nullable(false), this, "상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)");
+
+    /**
+     * The column <code>test_db.resume.contents</code>. 이력서내용
+     */
+    public final TableField<ResumeRecord, String> CONTENTS = createField(DSL.name("contents"), SQLDataType.VARCHAR(255).nullable(false), this, "이력서내용");
 
     /**
      * The column <code>test_db.resume.created_at</code>. 생성일시
@@ -88,6 +108,16 @@ public class Resume extends TableImpl<ResumeRecord> {
      * The column <code>test_db.resume.modified_by</code>. 수정자
      */
     public final TableField<ResumeRecord, Long> MODIFIED_BY = createField(DSL.name("modified_by"), SQLDataType.BIGINT, this, "수정자");
+
+    /**
+     * The column <code>test_db.resume.deleted_at</code>. 삭제일시
+     */
+    public final TableField<ResumeRecord, Instant> DELETED_AT = createField(DSL.name("deleted_at"), SQLDataType.LOCALDATETIME(0), this, "삭제일시", new AutoConverter<LocalDateTime, Instant>(LocalDateTime.class, Instant.class));
+
+    /**
+     * The column <code>test_db.resume.deleted_by</code>. 삭제자
+     */
+    public final TableField<ResumeRecord, Long> DELETED_BY = createField(DSL.name("deleted_by"), SQLDataType.BIGINT, this, "삭제자");
 
     private Resume(Name alias, Table<ResumeRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -118,9 +148,47 @@ public class Resume extends TableImpl<ResumeRecord> {
         this(DSL.name("resume"), null);
     }
 
+    public <O extends Record> Resume(Table<O> path, ForeignKey<O, ResumeRecord> childPath, InverseForeignKey<O, ResumeRecord> parentPath) {
+        super(path, childPath, parentPath, RESUME);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class ResumePath extends Resume implements Path<ResumeRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> ResumePath(Table<O> path, ForeignKey<O, ResumeRecord> childPath, InverseForeignKey<O, ResumeRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private ResumePath(Name alias, Table<ResumeRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public ResumePath as(String alias) {
+            return new ResumePath(DSL.name(alias), this);
+        }
+
+        @Override
+        public ResumePath as(Name alias) {
+            return new ResumePath(alias, this);
+        }
+
+        @Override
+        public ResumePath as(Table<?> alias) {
+            return new ResumePath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : TestDb.TEST_DB;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.RESUME_IDX_RESUME_USER_UNIQUE_ID_STATUS);
     }
 
     @Override
@@ -131,6 +199,36 @@ public class Resume extends TableImpl<ResumeRecord> {
     @Override
     public UniqueKey<ResumeRecord> getPrimaryKey() {
         return Keys.KEY_RESUME_PRIMARY;
+    }
+
+    @Override
+    public List<ForeignKey<ResumeRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.FK_RESUME_USER);
+    }
+
+    private transient UserPath _user;
+
+    /**
+     * Get the implicit join path to the <code>test_db.user</code> table.
+     */
+    public UserPath user() {
+        if (_user == null)
+            _user = new UserPath(this, Keys.FK_RESUME_USER, null);
+
+        return _user;
+    }
+
+    private transient PartyApplicationPath _partyApplication;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>test_db.party_application</code> table
+     */
+    public PartyApplicationPath partyApplication() {
+        if (_partyApplication == null)
+            _partyApplication = new PartyApplicationPath(this, null, Keys.FK_PARTY_APPLICATION_RESUME.getInverseKey());
+
+        return _partyApplication;
     }
 
     @Override

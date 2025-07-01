@@ -4,7 +4,6 @@
 package com.side.infrastructure.jooq.generated.tables.records;
 
 
-import com.side.infrastructure.jooq.generated.enums.PartyRecruitStatus;
 import com.side.infrastructure.jooq.generated.tables.PartyRecruit;
 
 import java.time.Instant;
@@ -22,143 +21,187 @@ public class PartyRecruitRecord extends UpdatableRecordImpl<PartyRecruitRecord> 
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>test_db.party_recruit.id</code>. 파티 모집글 ID
+     * Setter for <code>test_db.party_recruit.id</code>. 파티모집글id
      */
     public void setId(Long value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>test_db.party_recruit.id</code>. 파티 모집글 ID
+     * Getter for <code>test_db.party_recruit.id</code>. 파티모집글id
      */
     public Long getId() {
         return (Long) get(0);
     }
 
     /**
-     * Setter for <code>test_db.party_recruit.status</code>. 게시글 상태
+     * Setter for <code>test_db.party_recruit.revision</code>. 버전
      */
-    public void setStatus(PartyRecruitStatus value) {
+    public void setRevision(Long value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>test_db.party_recruit.status</code>. 게시글 상태
+     * Getter for <code>test_db.party_recruit.revision</code>. 버전
      */
-    public PartyRecruitStatus getStatus() {
-        return (PartyRecruitStatus) get(1);
+    public Long getRevision() {
+        return (Long) get(1);
     }
 
     /**
-     * Setter for <code>test_db.party_recruit.title</code>. 게시글 제목
+     * Setter for <code>test_db.party_recruit.user_unique_id</code>. 유저고유id
      */
-    public void setTitle(String value) {
+    public void setUserUniqueId(Long value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>test_db.party_recruit.title</code>. 게시글 제목
+     * Getter for <code>test_db.party_recruit.user_unique_id</code>. 유저고유id
      */
-    public String getTitle() {
-        return (String) get(2);
+    public Long getUserUniqueId() {
+        return (Long) get(2);
     }
 
     /**
-     * Setter for <code>test_db.party_recruit.contents</code>. 게시글 내용
+     * Setter for <code>test_db.party_recruit.title</code>. 게시글제목
      */
-    public void setContents(String value) {
+    public void setTitle(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>test_db.party_recruit.contents</code>. 게시글 내용
+     * Getter for <code>test_db.party_recruit.title</code>. 게시글제목
      */
-    public String getContents() {
+    public String getTitle() {
         return (String) get(3);
     }
 
     /**
-     * Setter for <code>test_db.party_recruit.likes</code>. 좋아요 수
+     * Setter for <code>test_db.party_recruit.contents</code>. 게시글내용
      */
-    public void setLikes(Long value) {
+    public void setContents(String value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>test_db.party_recruit.likes</code>. 좋아요 수
+     * Getter for <code>test_db.party_recruit.contents</code>. 게시글내용
      */
-    public Long getLikes() {
-        return (Long) get(4);
+    public String getContents() {
+        return (String) get(4);
     }
 
     /**
-     * Setter for <code>test_db.party_recruit.dislikes</code>. 싫어요 수
+     * Setter for <code>test_db.party_recruit.max_members</code>. 최대모집인원
      */
-    public void setDislikes(Long value) {
+    public void setMaxMembers(Integer value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>test_db.party_recruit.dislikes</code>. 싫어요 수
+     * Getter for <code>test_db.party_recruit.max_members</code>. 최대모집인원
      */
-    public Long getDislikes() {
-        return (Long) get(5);
+    public Integer getMaxMembers() {
+        return (Integer) get(5);
+    }
+
+    /**
+     * Setter for <code>test_db.party_recruit.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public void setStatus(String value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>test_db.party_recruit.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public String getStatus() {
+        return (String) get(6);
     }
 
     /**
      * Setter for <code>test_db.party_recruit.created_at</code>. 생성일시
      */
     public void setCreatedAt(Instant value) {
-        set(6, value);
+        set(7, value);
     }
 
     /**
      * Getter for <code>test_db.party_recruit.created_at</code>. 생성일시
      */
     public Instant getCreatedAt() {
-        return (Instant) get(6);
+        return (Instant) get(7);
     }
 
     /**
      * Setter for <code>test_db.party_recruit.created_by</code>. 생성자
      */
     public void setCreatedBy(Long value) {
-        set(7, value);
+        set(8, value);
     }
 
     /**
      * Getter for <code>test_db.party_recruit.created_by</code>. 생성자
      */
     public Long getCreatedBy() {
-        return (Long) get(7);
+        return (Long) get(8);
     }
 
     /**
      * Setter for <code>test_db.party_recruit.modified_at</code>. 수정일시
      */
     public void setModifiedAt(Instant value) {
-        set(8, value);
+        set(9, value);
     }
 
     /**
      * Getter for <code>test_db.party_recruit.modified_at</code>. 수정일시
      */
     public Instant getModifiedAt() {
-        return (Instant) get(8);
+        return (Instant) get(9);
     }
 
     /**
      * Setter for <code>test_db.party_recruit.modified_by</code>. 수정자
      */
     public void setModifiedBy(Long value) {
-        set(9, value);
+        set(10, value);
     }
 
     /**
      * Getter for <code>test_db.party_recruit.modified_by</code>. 수정자
      */
     public Long getModifiedBy() {
-        return (Long) get(9);
+        return (Long) get(10);
+    }
+
+    /**
+     * Setter for <code>test_db.party_recruit.deleted_at</code>. 삭제일시
+     */
+    public void setDeletedAt(Instant value) {
+        set(11, value);
+    }
+
+    /**
+     * Getter for <code>test_db.party_recruit.deleted_at</code>. 삭제일시
+     */
+    public Instant getDeletedAt() {
+        return (Instant) get(11);
+    }
+
+    /**
+     * Setter for <code>test_db.party_recruit.deleted_by</code>. 삭제자
+     */
+    public void setDeletedBy(Long value) {
+        set(12, value);
+    }
+
+    /**
+     * Getter for <code>test_db.party_recruit.deleted_by</code>. 삭제자
+     */
+    public Long getDeletedBy() {
+        return (Long) get(12);
     }
 
     // -------------------------------------------------------------------------
@@ -184,19 +227,22 @@ public class PartyRecruitRecord extends UpdatableRecordImpl<PartyRecruitRecord> 
     /**
      * Create a detached, initialised PartyRecruitRecord
      */
-    public PartyRecruitRecord(Long id, PartyRecruitStatus status, String title, String contents, Long likes, Long dislikes, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy) {
+    public PartyRecruitRecord(Long id, Long revision, Long userUniqueId, String title, String contents, Integer maxMembers, String status, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy, Instant deletedAt, Long deletedBy) {
         super(PartyRecruit.PARTY_RECRUIT);
 
         setId(id);
-        setStatus(status);
+        setRevision(revision);
+        setUserUniqueId(userUniqueId);
         setTitle(title);
         setContents(contents);
-        setLikes(likes);
-        setDislikes(dislikes);
+        setMaxMembers(maxMembers);
+        setStatus(status);
         setCreatedAt(createdAt);
         setCreatedBy(createdBy);
         setModifiedAt(modifiedAt);
         setModifiedBy(modifiedBy);
+        setDeletedAt(deletedAt);
+        setDeletedBy(deletedBy);
         resetChangedOnNotNull();
     }
 }

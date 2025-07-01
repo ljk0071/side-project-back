@@ -4,21 +4,30 @@
 package com.side.infrastructure.jooq.generated.tables;
 
 
+import com.side.infrastructure.jooq.generated.Indexes;
 import com.side.infrastructure.jooq.generated.Keys;
 import com.side.infrastructure.jooq.generated.TestDb;
-import com.side.infrastructure.jooq.generated.enums.PartyRecruitStatus;
+import com.side.infrastructure.jooq.generated.tables.PartyApplication.PartyApplicationPath;
+import com.side.infrastructure.jooq.generated.tables.User.UserPath;
 import com.side.infrastructure.jooq.generated.tables.records.PartyRecruitRecord;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
 import org.jooq.Identity;
+import org.jooq.Index;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -55,34 +64,40 @@ public class PartyRecruit extends TableImpl<PartyRecruitRecord> {
     }
 
     /**
-     * The column <code>test_db.party_recruit.id</code>. 파티 모집글 ID
+     * The column <code>test_db.party_recruit.id</code>. 파티모집글id
      */
-    public final TableField<PartyRecruitRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "파티 모집글 ID");
+    public final TableField<PartyRecruitRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "파티모집글id");
 
     /**
-     * The column <code>test_db.party_recruit.status</code>. 게시글 상태
+     * The column <code>test_db.party_recruit.revision</code>. 버전
      */
-    public final TableField<PartyRecruitRecord, PartyRecruitStatus> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR(1).nullable(false).asEnumDataType(PartyRecruitStatus.class), this, "게시글 상태");
+    public final TableField<PartyRecruitRecord, Long> REVISION = createField(DSL.name("revision"), SQLDataType.BIGINT.nullable(false), this, "버전");
 
     /**
-     * The column <code>test_db.party_recruit.title</code>. 게시글 제목
+     * The column <code>test_db.party_recruit.user_unique_id</code>. 유저고유id
      */
-    public final TableField<PartyRecruitRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(255).nullable(false), this, "게시글 제목");
+    public final TableField<PartyRecruitRecord, Long> USER_UNIQUE_ID = createField(DSL.name("user_unique_id"), SQLDataType.BIGINT.nullable(false), this, "유저고유id");
 
     /**
-     * The column <code>test_db.party_recruit.contents</code>. 게시글 내용
+     * The column <code>test_db.party_recruit.title</code>. 게시글제목
      */
-    public final TableField<PartyRecruitRecord, String> CONTENTS = createField(DSL.name("contents"), SQLDataType.CLOB.nullable(false), this, "게시글 내용");
+    public final TableField<PartyRecruitRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(100).nullable(false), this, "게시글제목");
 
     /**
-     * The column <code>test_db.party_recruit.likes</code>. 좋아요 수
+     * The column <code>test_db.party_recruit.contents</code>. 게시글내용
      */
-    public final TableField<PartyRecruitRecord, Long> LIKES = createField(DSL.name("likes"), SQLDataType.BIGINT.nullable(false), this, "좋아요 수");
+    public final TableField<PartyRecruitRecord, String> CONTENTS = createField(DSL.name("contents"), SQLDataType.VARCHAR(255).nullable(false), this, "게시글내용");
 
     /**
-     * The column <code>test_db.party_recruit.dislikes</code>. 싫어요 수
+     * The column <code>test_db.party_recruit.max_members</code>. 최대모집인원
      */
-    public final TableField<PartyRecruitRecord, Long> DISLIKES = createField(DSL.name("dislikes"), SQLDataType.BIGINT.nullable(false), this, "싫어요 수");
+    public final TableField<PartyRecruitRecord, Integer> MAX_MEMBERS = createField(DSL.name("max_members"), SQLDataType.INTEGER.nullable(false), this, "최대모집인원");
+
+    /**
+     * The column <code>test_db.party_recruit.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public final TableField<PartyRecruitRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.CHAR(1).nullable(false), this, "상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)");
 
     /**
      * The column <code>test_db.party_recruit.created_at</code>. 생성일시
@@ -103,6 +118,16 @@ public class PartyRecruit extends TableImpl<PartyRecruitRecord> {
      * The column <code>test_db.party_recruit.modified_by</code>. 수정자
      */
     public final TableField<PartyRecruitRecord, Long> MODIFIED_BY = createField(DSL.name("modified_by"), SQLDataType.BIGINT, this, "수정자");
+
+    /**
+     * The column <code>test_db.party_recruit.deleted_at</code>. 삭제일시
+     */
+    public final TableField<PartyRecruitRecord, Instant> DELETED_AT = createField(DSL.name("deleted_at"), SQLDataType.LOCALDATETIME(0), this, "삭제일시", new AutoConverter<LocalDateTime, Instant>(LocalDateTime.class, Instant.class));
+
+    /**
+     * The column <code>test_db.party_recruit.deleted_by</code>. 삭제자
+     */
+    public final TableField<PartyRecruitRecord, Long> DELETED_BY = createField(DSL.name("deleted_by"), SQLDataType.BIGINT, this, "삭제자");
 
     private PartyRecruit(Name alias, Table<PartyRecruitRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -133,9 +158,47 @@ public class PartyRecruit extends TableImpl<PartyRecruitRecord> {
         this(DSL.name("party_recruit"), null);
     }
 
+    public <O extends Record> PartyRecruit(Table<O> path, ForeignKey<O, PartyRecruitRecord> childPath, InverseForeignKey<O, PartyRecruitRecord> parentPath) {
+        super(path, childPath, parentPath, PARTY_RECRUIT);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class PartyRecruitPath extends PartyRecruit implements Path<PartyRecruitRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> PartyRecruitPath(Table<O> path, ForeignKey<O, PartyRecruitRecord> childPath, InverseForeignKey<O, PartyRecruitRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private PartyRecruitPath(Name alias, Table<PartyRecruitRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public PartyRecruitPath as(String alias) {
+            return new PartyRecruitPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public PartyRecruitPath as(Name alias) {
+            return new PartyRecruitPath(alias, this);
+        }
+
+        @Override
+        public PartyRecruitPath as(Table<?> alias) {
+            return new PartyRecruitPath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : TestDb.TEST_DB;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.PARTY_RECRUIT_IDX_PARTY_RECRUIT_RECRUIT_STATUS, Indexes.PARTY_RECRUIT_IDX_PARTY_RECRUIT_STATUS_CREATED_AT, Indexes.PARTY_RECRUIT_IDX_PARTY_RECRUIT_USER_UNIQUE_ID);
     }
 
     @Override
@@ -146,6 +209,36 @@ public class PartyRecruit extends TableImpl<PartyRecruitRecord> {
     @Override
     public UniqueKey<PartyRecruitRecord> getPrimaryKey() {
         return Keys.KEY_PARTY_RECRUIT_PRIMARY;
+    }
+
+    @Override
+    public List<ForeignKey<PartyRecruitRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.FK_PARTY_RECRUIT_USER);
+    }
+
+    private transient UserPath _user;
+
+    /**
+     * Get the implicit join path to the <code>test_db.user</code> table.
+     */
+    public UserPath user() {
+        if (_user == null)
+            _user = new UserPath(this, Keys.FK_PARTY_RECRUIT_USER, null);
+
+        return _user;
+    }
+
+    private transient PartyApplicationPath _partyApplication;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>test_db.party_application</code> table
+     */
+    public PartyApplicationPath partyApplication() {
+        if (_partyApplication == null)
+            _partyApplication = new PartyApplicationPath(this, null, Keys.FK_PARTY_APPLICATION_PARTY_RECRUIT.getInverseKey());
+
+        return _partyApplication;
     }
 
     @Override

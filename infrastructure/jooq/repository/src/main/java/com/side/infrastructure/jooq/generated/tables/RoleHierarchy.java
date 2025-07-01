@@ -6,15 +6,25 @@ package com.side.infrastructure.jooq.generated.tables;
 
 import com.side.infrastructure.jooq.generated.Keys;
 import com.side.infrastructure.jooq.generated.TestDb;
+import com.side.infrastructure.jooq.generated.tables.Role.RolePath;
 import com.side.infrastructure.jooq.generated.tables.records.RoleHierarchyRecord;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Identity;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -23,6 +33,7 @@ import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
+import org.jooq.impl.AutoConverter;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -50,14 +61,44 @@ public class RoleHierarchy extends TableImpl<RoleHierarchyRecord> {
     }
 
     /**
-     * The column <code>test_db.role_hierarchy.higher_role</code>. 상위 역할
+     * The column <code>test_db.role_hierarchy.id</code>. 역할관계id
      */
-    public final TableField<RoleHierarchyRecord, String> HIGHER_ROLE = createField(DSL.name("higher_role"), SQLDataType.VARCHAR(30).nullable(false), this, "상위 역할");
+    public final TableField<RoleHierarchyRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "역할관계id");
 
     /**
-     * The column <code>test_db.role_hierarchy.lower_role</code>. 하위 역할
+     * The column <code>test_db.role_hierarchy.revision</code>. 버전
      */
-    public final TableField<RoleHierarchyRecord, String> LOWER_ROLE = createField(DSL.name("lower_role"), SQLDataType.VARCHAR(30).nullable(false), this, "하위 역할");
+    public final TableField<RoleHierarchyRecord, Long> REVISION = createField(DSL.name("revision"), SQLDataType.BIGINT.nullable(false), this, "버전");
+
+    /**
+     * The column <code>test_db.role_hierarchy.higher_role_id</code>. 상위역할id
+     */
+    public final TableField<RoleHierarchyRecord, Long> HIGHER_ROLE_ID = createField(DSL.name("higher_role_id"), SQLDataType.BIGINT.nullable(false), this, "상위역할id");
+
+    /**
+     * The column <code>test_db.role_hierarchy.lower_role_id</code>. 하위역할id
+     */
+    public final TableField<RoleHierarchyRecord, Long> LOWER_ROLE_ID = createField(DSL.name("lower_role_id"), SQLDataType.BIGINT.nullable(false), this, "하위역할id");
+
+    /**
+     * The column <code>test_db.role_hierarchy.created_at</code>. 생성일시
+     */
+    public final TableField<RoleHierarchyRecord, Instant> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(0).nullable(false), this, "생성일시", new AutoConverter<LocalDateTime, Instant>(LocalDateTime.class, Instant.class));
+
+    /**
+     * The column <code>test_db.role_hierarchy.created_by</code>. 생성자
+     */
+    public final TableField<RoleHierarchyRecord, Long> CREATED_BY = createField(DSL.name("created_by"), SQLDataType.BIGINT.nullable(false), this, "생성자");
+
+    /**
+     * The column <code>test_db.role_hierarchy.modified_at</code>. 수정일시
+     */
+    public final TableField<RoleHierarchyRecord, Instant> MODIFIED_AT = createField(DSL.name("modified_at"), SQLDataType.LOCALDATETIME(0), this, "수정일시", new AutoConverter<LocalDateTime, Instant>(LocalDateTime.class, Instant.class));
+
+    /**
+     * The column <code>test_db.role_hierarchy.modified_by</code>. 수정자
+     */
+    public final TableField<RoleHierarchyRecord, Long> MODIFIED_BY = createField(DSL.name("modified_by"), SQLDataType.BIGINT, this, "수정자");
 
     private RoleHierarchy(Name alias, Table<RoleHierarchyRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -88,14 +129,83 @@ public class RoleHierarchy extends TableImpl<RoleHierarchyRecord> {
         this(DSL.name("role_hierarchy"), null);
     }
 
+    public <O extends Record> RoleHierarchy(Table<O> path, ForeignKey<O, RoleHierarchyRecord> childPath, InverseForeignKey<O, RoleHierarchyRecord> parentPath) {
+        super(path, childPath, parentPath, ROLE_HIERARCHY);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class RoleHierarchyPath extends RoleHierarchy implements Path<RoleHierarchyRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> RoleHierarchyPath(Table<O> path, ForeignKey<O, RoleHierarchyRecord> childPath, InverseForeignKey<O, RoleHierarchyRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private RoleHierarchyPath(Name alias, Table<RoleHierarchyRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public RoleHierarchyPath as(String alias) {
+            return new RoleHierarchyPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public RoleHierarchyPath as(Name alias) {
+            return new RoleHierarchyPath(alias, this);
+        }
+
+        @Override
+        public RoleHierarchyPath as(Table<?> alias) {
+            return new RoleHierarchyPath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : TestDb.TEST_DB;
     }
 
     @Override
+    public Identity<RoleHierarchyRecord, Long> getIdentity() {
+        return (Identity<RoleHierarchyRecord, Long>) super.getIdentity();
+    }
+
+    @Override
     public UniqueKey<RoleHierarchyRecord> getPrimaryKey() {
         return Keys.KEY_ROLE_HIERARCHY_PRIMARY;
+    }
+
+    @Override
+    public List<ForeignKey<RoleHierarchyRecord, ?>> getReferences() {
+        return Arrays.asList(Keys.FK_ROLE_HIERARCHY_ROLE_HIGHER, Keys.FK_ROLE_HIERARCHY_ROLE_LOWER);
+    }
+
+    private transient RolePath _fkRoleHierarchyRoleHigher;
+
+    /**
+     * Get the implicit join path to the <code>test_db.role</code> table, via
+     * the <code>fk_role_hierarchy_role_higher</code> key.
+     */
+    public RolePath fkRoleHierarchyRoleHigher() {
+        if (_fkRoleHierarchyRoleHigher == null)
+            _fkRoleHierarchyRoleHigher = new RolePath(this, Keys.FK_ROLE_HIERARCHY_ROLE_HIGHER, null);
+
+        return _fkRoleHierarchyRoleHigher;
+    }
+
+    private transient RolePath _fkRoleHierarchyRoleLower;
+
+    /**
+     * Get the implicit join path to the <code>test_db.role</code> table, via
+     * the <code>fk_role_hierarchy_role_lower</code> key.
+     */
+    public RolePath fkRoleHierarchyRoleLower() {
+        if (_fkRoleHierarchyRoleLower == null)
+            _fkRoleHierarchyRoleLower = new RolePath(this, Keys.FK_ROLE_HIERARCHY_ROLE_LOWER, null);
+
+        return _fkRoleHierarchyRoleLower;
     }
 
     @Override

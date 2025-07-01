@@ -1,32 +1,28 @@
 package com.side.domain.service;
 
-import static com.side.domain.enums.RepositoryTypeEnum.*;
-import static com.side.domain.model.UserReaction.*;
-
-import org.springframework.stereotype.Service;
-
 import com.side.domain.Metadata;
-import com.side.domain.enums.BoardStatusTypeEnum;
+import com.side.domain.StatusTypeEnum;
 import com.side.domain.model.PartyRecruit;
 import com.side.domain.repository.PartyRecruitRepositoryManager;
+import org.springframework.stereotype.Service;
+
+import static com.side.domain.RepositoryTypeEnum.JOOQ;
 
 @Service
 public class PartyRecruitService {
 
-	public void create(PartyRecruit partyRecruit) {
+    public void create(PartyRecruit partyRecruit) {
 
-		PartyRecruitRepositoryManager.getDefaultPartyRecruitRepository()
-									 .create(partyRecruit.toBuilder()
-														 .article(partyRecruit.article().toBuilder()
-																			  .userReaction(initForInsert())
-																			  .build())
-														 .status(BoardStatusTypeEnum.Y)
-														 .metadata(Metadata.builder().build())
-														 .build());
-	}
+        PartyRecruitRepositoryManager.getDefaultPartyRecruitRepository()
+                                     .create(partyRecruit.toBuilder()
+                                                         .revision(0L)
+                                                         .status(StatusTypeEnum.Y)
+                                                         .metadata(Metadata.builder().build())
+                                                         .build());
+    }
 
-	public void delete(long partyId) {
-		PartyRecruitRepositoryManager.getPartyRecruitRepository(JOOQ)
-									 .delete(partyId);
-	}
+    public void delete(long partyId) {
+        PartyRecruitRepositoryManager.getPartyRecruitRepository(JOOQ)
+                                     .delete(partyId);
+    }
 }

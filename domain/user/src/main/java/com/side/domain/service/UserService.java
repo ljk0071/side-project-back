@@ -1,6 +1,6 @@
 package com.side.domain.service;
 
-import static com.side.domain.enums.RepositoryTypeEnum.*;
+import static com.side.domain.RepositoryTypeEnum.JOOQ;
 
 import org.springframework.stereotype.Service;
 
@@ -11,16 +11,17 @@ import com.side.domain.repository.UserRepositoryManager;
 @Service
 public class UserService {
 
-	public User findByUserId(String userId) {
-		return UserRepositoryManager.getUserRepository(JOOQ).findByUserId(userId);
-	}
+    public User findByUserId(String userId) {
+        return UserRepositoryManager.getUserRepository(JOOQ)
+                                    .findByUserId(userId);
+    }
 
-	public void create(User user) {
-		UserRepositoryManager.getDefaultUserRepository().create(user);
-	}
+    public void create(User user) {
+        UserRepositoryManager.getDefaultUserRepository().create(user);
+    }
 
-	public User loadUserByUserId(String userId) {
-		return UserRepositoryManager.getDefaultUserRepository().findByUserIdAndStatus(userId, UserStatus.ACTIVE);
-	}
+    public User loadUserByUserId(String userId) {
+        return UserRepositoryManager.getDefaultUserRepository().findByUserIdAndStatus(userId, UserStatus.ACTIVE);
+    }
 }
 

@@ -1,31 +1,14 @@
 package com.side.infrastructure.jpa.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hibernate.annotations.Comment;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.side.domain.enums.BoardStatusTypeEnum;
+import com.side.domain.StatusTypeEnum;
 import com.side.infrastructure.jpa.common.MetadataEntity;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @NoArgsConstructor
@@ -36,33 +19,30 @@ import lombok.NoArgsConstructor;
 @EntityListeners(AuditingEntityListener.class)
 public class PartyRecruitEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Comment("파티 모집글 ID")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Comment("파티 모집글 ID")
+    private Long id;
 
-	@Column(name = "status", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private BoardStatusTypeEnum status;
+    @Version
+    @Column(name = "revision", nullable = false)
+    private Long revision;
 
-	@Embedded
-	private ArticleEntity article;
+    @Embedded
+    private ArticleEntity article;
 
-	@OneToMany(mappedBy = "partyRecruit", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private List<CommentEntity> comments = new ArrayList<>();
+    @Column(name = "user_unique_id", nullable = false)
+    private Long userUniqueId;
 
-	@Embedded
-	private MetadataEntity metadata;
+    @Column(name = "max_members", nullable = false)
+    @Comment("최대 모집 인원")
+    private Integer maxMembers;
 
-	// 댓글 추가
-	public void addComment(CommentEntity comment) {
-		comments.add(comment);
-		comment.setPartyRecruit(this);
-	}
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Comment("상태")
+    private StatusTypeEnum status;
 
-	// 댓글 제거
-	public void removeComment(CommentEntity comment) {
-		comments.remove(comment);
-		comment.setPartyRecruit(null);
-	}
+    @Embedded
+    private MetadataEntity metadata;
 }

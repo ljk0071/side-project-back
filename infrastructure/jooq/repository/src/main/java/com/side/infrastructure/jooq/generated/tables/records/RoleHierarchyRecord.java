@@ -6,7 +6,9 @@ package com.side.infrastructure.jooq.generated.tables.records;
 
 import com.side.infrastructure.jooq.generated.tables.RoleHierarchy;
 
-import org.jooq.Record2;
+import java.time.Instant;
+
+import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -19,31 +21,115 @@ public class RoleHierarchyRecord extends UpdatableRecordImpl<RoleHierarchyRecord
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>test_db.role_hierarchy.higher_role</code>. 상위 역할
+     * Setter for <code>test_db.role_hierarchy.id</code>. 역할관계id
      */
-    public void setHigherRole(String value) {
+    public void setId(Long value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>test_db.role_hierarchy.higher_role</code>. 상위 역할
+     * Getter for <code>test_db.role_hierarchy.id</code>. 역할관계id
      */
-    public String getHigherRole() {
-        return (String) get(0);
+    public Long getId() {
+        return (Long) get(0);
     }
 
     /**
-     * Setter for <code>test_db.role_hierarchy.lower_role</code>. 하위 역할
+     * Setter for <code>test_db.role_hierarchy.revision</code>. 버전
      */
-    public void setLowerRole(String value) {
+    public void setRevision(Long value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>test_db.role_hierarchy.lower_role</code>. 하위 역할
+     * Getter for <code>test_db.role_hierarchy.revision</code>. 버전
      */
-    public String getLowerRole() {
-        return (String) get(1);
+    public Long getRevision() {
+        return (Long) get(1);
+    }
+
+    /**
+     * Setter for <code>test_db.role_hierarchy.higher_role_id</code>. 상위역할id
+     */
+    public void setHigherRoleId(Long value) {
+        set(2, value);
+    }
+
+    /**
+     * Getter for <code>test_db.role_hierarchy.higher_role_id</code>. 상위역할id
+     */
+    public Long getHigherRoleId() {
+        return (Long) get(2);
+    }
+
+    /**
+     * Setter for <code>test_db.role_hierarchy.lower_role_id</code>. 하위역할id
+     */
+    public void setLowerRoleId(Long value) {
+        set(3, value);
+    }
+
+    /**
+     * Getter for <code>test_db.role_hierarchy.lower_role_id</code>. 하위역할id
+     */
+    public Long getLowerRoleId() {
+        return (Long) get(3);
+    }
+
+    /**
+     * Setter for <code>test_db.role_hierarchy.created_at</code>. 생성일시
+     */
+    public void setCreatedAt(Instant value) {
+        set(4, value);
+    }
+
+    /**
+     * Getter for <code>test_db.role_hierarchy.created_at</code>. 생성일시
+     */
+    public Instant getCreatedAt() {
+        return (Instant) get(4);
+    }
+
+    /**
+     * Setter for <code>test_db.role_hierarchy.created_by</code>. 생성자
+     */
+    public void setCreatedBy(Long value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>test_db.role_hierarchy.created_by</code>. 생성자
+     */
+    public Long getCreatedBy() {
+        return (Long) get(5);
+    }
+
+    /**
+     * Setter for <code>test_db.role_hierarchy.modified_at</code>. 수정일시
+     */
+    public void setModifiedAt(Instant value) {
+        set(6, value);
+    }
+
+    /**
+     * Getter for <code>test_db.role_hierarchy.modified_at</code>. 수정일시
+     */
+    public Instant getModifiedAt() {
+        return (Instant) get(6);
+    }
+
+    /**
+     * Setter for <code>test_db.role_hierarchy.modified_by</code>. 수정자
+     */
+    public void setModifiedBy(Long value) {
+        set(7, value);
+    }
+
+    /**
+     * Getter for <code>test_db.role_hierarchy.modified_by</code>. 수정자
+     */
+    public Long getModifiedBy() {
+        return (Long) get(7);
     }
 
     // -------------------------------------------------------------------------
@@ -51,8 +137,8 @@ public class RoleHierarchyRecord extends UpdatableRecordImpl<RoleHierarchyRecord
     // -------------------------------------------------------------------------
 
     @Override
-    public Record2<String, String> key() {
-        return (Record2) super.key();
+    public Record1<Long> key() {
+        return (Record1) super.key();
     }
 
     // -------------------------------------------------------------------------
@@ -69,11 +155,17 @@ public class RoleHierarchyRecord extends UpdatableRecordImpl<RoleHierarchyRecord
     /**
      * Create a detached, initialised RoleHierarchyRecord
      */
-    public RoleHierarchyRecord(String higherRole, String lowerRole) {
+    public RoleHierarchyRecord(Long id, Long revision, Long higherRoleId, Long lowerRoleId, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy) {
         super(RoleHierarchy.ROLE_HIERARCHY);
 
-        setHigherRole(higherRole);
-        setLowerRole(lowerRole);
+        setId(id);
+        setRevision(revision);
+        setHigherRoleId(higherRoleId);
+        setLowerRoleId(lowerRoleId);
+        setCreatedAt(createdAt);
+        setCreatedBy(createdBy);
+        setModifiedAt(modifiedAt);
+        setModifiedBy(modifiedBy);
         resetChangedOnNotNull();
     }
 }

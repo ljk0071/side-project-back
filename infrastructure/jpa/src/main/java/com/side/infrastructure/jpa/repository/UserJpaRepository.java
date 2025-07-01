@@ -1,14 +1,60 @@
 package com.side.infrastructure.jpa.repository;
 
-import java.util.Optional;
+import static com.side.domain.RepositoryTypeEnum.*;
+import static com.side.infrastructure.jpa.mapper.UserMapper.*;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 
 import com.side.domain.enums.UserStatus;
+import com.side.domain.model.User;
+import com.side.domain.repository.UserRepository;
+import com.side.domain.repository.UserRepositoryManager;
 import com.side.infrastructure.jpa.entity.UserEntity;
 
-public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
-	Optional<UserEntity> findByUserIdAndStatus(String userId, UserStatus status);
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 
-	Optional<UserEntity> findByUserId(String userId);
+@Repository
+@RequiredArgsConstructor
+public class UserJpaRepository implements UserRepository {
+
+    private final UserJpaInterface repository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    @PostConstruct
+    public void init() {
+        UserRepositoryManager.addUserRepository(JPA, this);
+    }
+
+    @Override
+    public void create(User user) {
+        UserEntity entity = UserMapper.toEntity(user);
+
+        repository.save(entity.toBuilder()
+                              .password(passwordEncoder.encode(entity.getPassword()))
+                              .build());
+    }
+
+    @Override
+    public User findById(long uniqueId) {
+        return UserMapper.toDomain(repository.findById(uniqueId)
+                                             .orElseThrow(
+                                                     () -> new IllegalArgumentException("User not found: " + uniqueId)));
+    }
+
+    @Override
+    public User findByUserId(String userId) {
+        return UserMapper.toDomain(repository.findByUserId(userId)
+                                             .orElseThrow(
+                                                     () -> new IllegalArgumentException("User not found: " + userId)));
+    }
+
+    @Override
+    public User findByUserIdAndStatus(String userId, UserStatus status) {
+        return UserMapper.toDomain(repository.findByUserIdAndStatus(userId, status)
+                                             .orElseThrow(
+                                                     () -> new IllegalArgumentException("User not found: " + userId)));
+    }
 }

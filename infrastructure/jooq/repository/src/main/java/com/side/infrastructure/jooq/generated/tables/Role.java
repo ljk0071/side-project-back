@@ -6,6 +6,9 @@ package com.side.infrastructure.jooq.generated.tables;
 
 import com.side.infrastructure.jooq.generated.Keys;
 import com.side.infrastructure.jooq.generated.TestDb;
+import com.side.infrastructure.jooq.generated.tables.RoleHierarchy.RoleHierarchyPath;
+import com.side.infrastructure.jooq.generated.tables.User.UserPath;
+import com.side.infrastructure.jooq.generated.tables.UserRole.UserRolePath;
 import com.side.infrastructure.jooq.generated.tables.records.RoleRecord;
 
 import java.time.Instant;
@@ -14,9 +17,14 @@ import java.util.Collection;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
+import org.jooq.Identity;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -53,19 +61,24 @@ public class Role extends TableImpl<RoleRecord> {
     }
 
     /**
-     * The column <code>test_db.role.id</code>. 역할 ID
+     * The column <code>test_db.role.id</code>. 역할id
      */
-    public final TableField<RoleRecord, String> ID = createField(DSL.name("id"), SQLDataType.VARCHAR(30).nullable(false), this, "역할 ID");
+    public final TableField<RoleRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "역할id");
+
+    /**
+     * The column <code>test_db.role.revision</code>. 버전
+     */
+    public final TableField<RoleRecord, Long> REVISION = createField(DSL.name("revision"), SQLDataType.BIGINT.nullable(false), this, "버전");
+
+    /**
+     * The column <code>test_db.role.code</code>. 역할코드
+     */
+    public final TableField<RoleRecord, String> CODE = createField(DSL.name("code"), SQLDataType.VARCHAR(30).nullable(false), this, "역할코드");
 
     /**
      * The column <code>test_db.role.name</code>. 역할명
      */
-    public final TableField<RoleRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(30).nullable(false), this, "역할명");
-
-    /**
-     * The column <code>test_db.role.description</code>. 설명
-     */
-    public final TableField<RoleRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(255), this, "설명");
+    public final TableField<RoleRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(50).nullable(false), this, "역할명");
 
     /**
      * The column <code>test_db.role.created_at</code>. 생성일시
@@ -116,14 +129,101 @@ public class Role extends TableImpl<RoleRecord> {
         this(DSL.name("role"), null);
     }
 
+    public <O extends Record> Role(Table<O> path, ForeignKey<O, RoleRecord> childPath, InverseForeignKey<O, RoleRecord> parentPath) {
+        super(path, childPath, parentPath, ROLE);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class RolePath extends Role implements Path<RoleRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> RolePath(Table<O> path, ForeignKey<O, RoleRecord> childPath, InverseForeignKey<O, RoleRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private RolePath(Name alias, Table<RoleRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public RolePath as(String alias) {
+            return new RolePath(DSL.name(alias), this);
+        }
+
+        @Override
+        public RolePath as(Name alias) {
+            return new RolePath(alias, this);
+        }
+
+        @Override
+        public RolePath as(Table<?> alias) {
+            return new RolePath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : TestDb.TEST_DB;
     }
 
     @Override
+    public Identity<RoleRecord, Long> getIdentity() {
+        return (Identity<RoleRecord, Long>) super.getIdentity();
+    }
+
+    @Override
     public UniqueKey<RoleRecord> getPrimaryKey() {
         return Keys.KEY_ROLE_PRIMARY;
+    }
+
+    private transient RoleHierarchyPath _fkRoleHierarchyRoleHigher;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>test_db.role_hierarchy</code> table, via the
+     * <code>fk_role_hierarchy_role_higher</code> key
+     */
+    public RoleHierarchyPath fkRoleHierarchyRoleHigher() {
+        if (_fkRoleHierarchyRoleHigher == null)
+            _fkRoleHierarchyRoleHigher = new RoleHierarchyPath(this, null, Keys.FK_ROLE_HIERARCHY_ROLE_HIGHER.getInverseKey());
+
+        return _fkRoleHierarchyRoleHigher;
+    }
+
+    private transient RoleHierarchyPath _fkRoleHierarchyRoleLower;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>test_db.role_hierarchy</code> table, via the
+     * <code>fk_role_hierarchy_role_lower</code> key
+     */
+    public RoleHierarchyPath fkRoleHierarchyRoleLower() {
+        if (_fkRoleHierarchyRoleLower == null)
+            _fkRoleHierarchyRoleLower = new RoleHierarchyPath(this, null, Keys.FK_ROLE_HIERARCHY_ROLE_LOWER.getInverseKey());
+
+        return _fkRoleHierarchyRoleLower;
+    }
+
+    private transient UserRolePath _userRole;
+
+    /**
+     * Get the implicit to-many join path to the <code>test_db.user_role</code>
+     * table
+     */
+    public UserRolePath userRole() {
+        if (_userRole == null)
+            _userRole = new UserRolePath(this, null, Keys.FK_USER_ROLE_ROLE.getInverseKey());
+
+        return _userRole;
+    }
+
+    /**
+     * Get the implicit many-to-many join path to the <code>test_db.user</code>
+     * table
+     */
+    public UserPath user() {
+        return userRole().user();
     }
 
     @Override

@@ -15,21 +15,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityService implements UserDetailsService {
 
-	private final UserService userService;
+    private final UserService userService;
 
-	@Override
-	public SecurityDto loadUserByUsername(String userId) throws UsernameNotFoundException {
+    @Override
+    public SecurityDto loadUserByUsername(String userId) throws UsernameNotFoundException {
 
-		User user = userService.findByUserId(userId);
+        User user = userService.findByUserId(userId);
 
-		return SecurityDto.builder()
-						  .uniqueId(user.uniqueId())
-						  .userId(userId)
-						  .password(user.password())
-						  .authorities(user.roles().stream()
-										   .map(role -> new SimpleGrantedAuthority(role.id()))
-										   .toList())
-						  .build();
-	}
+        return SecurityDto.builder()
+                          .uniqueId(user.uniqueId())
+                          .userId(userId)
+                          .password(user.password())
+                          .authorities(user.roles().stream()
+                                           .map(role -> new SimpleGrantedAuthority(role.code()))
+                                           .toList())
+                          .build();
+    }
 
 }

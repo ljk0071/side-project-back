@@ -1,6 +1,7 @@
 dependencies {
     implementation project(":domain:metadata")
     implementation project(":domain:user")
-    
+    implementation project(":domain:util")
+
     implementation("org.springframework:spring-context")
 }

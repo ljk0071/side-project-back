@@ -21,129 +21,173 @@ public class NoticeRecord extends UpdatableRecordImpl<NoticeRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>test_db.notice.id</code>. 공지사항 ID
+     * Setter for <code>test_db.notice.id</code>. 공지사항id
      */
     public void setId(Long value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>test_db.notice.id</code>. 공지사항 ID
+     * Getter for <code>test_db.notice.id</code>. 공지사항id
      */
     public Long getId() {
         return (Long) get(0);
     }
 
     /**
-     * Setter for <code>test_db.notice.title</code>. 게시글 제목
+     * Setter for <code>test_db.notice.revision</code>. 버전
      */
-    public void setTitle(String value) {
+    public void setRevision(Long value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>test_db.notice.title</code>. 게시글 제목
+     * Getter for <code>test_db.notice.revision</code>. 버전
      */
-    public String getTitle() {
-        return (String) get(1);
+    public Long getRevision() {
+        return (Long) get(1);
     }
 
     /**
-     * Setter for <code>test_db.notice.contents</code>. 게시글 내용
+     * Setter for <code>test_db.notice.title</code>. 게시글제목
      */
-    public void setContents(String value) {
+    public void setTitle(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>test_db.notice.contents</code>. 게시글 내용
+     * Getter for <code>test_db.notice.title</code>. 게시글제목
      */
-    public String getContents() {
+    public String getTitle() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>test_db.notice.likes</code>. 좋아요 수
+     * Setter for <code>test_db.notice.contents</code>. 게시글내용
      */
-    public void setLikes(Long value) {
+    public void setContents(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>test_db.notice.likes</code>. 좋아요 수
+     * Getter for <code>test_db.notice.contents</code>. 게시글내용
      */
-    public Long getLikes() {
-        return (Long) get(3);
+    public String getContents() {
+        return (String) get(3);
     }
 
     /**
-     * Setter for <code>test_db.notice.dislikes</code>. 싫어요 수
+     * Setter for <code>test_db.notice.view_count</code>. 조회수
      */
-    public void setDislikes(Long value) {
+    public void setViewCount(Long value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>test_db.notice.dislikes</code>. 싫어요 수
+     * Getter for <code>test_db.notice.view_count</code>. 조회수
      */
-    public Long getDislikes() {
+    public Long getViewCount() {
         return (Long) get(4);
+    }
+
+    /**
+     * Setter for <code>test_db.notice.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public void setStatus(String value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>test_db.notice.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public String getStatus() {
+        return (String) get(5);
     }
 
     /**
      * Setter for <code>test_db.notice.created_at</code>. 생성일시
      */
     public void setCreatedAt(Instant value) {
-        set(5, value);
+        set(6, value);
     }
 
     /**
      * Getter for <code>test_db.notice.created_at</code>. 생성일시
      */
     public Instant getCreatedAt() {
-        return (Instant) get(5);
+        return (Instant) get(6);
     }
 
     /**
      * Setter for <code>test_db.notice.created_by</code>. 생성자
      */
     public void setCreatedBy(Long value) {
-        set(6, value);
+        set(7, value);
     }
 
     /**
      * Getter for <code>test_db.notice.created_by</code>. 생성자
      */
     public Long getCreatedBy() {
-        return (Long) get(6);
+        return (Long) get(7);
     }
 
     /**
      * Setter for <code>test_db.notice.modified_at</code>. 수정일시
      */
     public void setModifiedAt(Instant value) {
-        set(7, value);
+        set(8, value);
     }
 
     /**
      * Getter for <code>test_db.notice.modified_at</code>. 수정일시
      */
     public Instant getModifiedAt() {
-        return (Instant) get(7);
+        return (Instant) get(8);
     }
 
     /**
      * Setter for <code>test_db.notice.modified_by</code>. 수정자
      */
     public void setModifiedBy(Long value) {
-        set(8, value);
+        set(9, value);
     }
 
     /**
      * Getter for <code>test_db.notice.modified_by</code>. 수정자
      */
     public Long getModifiedBy() {
-        return (Long) get(8);
+        return (Long) get(9);
+    }
+
+    /**
+     * Setter for <code>test_db.notice.deleted_at</code>. 삭제일시
+     */
+    public void setDeletedAt(Instant value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>test_db.notice.deleted_at</code>. 삭제일시
+     */
+    public Instant getDeletedAt() {
+        return (Instant) get(10);
+    }
+
+    /**
+     * Setter for <code>test_db.notice.deleted_by</code>. 삭제자
+     */
+    public void setDeletedBy(Long value) {
+        set(11, value);
+    }
+
+    /**
+     * Getter for <code>test_db.notice.deleted_by</code>. 삭제자
+     */
+    public Long getDeletedBy() {
+        return (Long) get(11);
     }
 
     // -------------------------------------------------------------------------
@@ -169,18 +213,21 @@ public class NoticeRecord extends UpdatableRecordImpl<NoticeRecord> {
     /**
      * Create a detached, initialised NoticeRecord
      */
-    public NoticeRecord(Long id, String title, String contents, Long likes, Long dislikes, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy) {
+    public NoticeRecord(Long id, Long revision, String title, String contents, Long viewCount, String status, Instant createdAt, Long createdBy, Instant modifiedAt, Long modifiedBy, Instant deletedAt, Long deletedBy) {
         super(Notice.NOTICE);
 
         setId(id);
+        setRevision(revision);
         setTitle(title);
         setContents(contents);
-        setLikes(likes);
-        setDislikes(dislikes);
+        setViewCount(viewCount);
+        setStatus(status);
         setCreatedAt(createdAt);
         setCreatedBy(createdBy);
         setModifiedAt(modifiedAt);
         setModifiedBy(modifiedBy);
+        setDeletedAt(deletedAt);
+        setDeletedBy(deletedBy);
         resetChangedOnNotNull();
     }
 }

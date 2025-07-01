@@ -6,9 +6,10 @@ import lombok.Builder;
 
 @Builder(toBuilder = true)
 public record Role(
-	String id,
-	String name,
-	String description,
-	Metadata metadata
+        Long id,
+        Long revision,
+        String code,
+        String name,
+        Metadata metadata
 ) {
 }

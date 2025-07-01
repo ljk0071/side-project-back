@@ -10,15 +10,13 @@ spring:
 
   jpa:
     open-in-view: false
-
+  
   jmx:
     enabled: false
 
 logging:
   level:
-    org.springframework.security.config.annotation.authentication.configuration: ERROR
-    sun.rmi: WARN
-    javax.management.remote.rmi: WARN
+    root: debug
 
 management:
   endpoints:

@@ -24,54 +24,29 @@ paths:
                 value: |-
                   {
                     "id" : null,
+                    "userUniqueId" : null,
                     "article" : {
                       "title" : "test",
                       "contents" : "testBody"
-                    }
-                  }
-      responses:
-        "200":
-          description: "200"
-  /v1/resume:
-    post:
-      tags:
-      - 이력서 정보
-      summary: 이력서를 등록합니다.
-      description: 이력서 내용을 전송받아 이력서를 등록합니다.
-      operationId: 이력서 등록하기
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/이력서 등록 요청"
-            examples:
-              이력서 등록하기:
-                value: |-
-                  {
-                    "id" : null,
-                    "userUniqueId" : null,
-                    "contents" : "안녕하세요. 저는 백엔드 개발자입니다.\n\n- 경력: 5년\n- 주요 기술 스택: Java, Spring Boot, MySQL\n- 프로젝트 경험: 전자상거래 플랫폼 개발\n"
+                    },
+                    "maxMembers" : 2
                   }
       responses:
         "200":
           description: "200"
 components:
   schemas:
-    이력서 등록 요청:
-      title: 이력서 등록 요청
-      required:
-      - contents
-      type: object
-      properties:
-        contents:
-          type: string
-          description: 이력서 내용
     게시글 등록 요청:
       title: 게시글 등록 요청
       required:
       - article
+      - maxMembers
+      - userUniqueId
       type: object
       properties:
+        maxMembers:
+          type: number
+          description: 최대 멤버수
         article:
           required:
           - contents

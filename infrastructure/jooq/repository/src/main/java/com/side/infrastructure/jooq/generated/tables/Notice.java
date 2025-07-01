@@ -4,20 +4,29 @@
 package com.side.infrastructure.jooq.generated.tables;
 
 
+import com.side.infrastructure.jooq.generated.Indexes;
 import com.side.infrastructure.jooq.generated.Keys;
 import com.side.infrastructure.jooq.generated.TestDb;
+import com.side.infrastructure.jooq.generated.tables.NoticeComment.NoticeCommentPath;
 import com.side.infrastructure.jooq.generated.tables.records.NoticeRecord;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.jooq.Condition;
 import org.jooq.Field;
+import org.jooq.ForeignKey;
 import org.jooq.Identity;
+import org.jooq.Index;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
+import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -54,29 +63,35 @@ public class Notice extends TableImpl<NoticeRecord> {
     }
 
     /**
-     * The column <code>test_db.notice.id</code>. 공지사항 ID
+     * The column <code>test_db.notice.id</code>. 공지사항id
      */
-    public final TableField<NoticeRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "공지사항 ID");
+    public final TableField<NoticeRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "공지사항id");
 
     /**
-     * The column <code>test_db.notice.title</code>. 게시글 제목
+     * The column <code>test_db.notice.revision</code>. 버전
      */
-    public final TableField<NoticeRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(255).nullable(false), this, "게시글 제목");
+    public final TableField<NoticeRecord, Long> REVISION = createField(DSL.name("revision"), SQLDataType.BIGINT.nullable(false), this, "버전");
 
     /**
-     * The column <code>test_db.notice.contents</code>. 게시글 내용
+     * The column <code>test_db.notice.title</code>. 게시글제목
      */
-    public final TableField<NoticeRecord, String> CONTENTS = createField(DSL.name("contents"), SQLDataType.CLOB.nullable(false), this, "게시글 내용");
+    public final TableField<NoticeRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(100).nullable(false), this, "게시글제목");
 
     /**
-     * The column <code>test_db.notice.likes</code>. 좋아요 수
+     * The column <code>test_db.notice.contents</code>. 게시글내용
      */
-    public final TableField<NoticeRecord, Long> LIKES = createField(DSL.name("likes"), SQLDataType.BIGINT.nullable(false), this, "좋아요 수");
+    public final TableField<NoticeRecord, String> CONTENTS = createField(DSL.name("contents"), SQLDataType.VARCHAR(255).nullable(false), this, "게시글내용");
 
     /**
-     * The column <code>test_db.notice.dislikes</code>. 싫어요 수
+     * The column <code>test_db.notice.view_count</code>. 조회수
      */
-    public final TableField<NoticeRecord, Long> DISLIKES = createField(DSL.name("dislikes"), SQLDataType.BIGINT.nullable(false), this, "싫어요 수");
+    public final TableField<NoticeRecord, Long> VIEW_COUNT = createField(DSL.name("view_count"), SQLDataType.BIGINT.nullable(false).defaultValue(DSL.inline("0", SQLDataType.BIGINT)), this, "조회수");
+
+    /**
+     * The column <code>test_db.notice.status</code>.
+     * 상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)
+     */
+    public final TableField<NoticeRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.CHAR(1).nullable(false), this, "상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)");
 
     /**
      * The column <code>test_db.notice.created_at</code>. 생성일시
@@ -97,6 +112,16 @@ public class Notice extends TableImpl<NoticeRecord> {
      * The column <code>test_db.notice.modified_by</code>. 수정자
      */
     public final TableField<NoticeRecord, Long> MODIFIED_BY = createField(DSL.name("modified_by"), SQLDataType.BIGINT, this, "수정자");
+
+    /**
+     * The column <code>test_db.notice.deleted_at</code>. 삭제일시
+     */
+    public final TableField<NoticeRecord, Instant> DELETED_AT = createField(DSL.name("deleted_at"), SQLDataType.LOCALDATETIME(0), this, "삭제일시", new AutoConverter<LocalDateTime, Instant>(LocalDateTime.class, Instant.class));
+
+    /**
+     * The column <code>test_db.notice.deleted_by</code>. 삭제자
+     */
+    public final TableField<NoticeRecord, Long> DELETED_BY = createField(DSL.name("deleted_by"), SQLDataType.BIGINT, this, "삭제자");
 
     private Notice(Name alias, Table<NoticeRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -127,9 +152,47 @@ public class Notice extends TableImpl<NoticeRecord> {
         this(DSL.name("notice"), null);
     }
 
+    public <O extends Record> Notice(Table<O> path, ForeignKey<O, NoticeRecord> childPath, InverseForeignKey<O, NoticeRecord> parentPath) {
+        super(path, childPath, parentPath, NOTICE);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class NoticePath extends Notice implements Path<NoticeRecord> {
+
+        private static final long serialVersionUID = 1L;
+        public <O extends Record> NoticePath(Table<O> path, ForeignKey<O, NoticeRecord> childPath, InverseForeignKey<O, NoticeRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private NoticePath(Name alias, Table<NoticeRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public NoticePath as(String alias) {
+            return new NoticePath(DSL.name(alias), this);
+        }
+
+        @Override
+        public NoticePath as(Name alias) {
+            return new NoticePath(alias, this);
+        }
+
+        @Override
+        public NoticePath as(Table<?> alias) {
+            return new NoticePath(alias.getQualifiedName(), this);
+        }
+    }
+
     @Override
     public Schema getSchema() {
         return aliased() ? null : TestDb.TEST_DB;
+    }
+
+    @Override
+    public List<Index> getIndexes() {
+        return Arrays.asList(Indexes.NOTICE_IDX_NOTICE_CREATED_AT, Indexes.NOTICE_IDX_NOTICE_STATUS_CREATED_AT);
     }
 
     @Override
@@ -140,6 +203,19 @@ public class Notice extends TableImpl<NoticeRecord> {
     @Override
     public UniqueKey<NoticeRecord> getPrimaryKey() {
         return Keys.KEY_NOTICE_PRIMARY;
+    }
+
+    private transient NoticeCommentPath _noticeComment;
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>test_db.notice_comment</code> table
+     */
+    public NoticeCommentPath noticeComment() {
+        if (_noticeComment == null)
+            _noticeComment = new NoticeCommentPath(this, null, Keys.FK_NOTICE_COMMENT_NOTICE.getInverseKey());
+
+        return _noticeComment;
     }
 
     @Override

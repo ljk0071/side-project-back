@@ -1,5 +1,6 @@
 package com.side.domain.model;
 
+import java.time.Instant;
 import java.util.List;
 
 import com.side.domain.Metadata;
@@ -11,10 +12,11 @@ import lombok.Builder;
 @Builder(toBuilder = true)
 public record User(
 	Long uniqueId,
+	Long revision,
 	String userId,
 	String password,
+	Instant passwordUpdatedAt,
 	String name,
-	String phoneNumber,
 	String email,
 	UserStatus status,
 	UserType type,
