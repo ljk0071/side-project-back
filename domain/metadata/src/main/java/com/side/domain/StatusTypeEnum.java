@@ -7,9 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StatusTypeEnum {
 
-	Y("사용가능"),
-	N("사용불가능"),
-	D("삭제됨");
+    Y("사용가능"),
+    N("사용불가능"),
+    D("삭제됨");
 
-	private final String value;
+    private final String value;
 }

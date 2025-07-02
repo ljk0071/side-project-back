@@ -43,40 +43,17 @@ services:
   valkey-1:
     image: valkey/valkey:latest
     ports:
-      - "6379:6379"      # client port
-    environment:
-      - REDISCLI_AUTH=test_pw
-    command: >
-      valkey-server
-      --port 6379
-      --appendonly yes
-      --requirepass test_pw
-      --masterauth test_pw
+      - "6379:6379"
+    entrypoint: /usr/local/bin/docker-entrypoint.sh
     healthcheck:
-      test: [ "CMD", "valkey-cli", "ping" ]
+      test: [ "CMD", "valkey-cli", "-u", "valkey://:test_pw@localhost:6379", "ping" ]
       interval: 1s
       timeout: 3s
       retries: 30
     volumes:
       - valkey1-data:/data
-
-  valkey-role-hierarchy-init:
-    image: valkey/valkey:latest
-    depends_on:
-      - valkey-1
-    environment:
-      - REDISCLI_AUTH=test_pw
-    entrypoint: >
-      bash -c "
-      echo 'Waiting for Valkey to be available...' &&
-      until valkey-cli -h valkey-1 ping | grep PONG; do sleep 1; done &&
-      echo 'Running init script...' &&
-      valkey-cli -h valkey-1 < /init/init_script.redis && 
-      echo 'Initialization complete. Keeping container alive.' &&
-      tail -f /dev/null
-      "
-    volumes:
-      - ./docker/valkey:/init
+      - ./docker/valkey/init_script.redis:/init/init_script.redis
+      - ./docker/valkey/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
 
   redis-insight:
     image: redislabs/redisinsight:latest

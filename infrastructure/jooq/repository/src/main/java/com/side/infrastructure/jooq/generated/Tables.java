@@ -4,26 +4,19 @@
 package com.side.infrastructure.jooq.generated;
 
 
-import com.side.infrastructure.jooq.generated.tables.Comment;
-import com.side.infrastructure.jooq.generated.tables.Notice;
-import com.side.infrastructure.jooq.generated.tables.PartyRecruit;
-import com.side.infrastructure.jooq.generated.tables.Resume;
-import com.side.infrastructure.jooq.generated.tables.Role;
-import com.side.infrastructure.jooq.generated.tables.RoleHierarchy;
-import com.side.infrastructure.jooq.generated.tables.User;
-import com.side.infrastructure.jooq.generated.tables.UserRole;
+import com.side.infrastructure.jooq.generated.tables.*;
 
 
 /**
  * Convenience access to all tables in test_db.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
+@SuppressWarnings({"all", "unchecked", "rawtypes", "this-escape"})
 public class Tables {
 
     /**
-     * The table <code>test_db.comment</code>.
+     * The table <code>test_db.login_attempt_log</code>.
      */
-    public static final Comment COMMENT = Comment.COMMENT;
+    public static final LoginAttemptLog LOGIN_ATTEMPT_LOG = LoginAttemptLog.LOGIN_ATTEMPT_LOG;
 
     /**
      * The table <code>test_db.notice</code>.
@@ -31,14 +24,54 @@ public class Tables {
     public static final Notice NOTICE = Notice.NOTICE;
 
     /**
+     * The table <code>test_db.notice_comment</code>.
+     */
+    public static final NoticeComment NOTICE_COMMENT = NoticeComment.NOTICE_COMMENT;
+
+    /**
+     * The table <code>test_db.notice_comment_modify_log</code>.
+     */
+    public static final NoticeCommentModifyLog NOTICE_COMMENT_MODIFY_LOG = NoticeCommentModifyLog.NOTICE_COMMENT_MODIFY_LOG;
+
+    /**
+     * The table <code>test_db.notice_modify_log</code>.
+     */
+    public static final NoticeModifyLog NOTICE_MODIFY_LOG = NoticeModifyLog.NOTICE_MODIFY_LOG;
+
+    /**
+     * The table <code>test_db.notification</code>.
+     */
+    public static final Notification NOTIFICATION = Notification.NOTIFICATION;
+
+    /**
+     * The table <code>test_db.party_application</code>.
+     */
+    public static final PartyApplication PARTY_APPLICATION = PartyApplication.PARTY_APPLICATION;
+
+    /**
+     * The table <code>test_db.party_application_modify_log</code>.
+     */
+    public static final PartyApplicationModifyLog PARTY_APPLICATION_MODIFY_LOG = PartyApplicationModifyLog.PARTY_APPLICATION_MODIFY_LOG;
+
+    /**
      * The table <code>test_db.party_recruit</code>.
      */
     public static final PartyRecruit PARTY_RECRUIT = PartyRecruit.PARTY_RECRUIT;
 
     /**
+     * The table <code>test_db.party_recruit_modify_log</code>.
+     */
+    public static final PartyRecruitModifyLog PARTY_RECRUIT_MODIFY_LOG = PartyRecruitModifyLog.PARTY_RECRUIT_MODIFY_LOG;
+
+    /**
      * The table <code>test_db.resume</code>.
      */
     public static final Resume RESUME = Resume.RESUME;
+
+    /**
+     * The table <code>test_db.resume_modify_log</code>.
+     */
+    public static final ResumeModifyLog RESUME_MODIFY_LOG = ResumeModifyLog.RESUME_MODIFY_LOG;
 
     /**
      * The table <code>test_db.role</code>.
@@ -51,12 +84,47 @@ public class Tables {
     public static final RoleHierarchy ROLE_HIERARCHY = RoleHierarchy.ROLE_HIERARCHY;
 
     /**
+     * The table <code>test_db.role_hierarchy_modify_log</code>.
+     */
+    public static final RoleHierarchyModifyLog ROLE_HIERARCHY_MODIFY_LOG = RoleHierarchyModifyLog.ROLE_HIERARCHY_MODIFY_LOG;
+
+    /**
+     * The table <code>test_db.role_modify_log</code>.
+     */
+    public static final RoleModifyLog ROLE_MODIFY_LOG = RoleModifyLog.ROLE_MODIFY_LOG;
+
+    /**
      * The table <code>test_db.user</code>.
      */
     public static final User USER = User.USER;
 
     /**
+     * The table <code>test_db.user_discord_auth</code>.
+     */
+    public static final UserDiscordAuth USER_DISCORD_AUTH = UserDiscordAuth.USER_DISCORD_AUTH;
+
+    /**
+     * The table <code>test_db.user_discord_auth_modify_log</code>.
+     */
+    public static final UserDiscordAuthModifyLog USER_DISCORD_AUTH_MODIFY_LOG = UserDiscordAuthModifyLog.USER_DISCORD_AUTH_MODIFY_LOG;
+
+    /**
+     * The table <code>test_db.user_modify_log</code>.
+     */
+    public static final UserModifyLog USER_MODIFY_LOG = UserModifyLog.USER_MODIFY_LOG;
+
+    /**
+     * The table <code>test_db.user_reaction</code>.
+     */
+    public static final UserReaction USER_REACTION = UserReaction.USER_REACTION;
+
+    /**
      * The table <code>test_db.user_role</code>.
      */
     public static final UserRole USER_ROLE = UserRole.USER_ROLE;
+
+    /**
+     * The table <code>test_db.user_role_modify_log</code>.
+     */
+    public static final UserRoleModifyLog USER_ROLE_MODIFY_LOG = UserRoleModifyLog.USER_ROLE_MODIFY_LOG;
 }

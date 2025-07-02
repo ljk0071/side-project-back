@@ -1,9 +1,33 @@
 package com.side.infrastructure.jpa.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.side.domain.model.RoleHierarchyInfo;
+import com.side.domain.repository.RoleHierarchyRepository;
+import com.side.domain.repository.RoleHierarchyRepositoryManager;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
-import com.side.infrastructure.jpa.entity.RoleHierarchyEntity;
-import com.side.infrastructure.jpa.entity.RoleHierarchyKey;
+import java.util.List;
 
-public interface RoleHierarchyJpaRepository extends JpaRepository<RoleHierarchyEntity, RoleHierarchyKey> {
+import static com.side.domain.RepositoryTypeEnum.JPA;
+import static com.side.infrastructure.jpa.mapper.RoleHierarchyMapper.RoleHierarchyMapper;
+
+@Repository
+@RequiredArgsConstructor
+public class RoleHierarchyJpaRepository implements RoleHierarchyRepository {
+
+    private final RoleHierarchyJpaInterface repository;
+
+    @PostConstruct
+    public void init() {
+        RoleHierarchyRepositoryManager.addRoleHierarchyRepository(JPA, this);
+    }
+
+    @Override
+    public List<RoleHierarchyInfo> findAll() {
+
+        return repository.findAll().stream()
+                         .map(RoleHierarchyMapper::toDomain)
+                         .toList();
+    }
 }

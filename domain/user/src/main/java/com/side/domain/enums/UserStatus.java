@@ -7,14 +7,12 @@ import lombok.Getter;
 @Getter
 public enum UserStatus {
 
-	PENDING("승인대기", "", "", ""),
-	ACTIVE("정상", "", "", ""),
-	LOCKED("잠금", "", "", ""),
-	DELETED("삭제", "", "", ""),
-	;
+    PENDING("P", "승인대기"),
+    ACTIVE("A", "정상"),
+    LOCKED("L", "잠금"),
+    DELETED("D", "삭제"),
+    ;
 
-	private final String name;
-	private final String desc;
-	private final String note;
-	private final String link;
+    private final String value;
+    private final String note;
 }

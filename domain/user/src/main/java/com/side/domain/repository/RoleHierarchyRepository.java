@@ -1,11 +1,11 @@
 package com.side.domain.repository;
 
-import java.util.List;
-
 import com.side.domain.model.RoleHierarchyInfo;
+
+import java.util.List;
 
 public interface RoleHierarchyRepository {
 
-	List<RoleHierarchyInfo> findAll();
+    List<RoleHierarchyInfo> findAll();
 }
 

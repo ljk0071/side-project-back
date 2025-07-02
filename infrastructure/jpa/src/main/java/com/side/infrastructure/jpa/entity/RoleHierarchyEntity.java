@@ -1,16 +1,11 @@
 package com.side.infrastructure.jpa.entity;
 
-import org.hibernate.annotations.Comment;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Getter
 @NoArgsConstructor
@@ -21,13 +16,13 @@ import lombok.NoArgsConstructor;
 @IdClass(RoleHierarchyKey.class)
 public class RoleHierarchyEntity {
 
-	@Id
-	@Comment("하위 역할")
-	@Column(name = "lower_role", length = 30)
-	private String lowerRole;
+    @Id
+    @Comment("하위 역할")
+    @Column(name = "lower_role", length = 30)
+    private String lowerRole;
 
-	@Id
-	@Comment("상위 역할")
-	@Column(name = "higher_role", length = 30)
-	private String higherRole;
+    @Id
+    @Comment("상위 역할")
+    @Column(name = "higher_role", length = 30)
+    private String higherRole;
 }

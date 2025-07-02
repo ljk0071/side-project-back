@@ -1,25 +1,26 @@
 package com.side.domain.model;
 
-import java.util.List;
-
 import com.side.domain.Metadata;
 import com.side.domain.enums.UserStatus;
 import com.side.domain.enums.UserType;
-
 import lombok.Builder;
+
+import java.time.Instant;
+import java.util.List;
 
 @Builder(toBuilder = true)
 public record User(
-	Long uniqueId,
-	String userId,
-	String password,
-	String name,
-	String phoneNumber,
-	String email,
-	UserStatus status,
-	UserType type,
-	String description,
-	List<Role> roles,
-	Metadata metadata
+        Long uniqueId,
+        Long revision,
+        String userId,
+        String password,
+        Instant passwordUpdatedAt,
+        String name,
+        String email,
+        UserStatus status,
+        UserType type,
+        String description,
+        List<Role> roles,
+        Metadata metadata
 ) {
 }

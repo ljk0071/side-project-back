@@ -8,24 +8,24 @@ import lombok.Builder;
  */
 @Builder(toBuilder = true)
 public record AuthToken(
-	String userId,
-	String password,
-	int days,
-	String accessToken,
-	String refreshToken,
-	long expiresIn,
-	long refreshExpiresIn
+        String userId,
+        String password,
+        int days,
+        String accessToken,
+        String refreshToken,
+        long expiresIn,
+        long refreshExpiresIn
 ) {
-	/**
-	 * AuthToken을 생성합니다.
-	 *
-	 * @param userId 토큰과 연관된 사용자 ID
-	 * @param accessToken 액세스 토큰 문자열
-	 * @param refreshToken 리프레시 토큰 문자열
-	 * @param expiresIn 액세스 토큰의 만료 시간(초 단위)
-	 * @param refreshExpiresIn 리프레시 토큰의 만료 시간(초 단위)
-	 */
-	public AuthToken {
-		// Compact constructor for validation if needed
-	}
+    /**
+     * AuthToken을 생성합니다.
+     *
+     * @param userId           토큰과 연관된 사용자 ID
+     * @param accessToken      액세스 토큰 문자열
+     * @param refreshToken     리프레시 토큰 문자열
+     * @param expiresIn        액세스 토큰의 만료 시간(초 단위)
+     * @param refreshExpiresIn 리프레시 토큰의 만료 시간(초 단위)
+     */
+    public AuthToken {
+        // Compact constructor for validation if needed
+    }
 }

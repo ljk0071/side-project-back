@@ -1,10 +1,10 @@
 package com.side.domain.repository;
 
-import java.util.Collection;
-
 import com.side.domain.model.Role;
+
+import java.util.Collection;
 
 public interface UserRoleRepository {
 
-	Collection<Role> loadRoleByUserId(String userId);
+    Collection<Role> loadRoleByUserId(String userId);
 }

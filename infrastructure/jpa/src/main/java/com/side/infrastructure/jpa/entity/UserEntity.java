@@ -1,31 +1,19 @@
 package com.side.infrastructure.jpa.entity;
 
-import java.util.List;
-
-import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import com.side.domain.enums.UserStatus;
 import com.side.domain.enums.UserType;
 import com.side.infrastructure.jpa.common.MetadataEntity;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import java.time.Instant;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -37,47 +25,49 @@ import lombok.NoArgsConstructor;
 @DynamicUpdate
 public class UserEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "unique_id")
-	private Long uniqueId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "unique_id")
+    private Long uniqueId;
 
-	@Column(name = "user_id", length = 50)
-	private String userId;
+    @Version
+    @Column(name = "revision", nullable = false)
+    @Comment("버전")
+    private Long revision;
 
-	@Comment("비밀번호")
-	private String password;
+    @Column(name = "user_id", length = 50)
+    private String userId;
 
-	@Comment("이름")
-	@Column(length = 50)
-	private String name;
+    @Comment("비밀번호")
+    private String password;
 
-	@Comment("핸드폰번호")
-	@Column(name = "phone_number", length = 15)
-	private String phoneNumber;
+    @Comment("이름")
+    @Column(length = 50)
+    private String name;
 
-	@Comment("이메일")
-	private String email;
+    @Column(name = "password_updated_at")
+    @Comment("패스워드변경일시")
+    private Instant passwordUpdatedAt;
 
-	@Comment("상태")
-	@Enumerated(EnumType.STRING)
-	private UserStatus status;
+    @Comment("이메일")
+    private String email;
 
-	@Comment("타입")
-	@Enumerated(EnumType.STRING)
-	@Column(name = "type")
-	private UserType type;
+    @Comment("상태")
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
-	@Comment("설명")
-	@Column(columnDefinition = "TEXT")
-	private String description;
+    @Comment("타입")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private UserType type;
 
-	@OneToOne(mappedBy = "userEntity", cascade = CascadeType.ALL)
-	private ResumeEntity resume;
+    @Comment("설명")
+    @Column(name = "description")
+    private String description;
 
-	@Embedded
-	private MetadataEntity metadata;
+    @Embedded
+    private MetadataEntity metadata;
 
-	@Transient
-	private List<RoleEntity> roles;
+    @Transient
+    private List<RoleEntity> roles;
 }

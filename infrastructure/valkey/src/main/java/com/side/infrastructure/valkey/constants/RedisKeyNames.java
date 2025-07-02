@@ -5,6 +5,6 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RedisKeyNames {
-	public static final String JWT_REFRESH_TOKEN = "jwt:refresh-token:";
+    public static final String JWT_REFRESH_TOKEN = "jwt:refresh-token:";
 
 }
