@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.bootstrap.SideApplication;
 import com.side.rest.domain.board.dto.request.ArticleRequestDto;
 import com.side.rest.domain.board.dto.request.PartyRecruitRequestDto;
+import com.side.rest.util.TestLoginUtil;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,11 +24,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Map;
+
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,6 +54,7 @@ class PartyRecruitControllerTest {
                                               .operationPreprocessors()
                                               .withRequestDefaults(prettyPrint())
                                               .withResponseDefaults(prettyPrint()))
+                                      .apply(springSecurity())
                                       .build();
     }
 
@@ -65,9 +71,15 @@ class PartyRecruitControllerTest {
 
         dto.setMaxMembers(2);
 
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+
+        Map<String, String> result = tlu.login();
+
         this.mockMvc.perform(post("/v1/party")
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
+                    .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                    .cookie(new Cookie("Authorization", result.get("accessToken")))
                     .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isOk())
                     .andDo(
