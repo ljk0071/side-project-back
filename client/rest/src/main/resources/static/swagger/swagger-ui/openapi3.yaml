@@ -4,13 +4,46 @@ info:
   description: 메이플 파티 서버 API 목록
   version: 0.1.0
 servers:
-  - url: http://localhost:8080
-tags: [ ]
+- url: http://localhost:8080
+tags: []
 paths:
+  /api/sign/in:
+    post:
+      tags:
+      - 인증
+      summary: 사용자 로그인
+      description: 사용자 ID와 비밀번호로 로그인합니다.
+      operationId: 로그인
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/로그인 요청"
+            examples:
+              로그인:
+                value: |-
+                  {
+                    "userId" : "system",
+                    "password" : "gmlwls@9833"
+                  }
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: "#/components/schemas/api-sign-in486549215"
+              examples:
+                로그인:
+                  value: |-
+                    {
+                      "csrfToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiQ1NSRiIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MTUxNzExMSwiZXhwIjoxNzU0MTA5MTExfQ.AKawRX9TcY6TonmClVg7qfIVbR7t0OjSldf5XGJVAKA",
+                      "refreshToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiUkVGUkVTSCIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MTUxNzExMSwiZXhwIjoxNzU0MTA5MTExfQ.uHfdPeaeLYKbTK6cH6jzPZfOkZoknNrGMgGG_aElHQc"
+                    }
   /v1/party:
     post:
       tags:
-        - 게시글 정보
+      - 게시글 정보
       summary: 게시글을 등록합니다.
       description: 제목과 내용을 전송받아 게시글을 등록합니다.
       operationId: 게시글 등록하기
@@ -34,14 +67,37 @@ paths:
       responses:
         "200":
           description: "200"
+  /v1/resume:
+    post:
+      tags:
+      - 이력서 정보
+      summary: 이력서를 등록합니다.
+      description: 이력서 내용을 전송받아 이력서를 등록합니다.
+      operationId: 이력서 등록하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/이력서 등록 요청"
+            examples:
+              이력서 등록하기:
+                value: |-
+                  {
+                    "id" : null,
+                    "userUniqueId" : null,
+                    "contents" : "안녕하세요. 저는 백엔드 개발자입니다.\n\n- 경력: 5년\n- 주요 기술 스택: Java, Spring Boot, MySQL\n- 프로젝트 경험: 전자상거래 플랫폼 개발\n"
+                  }
+      responses:
+        "200":
+          description: "200"
 components:
   schemas:
     게시글 등록 요청:
       title: 게시글 등록 요청
       required:
-        - article
-        - maxMembers
-        - userUniqueId
+      - article
+      - maxMembers
+      - userUniqueId
       type: object
       properties:
         maxMembers:
@@ -49,8 +105,8 @@ components:
           description: 최대 멤버수
         article:
           required:
-            - contents
-            - title
+          - contents
+          - title
           type: object
           properties:
             contents:
@@ -60,6 +116,30 @@ components:
               type: string
               description: 게시글 제목
           description: 게시글 정보
+    이력서 등록 요청:
+      title: 이력서 등록 요청
+      required:
+      - contents
+      type: object
+      properties:
+        contents:
+          type: string
+          description: 이력서 내용
+    로그인 요청:
+      title: 로그인 요청
+      required:
+      - password
+      - userId
+      type: object
+      properties:
+        password:
+          type: string
+          description: 비밀번호
+        userId:
+          type: string
+          description: 사용자 ID
+    api-sign-in486549215:
+      type: object
   securitySchemes:
     Authorization:
       type: http
@@ -70,5 +150,5 @@ components:
       in: header
       name: X-CSRF-TOKEN
 security:
-  - Authorization: [ ]
-  - X-CSRF-TOKEN: [ ]
+  - Authorization: []
+  - X-CSRF-TOKEN: []
