@@ -1,6 +1,7 @@
 package com.side.rest.domain.board.controller;
 
 import com.side.rest.domain.board.dto.request.PartyRecruitRequestDto;
+import com.side.security.service.SecurityHelper;
 import com.side.usecase.board.PartyRecruitUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class PartyRecruitController {
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody @Validated(PartyRecruitRequestDto.Insert.class) PartyRecruitRequestDto partyRequestDto) {
 
-        partyRequestDto.setUserUniqueId(1L);
+        partyRequestDto.setUserUniqueId(SecurityHelper.getAuthenticatedUser().uniqueId());
 
         partyRecruitUseCase.create(PartyRecruitMapper.toDomain(partyRequestDto));
 
