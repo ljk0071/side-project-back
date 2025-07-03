@@ -25,11 +25,13 @@ public class TestLoginUtil {
     }
 
     public Map<String, String> login() throws Exception {
+        return login("system", "gmlwls@9833");
+    }
+
+    public Map<String, String> login(String userId, String password) throws Exception {
         MvcResult httpResult = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/sign/in")
                                                                           .contentType(MediaType.APPLICATION_JSON)
-                                                                          .content(objectMapper.writeValueAsString(
-                                                                                  Map.of("userId", "system",
-                                                                                          "password", "gmlwls@9833"))))
+                                                                          .content(objectMapper.writeValueAsString(Map.of("userId", userId, "password", password))))
                                            .andExpect(status().isOk())
                                            .andReturn();
 
