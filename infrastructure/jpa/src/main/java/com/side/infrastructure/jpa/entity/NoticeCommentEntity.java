@@ -1,6 +1,6 @@
 package com.side.infrastructure.jpa.entity;
 
-import com.side.domain.StatusTypeEnum;
+import com.side.domain.YesNoDeleteStatus;
 import com.side.infrastructure.jpa.common.MetadataEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,7 +37,7 @@ public class NoticeCommentEntity {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     @Comment("상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)")
-    private StatusTypeEnum status;
+    private YesNoDeleteStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id", nullable = false)

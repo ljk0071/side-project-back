@@ -1,6 +1,6 @@
 package com.side.rest.domain.board.dto.response;
 
-import com.side.domain.StatusTypeEnum;
+import com.side.domain.YesNoDeleteStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +14,6 @@ public class NoticeResponseDto {
     private Long revision;
     private ArticleResponseDto article;
     private Long viewCount;
-    private StatusTypeEnum status;
+    private YesNoDeleteStatus status;
     private MetadataResponseDto metadata;
 }
