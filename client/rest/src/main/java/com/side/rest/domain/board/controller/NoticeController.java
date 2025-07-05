@@ -1,5 +1,6 @@
 package com.side.rest.domain.board.controller;
 
+import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
 import com.side.rest.domain.board.dto.request.NoticeRequestDto;
 import com.side.rest.domain.board.dto.response.NoticeResponseDto;
@@ -8,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.side.rest.mapper.NoticeMapper.NoticeMapper;
 
@@ -36,9 +40,18 @@ public class NoticeController {
     // }
 
     @GetMapping
-    public ResponseEntity<NoticeResponseDto> get(NoticeRequestDto noticeRequestDto) {
+    public ResponseEntity<List<NoticeResponseDto>> findNotice(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "all") NoticeSearchType type
+    ) {
+        List<Notice> notices = noticeUseCase.find(keyword, type);
 
-        return ResponseEntity.ok(NoticeMapper.toResponse(noticeUseCase.find(NoticeMapper.toDomain(noticeRequestDto))));
+        List<NoticeResponseDto> responseList = new ArrayList<>();
+        for (Notice notice : notices) {
+            responseList.add(NoticeMapper.toResponse(notice));
+        }
+
+        return ResponseEntity.ok(responseList);
     }
 
 

@@ -1,6 +1,7 @@
 package com.side.infrastructure.jpa.repository;
 
 import com.side.domain.Metadata;
+import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepository;
 import com.side.domain.repository.NoticeRepositoryManager;
@@ -41,11 +42,8 @@ public class NoticeJpaRepository implements NoticeRepository {
     }
 
     @Override
-    public Notice find(Notice notice) {
+    public List<Notice> find(String keyword, NoticeSearchType type) {
 
-        NoticeEntity entity = repository.findById(notice.id())
-                                        .orElseThrow(() -> new IllegalStateException(notice.id() + " doesn't exist"));
-
-        return NoticeMapper.toDomain(entity);
+        throw new UnsupportedOperationException("사용 안함");
     }
 }

@@ -1,6 +1,7 @@
 package com.side.domain.service;
 
 import com.side.domain.Metadata;
+import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Article;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepositoryManager;
@@ -43,8 +44,10 @@ public class NoticeService {
 
     }
 
-    public Notice find(Notice notice) {
-        return NoticeRepositoryManager.getNoticeRepository(JPA)
-                                      .find(notice);
+    public List<Notice> find(String keyword, NoticeSearchType type) {
+
+        return NoticeRepositoryManager.getNoticeRepository(JOOQ)
+                                      .find(keyword, type);
     }
+
 }
