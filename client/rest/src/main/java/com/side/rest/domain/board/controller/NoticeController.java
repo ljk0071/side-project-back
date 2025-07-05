@@ -8,6 +8,7 @@ import com.side.usecase.board.NoticeUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -56,7 +57,9 @@ public class NoticeController {
 
 
     @PostMapping
-    public ResponseEntity<String> createNotice(@RequestBody NoticeRequestDto noticeRequestDto) {
+    public ResponseEntity<String> createNotice(
+            @RequestBody @Validated(NoticeRequestDto.Insert.class) NoticeRequestDto noticeRequestDto
+    ) {
 
         Notice notice = NoticeMapper.toDomain(noticeRequestDto);
 

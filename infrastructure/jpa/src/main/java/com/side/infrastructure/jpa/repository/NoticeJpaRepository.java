@@ -1,7 +1,6 @@
 package com.side.infrastructure.jpa.repository;
 
 import com.side.domain.Metadata;
-import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepository;
 import com.side.domain.repository.NoticeRepositoryManager;
@@ -29,9 +28,7 @@ public class NoticeJpaRepository implements NoticeRepository {
     @Override
     public void create(Notice notice) {
 
-        NoticeEntity noticeEntity = NoticeMapper.toEntity(notice.toBuilder()
-                                                                .metadata(Metadata.builder().build())
-                                                                .build());
+        NoticeEntity noticeEntity = NoticeMapper.toEntity(notice);
 
         repository.save(noticeEntity);
     }

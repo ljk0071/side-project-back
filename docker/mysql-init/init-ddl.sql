@@ -321,6 +321,7 @@ create table party_application
     created_by       bigint   not null comment '생성자',
     modified_at      datetime comment '수정일시',
     modified_by      bigint comment '수정자',
+    unique key uk_party_application_party_recruit_id_resume_id (party_recruit_id, resume_id),
     index idx_party_application_party_recruit_id_status (party_recruit_id, status),
     index idx_party_application_resume_id_status (resume_id, status)
 );

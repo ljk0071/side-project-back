@@ -1,6 +1,8 @@
 package com.side.infrastructure.jpa.entity;
 
+import com.side.domain.enums.PartyApplicationStatusTypeEnum;
 import com.side.infrastructure.jpa.common.MetadataEntity;
+import com.side.infrastructure.jpa.converter.PartyApplicationStatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -27,18 +29,17 @@ public class PartyApplicationEntity {
     private Long revision;
 
     @Column(name = "status", length = 1, nullable = false)
+    @Convert(converter = PartyApplicationStatusConverter.class)
     @Comment("지원상태:P(Pending),A(Accepted),R(Rejected),C(Canceled)")
-    private String status;
+    private PartyApplicationStatusTypeEnum status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "party_recruit_id", nullable = false)
+    @Column(name = "party_recruit_id")
     @Comment("파티모집글id")
-    private PartyRecruitEntity partyRecruit;
+    private long partyRecruitId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resume_id", nullable = false)
+    @Column(name = "resume_id")
     @Comment("지원서id")
-    private ResumeEntity resume;
+    private long resumeId;
 
     @Embedded
     private MetadataEntity metadata;

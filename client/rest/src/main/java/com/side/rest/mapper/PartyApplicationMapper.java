@@ -2,7 +2,7 @@ package com.side.rest.mapper;
 
 import com.side.domain.model.PartyApplication;
 import com.side.rest.domain.board.dto.response.PartyApplicationResponseDto;
-import com.side.rest.domain.resume.dto.request.PartyApplicationRequestDto;
+import com.side.rest.domain.party.dto.request.PartyApplicationRequestDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface PartyApplicationMapper {
 
-    PartyApplicationMapper INSTANCE = Mappers.getMapper(PartyApplicationMapper.class);
+    PartyApplicationMapper PartyApplicationMapper = Mappers.getMapper(PartyApplicationMapper.class);
 
     @Mapping(target = "metadata", ignore = true)
     PartyApplication toDomain(PartyApplicationRequestDto dto);

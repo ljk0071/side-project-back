@@ -65,32 +65,32 @@ services:
     depends_on:
       - valkey-1
 
-#  # Redis Exporter - Valkey 모니터링용
-#  redis-exporter:
-#    image: oliver006/redis_exporter
-#    environment:
-#      - REDIS_ADDR=valkey-1:6379
-#      - REDIS_PASSWORD=test_pw
-#    ports:
-#      - "9121:9121"
-#    networks:
-#      - valkey-net
-#    depends_on:
-#      - valkey-1
+  #  # Redis Exporter - Valkey 모니터링용
+  #  redis-exporter:
+  #    image: oliver006/redis_exporter
+  #    environment:
+  #      - REDIS_ADDR=valkey-1:6379
+  #      - REDIS_PASSWORD=test_pw
+  #    ports:
+  #      - "9121:9121"
+  #    networks:
+  #      - valkey-net
+  #    depends_on:
+  #      - valkey-1
 
-#  # MySQL Exporter
-#  mysql-exporter:
-#    image: prom/mysqld-exporter
-#    volumes:
-#      - ./mysql-exporter-config/.my.cnf:/etc/mysqld-exporter/.my.cnf
-#    command: --config.my-cnf=/etc/mysqld-exporter/.my.cnf
-#    restart: unless-stopped
-#    ports:
-#      - "9104:9104"
-#    networks:
-#      - valkey-net
-#    depends_on:
-#      - mysql
+  #  # MySQL Exporter
+  #  mysql-exporter:
+  #    image: prom/mysqld-exporter
+  #    volumes:
+  #      - ./mysql-exporter-config/.my.cnf:/etc/mysqld-exporter/.my.cnf
+  #    command: --config.my-cnf=/etc/mysqld-exporter/.my.cnf
+  #    restart: unless-stopped
+  #    ports:
+  #      - "9104:9104"
+  #    networks:
+  #      - valkey-net
+  #    depends_on:
+  #      - mysql
 
 #  # Prometheus 설정
 #  prometheus:
@@ -102,36 +102,32 @@ services:
 #      - '--web.console.templates=/etc/prometheus/consoles'
 #      - '--web.enable-lifecycle'
 #    volumes:
-#      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 #      - prometheus-data:/prometheus
 #    ports:
 #      - "9090:9090"
-#    networks:
-#      - valkey-net
-#    depends_on:
-#      - mysql-exporter
-#      - redis-exporter
-
+#  #    depends_on:
+#  #      - mysql-exporter
+#  #      - redis-exporter
+#
 #  # Grafana 설정
 #  grafana:
 #    image: grafana/grafana
 #    environment:
-##      - GF_SECURITY_ADMIN_USER=admin
-##      - GF_SECURITY_ADMIN_PASSWORD=admin
-##      - GF_USERS_ALLOW_SIGN_UP=false
+#      #      - GF_SECURITY_ADMIN_USER=admin
+#      #      - GF_SECURITY_ADMIN_PASSWORD=admin
+#      #      - GF_USERS_ALLOW_SIGN_UP=false
 #      - GF_AUTH_ANONYMOUS_ENABLED=true
 #      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin  # 또는 Viewer, Editor
 #      - GF_AUTH_DISABLE_LOGIN_FORM=true   # 선택사항: 로그인 폼 비활성화
 #    volumes:
-#      - ./grafana/provisioning:/etc/grafana/provisioning
+#      #      - ./docker/grafana/provisioning:/etc/grafana/provisioning
 #      - grafana-data:/var/lib/grafana
 #    ports:
 #      - "3000:3000"
-#    networks:
-#      - valkey-net
 #    depends_on:
-#      - loki
 #      - prometheus
+#      #      - loki
 #
 #  promtail:
 #    image: grafana/promtail:latest

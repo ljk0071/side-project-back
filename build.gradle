@@ -3,7 +3,7 @@ plugins {
     id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
     id "org.springframework.boot" version "${springBootVersion}" apply false
     id 'org.asciidoctor.jvm.convert' version "${asciidoctorConvertVersion}" apply false
-    id 'com.epages.restdocs-api-spec' version "${epagesRestdocsApiSpec}" apply false
+    id 'com.epages.restdocs-api-spec' version "${epagesRestdocsApiSpecVersion}" apply false
 }
 
 allprojects {
@@ -63,7 +63,7 @@ subprojects {
 
 // 공통 의존성 정의
 ext {
-    domains = ["board", "external", "memory", "metadata", "user", "util", "resume"]
+    domains = ["board", "external", "memory", "metadata", "user", "util", "party"]
 }
 
 // 함수로 정의해서 선택적으로 사용할 수 있게 만들기

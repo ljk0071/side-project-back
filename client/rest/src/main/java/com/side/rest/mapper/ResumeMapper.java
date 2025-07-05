@@ -1,8 +1,8 @@
 package com.side.rest.mapper;
 
 import com.side.domain.model.Resume;
-import com.side.rest.domain.resume.dto.request.ResumeRequestDto;
-import com.side.rest.domain.resume.dto.response.ResumeResponseDto;
+import com.side.rest.domain.party.dto.request.ResumeRequestDto;
+import com.side.rest.domain.party.dto.response.ResumeResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

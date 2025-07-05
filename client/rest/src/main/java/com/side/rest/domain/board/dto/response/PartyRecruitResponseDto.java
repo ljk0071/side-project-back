@@ -1,6 +1,6 @@
 package com.side.rest.domain.board.dto.response;
 
-import com.side.domain.StatusTypeEnum;
+import com.side.domain.YesNoDeleteStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +15,6 @@ public class PartyRecruitResponseDto {
     private Long userUniqueId;
     private ArticleResponseDto article;
     private Integer maxMembers;
-    private StatusTypeEnum status;
+    private YesNoDeleteStatus status;
     private MetadataResponseDto metadata;
 }

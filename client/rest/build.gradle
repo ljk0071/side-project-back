@@ -21,7 +21,10 @@ dependencies {
 
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-    testImplementation("com.epages:restdocs-api-spec-mockmvc:${epagesRestdocsApiSpec}")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:${epagesRestdocsApiSpecVersion}")
+
+    // Java
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:${fixtureMonkeyVersion}")
 
     testImplementation project(':bootstrap')
 }
@@ -43,8 +46,6 @@ ext {
 tasks.named('test') {
     // 'test' 태스크 실행 후 snippetsDir에 결과물이 생성됨을 명시합니다.
     outputs.dir snippetsDir
-
-    finalizedBy('copyOasToSwagger')
 }
 
 // 'asciidoctor' 태스크에 대한 설정을 정의합니다.
@@ -105,8 +106,19 @@ openapi3 {
     servers = [
             { url = 'http://localhost:8080' }
     ]
-    title = '메이플 파티'
-    description = '메이플 파티 서버 API 목록'
-    version = '0.1.0'
+    title = 'Side Project API'
+    description = '''
+## 메이플 파티 백엔드 API 문서
+
+### 📋 주요 기능
+- 파티 모집글 관리
+- 이력서 관리  
+- 파티 지원서 관리
+- 공지사항 관리
+
+### 🔐 인증
+JWT 토큰을 사용한 인증이 필요합니다.
+'''
+    version = '1.0.0'
     format = 'yaml'
 }

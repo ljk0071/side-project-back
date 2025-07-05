@@ -1,7 +1,6 @@
 package com.side.domain.service;
 
 import com.side.domain.Metadata;
-import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Article;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepositoryManager;
@@ -18,7 +17,15 @@ public class NoticeService {
 
     public void create(Notice notice) {
         NoticeRepositoryManager.getNoticeRepository(JPA)
-                               .create(notice);
+                               .create(initForCreate(notice));
+    }
+
+    public Notice initForCreate(Notice notice) {
+        return notice.toBuilder()
+                     .viewCount(0L)
+                     .status(YesNoDeleteStatus.YES)
+                     .metadata(Metadata.init())
+                     .build();
     }
 
     public void bulkCreate(List<Notice> notices) {

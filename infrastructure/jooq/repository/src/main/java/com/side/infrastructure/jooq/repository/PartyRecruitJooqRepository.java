@@ -1,76 +1,81 @@
 package com.side.infrastructure.jooq.repository;
 
-import com.side.domain.StatusTypeEnum;
+import com.side.domain.Metadata;
+import com.side.domain.YesNoDeleteStatus;
+import com.side.domain.enums.UserStatus;
+import com.side.domain.model.Article;
 import com.side.domain.model.PartyRecruit;
-import com.side.domain.repository.PartyRecruitRepository;
-import com.side.domain.repository.PartyRecruitRepositoryManager;
-import com.side.infrastructure.jooq.config.RecordAuditListenerGenerator;
-import com.side.infrastructure.jooq.generated.tables.records.PartyRecruitRecord;
+import com.side.domain.repository.PartyRecruitReader;
+import com.side.infrastructure.jooq.generated.tables.User;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.Configuration;
 import org.jooq.DSLContext;
-import org.jooq.RecordListener;
-import org.jooq.impl.DSL;
+import org.jooq.Record;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
-import java.util.function.Consumer;
+import java.util.Optional;
 
-import static com.side.domain.RepositoryTypeEnum.JOOQ;
 import static com.side.infrastructure.jooq.generated.Tables.PARTY_RECRUIT;
-import static com.side.security.service.SecurityHelper.getAuthenticatedUser;
+import static com.side.infrastructure.jooq.generated.tables.User.USER;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
-public class PartyRecruitJooqRepository implements PartyRecruitRepository {
+public class PartyRecruitJooqRepository implements PartyRecruitReader {
 
     private final DSLContext dsl;
 
-    public PartyRecruitJooqRepository(DSLContext dsl) {
-        Configuration config = dsl.configuration().derive();
-        config.set(partyRecruitRecordAuditListener());
-        this.dsl = DSL.using(config);
-
-        PartyRecruitRepositoryManager.addPartyRecruitRepository(JOOQ, this);
-    }
-
-    private RecordListener partyRecruitRecordAuditListener() {
-        Consumer<PartyRecruitRecord> createAudit = record -> {
-            record.setCreatedAt(Instant.now());
-            record.setCreatedBy(getAuthenticatedUser().uniqueId());
-        };
-
-        Consumer<PartyRecruitRecord> updateAudit = record -> {
-            record.setModifiedAt(Instant.now());
-            record.setModifiedBy(getAuthenticatedUser().uniqueId());
-        };
-
-        return new RecordAuditListenerGenerator<PartyRecruitRecord>().generate(
-                PartyRecruitRecord.class,
-                createAudit,
-                updateAudit
-        );
-    }
-
     @Override
-    public void create(PartyRecruit partyRecruit) {
-        PartyRecruitRecord record = dsl.newRecord(PARTY_RECRUIT, partyRecruit);
+    public Optional<PartyRecruit> findById(long partyRecruitId) {
 
-        record.setUserUniqueId(partyRecruit.userUniqueId());
-        record.setTitle(partyRecruit.article().title());
-        record.setContents(partyRecruit.article().contents());
-        record.setMaxMembers(partyRecruit.maxMembers());
-        record.setRevision(partyRecruit.revision());
-        record.setStatus(partyRecruit.status().name());
+        User createUser = USER.as("create_user");
+        User modifyUser = USER.as("modify_user");
 
-        record.insert();
+        return dsl.select(
+                          PARTY_RECRUIT.asterisk(),
+                          createUser.NAME.as("create_user_name"),
+                          modifyUser.NAME.as("modify_user_name")
+                  )
+                  .from(PARTY_RECRUIT)
+                  .leftJoin(createUser)
+                  .on(PARTY_RECRUIT.CREATED_BY.eq(createUser.UNIQUE_ID))
+                  .and(createUser.STATUS.eq(UserStatus.ACTIVE))
+                  .leftJoin(modifyUser)
+                  .on(PARTY_RECRUIT.MODIFIED_BY.eq(modifyUser.UNIQUE_ID))
+                  .and(modifyUser.STATUS.eq(UserStatus.ACTIVE))
+                  .where(PARTY_RECRUIT.ID.eq(partyRecruitId))
+                  .fetchOptional(this::toDomainWithUserInfo);
     }
 
-    @Override
-    public void delete(long partyId) {
-        dsl.update(PARTY_RECRUIT)
-           .set(PARTY_RECRUIT.STATUS, StatusTypeEnum.D.name())
-           .where(PARTY_RECRUIT.ID.eq(partyId))
-           .execute();
+    private PartyRecruit toDomainWithUserInfo(Record record) {
+        return PartyRecruit.builder()
+                           .id(record.get(PARTY_RECRUIT.ID))
+                           .revision(record.get(PARTY_RECRUIT.REVISION))
+                           .userUniqueId(record.get(PARTY_RECRUIT.USER_UNIQUE_ID))
+                           .article(Article.builder()
+                                           .title(record.get(PARTY_RECRUIT.TITLE))
+                                           .contents(record.get(PARTY_RECRUIT.CONTENTS))
+                                           .build())
+                           .maxMembers(record.get(PARTY_RECRUIT.MAX_MEMBERS))
+                           .status(fromDatabase(record.get(PARTY_RECRUIT.STATUS)))
+                           .metadata(Metadata.builder()
+                                             .createdBy(record.get(PARTY_RECRUIT.CREATED_BY))
+                                             .createdAt(record.get(PARTY_RECRUIT.CREATED_AT))
+                                             .modifiedBy(record.get(PARTY_RECRUIT.MODIFIED_BY))
+                                             .modifiedAt(record.get(PARTY_RECRUIT.MODIFIED_AT))
+                                             .createdByName(record.get("create_user_name", String.class))
+                                             .modifiedByName(record.get("modify_user_name", String.class))
+                                             .build())
+                           .build();
+    }
+
+    private YesNoDeleteStatus fromDatabase(String status) {
+        if (status == null) return null;
+        return switch (status) {
+            case "Y" -> YesNoDeleteStatus.YES;
+            case "N" -> YesNoDeleteStatus.NO;
+            case "D" -> YesNoDeleteStatus.DELETE;
+            default -> throw new IllegalArgumentException("Unknown status: " + status);
+        };
     }
 }
