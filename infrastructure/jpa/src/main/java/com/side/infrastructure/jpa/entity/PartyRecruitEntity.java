@@ -1,7 +1,8 @@
 package com.side.infrastructure.jpa.entity;
 
-import com.side.domain.StatusTypeEnum;
+import com.side.domain.YesNoDeleteStatus;
 import com.side.infrastructure.jpa.common.MetadataEntity;
+import com.side.infrastructure.jpa.converter.YesNoDeleteStatusConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,10 +39,10 @@ public class PartyRecruitEntity {
     @Comment("최대 모집 인원")
     private Integer maxMembers;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 1, nullable = false)
+    @Convert(converter = YesNoDeleteStatusConverter.class)
     @Comment("상태")
-    private StatusTypeEnum status;
+    private YesNoDeleteStatus status;
 
     @Embedded
     private MetadataEntity metadata;

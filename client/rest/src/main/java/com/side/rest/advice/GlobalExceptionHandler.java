@@ -1,7 +1,10 @@
 package com.side.rest.advice;
 
+import com.side.domain.exception.DuplicatePartyApplicationException;
+import com.side.domain.exception.NotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -49,7 +53,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleCustomException(Exception e) {
+    public ResponseEntity<Map<String, String>> handleUnhandledException(Exception e) {
 
         log.error("예상치 못한 에러 발생", e);
 
@@ -60,11 +64,39 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
     }
 
+    @ExceptionHandler(NotExistException.class)
+    public ResponseEntity<Map<String, String>> handleNotExistException(NotExistException e) {
+
+        String errorMessage = e.getMessage() + " : " + e.getId();
+
+        log.error(errorMessage);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(Map.of("message", e.getMessage()));
+    }
+
+    @ExceptionHandler(DuplicatePartyApplicationException.class)
+    public ResponseEntity<Map<String, String>> handleNotExistException(DuplicatePartyApplicationException e) {
+
+        String errorMessage = e.getMessage() + " : " + e.getTitle();
+
+        log.error("{} {}", errorMessage, e.getPartyRecruitId());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(Map.of("message", errorMessage));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
-        log.error("parameter validation 실패: {}", e.getMessage());
+        String errorMessage = e.getBindingResult()
+                               .getAllErrors()
+                               .stream()
+                               .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                               .collect(Collectors.joining(","));
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        log.error("parameter validation 실패: {}", errorMessage);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", errorMessage));
     }
 }

@@ -16,9 +16,4 @@ public class PartyRecruitUseCase {
     public void create(PartyRecruit partyRecruit) {
         partyRecruitService.create(partyRecruit);
     }
-
-    @Transactional
-    public void delete(long partyId) {
-        partyRecruitService.delete(partyId);
-    }
 }

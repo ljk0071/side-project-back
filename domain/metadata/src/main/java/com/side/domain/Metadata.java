@@ -16,4 +16,8 @@ public record Metadata(
         String deletedByName,
         Instant deletedAt
 ) {
+
+    public static Metadata init() {
+        return builder().build();
+    }
 }

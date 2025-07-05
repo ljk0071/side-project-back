@@ -1,7 +1,8 @@
 package com.side.infrastructure.jpa.entity;
 
-import com.side.domain.StatusTypeEnum;
+import com.side.domain.YesNoDeleteStatus;
 import com.side.infrastructure.jpa.common.MetadataEntity;
+import com.side.infrastructure.jpa.converter.YesNoDeleteStatusConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -30,9 +31,10 @@ public class ResumeEntity {
     @Column(name = "user_unique_id", nullable = false)
     private Long userUniqueId;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private StatusTypeEnum status;
+    @Column(name = "status", length = 1, nullable = false)
+    @Convert(converter = YesNoDeleteStatusConverter.class)
+    @Comment("상태")
+    private YesNoDeleteStatus status;
 
     @Column(name = "contents", nullable = false)
     @Comment("이력서 내용")

@@ -1,6 +1,6 @@
 package com.side.rest.domain.board.dto.response;
 
-import com.side.domain.StatusTypeEnum;
+import com.side.domain.enums.PartyApplicationStatusTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +14,6 @@ public class PartyApplicationResponseDto {
     private Long revision;
     private Long partyRecruitId;
     private Long resumeId;
-    private StatusTypeEnum status;
+    private PartyApplicationStatusTypeEnum status;
     private MetadataResponseDto metadata;
 }

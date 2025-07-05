@@ -33,6 +33,7 @@ import java.util.TimeZone;
         "com.side.infrastructure.jooq.config",
         "com.side.infrastructure.jooq.repository",
         "com.side.infrastructure.jpa.config",
+        "com.side.infrastructure.jpa.converter",
         "com.side.infrastructure.jpa.repository",
         "com.side.infrastructure.valkey.cache.config",
         "com.side.infrastructure.valkey.cache.service",

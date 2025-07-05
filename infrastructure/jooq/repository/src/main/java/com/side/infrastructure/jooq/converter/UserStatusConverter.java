@@ -1,6 +1,7 @@
 package com.side.infrastructure.jooq.converter;
 
 import com.side.domain.enums.UserStatus;
+import lombok.NonNull;
 import org.jooq.Converter;
 
 import java.util.Arrays;
@@ -21,11 +22,13 @@ public class UserStatusConverter implements Converter<String, UserStatus> {
     }
 
     @Override
+    @NonNull
     public Class<String> fromType() {
         return String.class;
     }
 
     @Override
+    @NonNull
     public Class<UserStatus> toType() {
         return UserStatus.class;
     }

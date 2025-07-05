@@ -7,18 +7,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class DataSourceConfig {
 
-    private int getCpuCores() {
-        return Runtime.getRuntime().availableProcessors();
-    }
-
-    private int getEffectiveDisks() {
-        return 2; // Example fixed value, should be configured based on actual system
-    }
-
-    private int calculateOptimalPoolSize() {
-        return (getCpuCores() * 2) + getEffectiveDisks();
-    }
-
     @Bean
     public HikariDataSource dataSource(DataSourceProperties dataSourceProperties) {
 
@@ -29,13 +17,7 @@ public class DataSourceConfig {
         hikariDataSource.setUsername(dataSourceProperties.getUsername());
         hikariDataSource.setPassword(dataSourceProperties.getPassword());
 
-        int maximumPoolSize = calculateOptimalPoolSize();
-
-        dataSourceProperties.setMaximumPoolSize(maximumPoolSize);
-
-        dataSourceProperties.setMinimumIdle(Math.max(maximumPoolSize / 3, 1));
-
-        hikariDataSource.setMaximumPoolSize(maximumPoolSize);
+        hikariDataSource.setMaximumPoolSize(dataSourceProperties.getMaximumPoolSize());
         hikariDataSource.setMinimumIdle(dataSourceProperties.getMinimumIdle());
         hikariDataSource.setConnectionTestQuery("SELECT 1");
         hikariDataSource.setConnectionInitSql("SELECT 1");

@@ -12,13 +12,14 @@ public class ResumeUseCase {
 
     private final ResumeService resumeService;
 
+    /**
+     * 주어진 이력서를 생성합니다.
+     *
+     * @param resume 생성할 이력서 객체
+     * @return 생성된 이력서의 ID
+     */
     @Transactional
-    public void create(Resume resume) {
-        resumeService.create(resume);
-    }
-
-    @Transactional
-    public void delete(long resumeId) {
-        resumeService.delete(resumeId);
+    public long create(Resume resume) {
+        return resumeService.create(resume);
     }
 }
