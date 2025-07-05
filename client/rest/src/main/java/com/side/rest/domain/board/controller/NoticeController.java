@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.side.rest.mapper.NoticeMapper.NoticeMapper;
 
@@ -46,12 +47,11 @@ public class NoticeController {
     ) {
         List<Notice> notices = noticeUseCase.find(keyword, type);
 
-        List<NoticeResponseDto> responseList = new ArrayList<>();
-        for (Notice notice : notices) {
-            responseList.add(NoticeMapper.toResponse(notice));
-        }
+        List<NoticeResponseDto> responsesList = notices.stream()
+                                                       .map(NoticeMapper::toResponse)
+                                                       .collect(Collectors.toList());
 
-        return ResponseEntity.ok(responseList);
+        return ResponseEntity.ok(responsesList);
     }
 
 
