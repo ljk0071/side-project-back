@@ -4,11 +4,13 @@ import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepository;
 import com.side.domain.repository.NoticeRepositoryManager;
-import com.side.infrastructure.jooq.config.RecordAuditListenerGenerator;
 import com.side.infrastructure.jooq.generated.tables.records.NoticeRecord;
+import com.side.infrastructure.jooq.repository.base.AutoAuditJooqRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.*;
 import org.jooq.impl.DSL;
+import org.jooq.DSLContext;
+import org.jooq.InsertValuesStep6;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -16,42 +18,17 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import static com.side.domain.RepositoryTypeEnum.JOOQ;
 import static com.side.infrastructure.jooq.generated.tables.Notice.NOTICE;
-import static com.side.security.service.SecurityHelper.getAuthenticatedUser;
 
 @Slf4j
 @Repository
-public class NoticeJooqRepository implements NoticeRepository {
-
-    private final DSLContext dsl;
+public class NoticeJooqRepository extends AutoAuditJooqRepository<NoticeRecord> implements NoticeRepository {
 
     public NoticeJooqRepository(DSLContext dsl) {
-        Configuration config = dsl.configuration().derive();
-        config.set(noticeRecordAuditListener());
-        this.dsl = DSL.using(config);
-
+        super(dsl, NoticeRecord.class);
         NoticeRepositoryManager.addNoticeRepository(JOOQ, this);
-    }
-
-    private RecordListener noticeRecordAuditListener() {
-        Consumer<NoticeRecord> createAudit = record -> {
-            record.setCreatedAt(Instant.now());
-            record.setCreatedBy(getAuthenticatedUser().uniqueId());
-        };
-
-        Consumer<NoticeRecord> updateAudit = record -> {
-            record.setModifiedAt(Instant.now());
-            record.setModifiedBy(2L);
-        };
-
-        return new RecordAuditListenerGenerator<NoticeRecord>().generate(
-                NoticeRecord.class,
-                createAudit,
-                updateAudit
-        );
     }
 
     @Override
