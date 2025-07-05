@@ -1,5 +1,6 @@
 package com.side.domain.repository;
 
+import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
 
 import java.util.List;
@@ -10,6 +11,7 @@ public interface NoticeRepository {
 
     void bulkcreate(List<Notice> notices);
 
-    Notice find(Notice notice);
+    List<Notice> find(String keyword, NoticeSearchType type);
+
 }
 

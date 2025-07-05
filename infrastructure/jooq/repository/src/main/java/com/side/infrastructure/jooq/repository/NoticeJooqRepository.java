@@ -1,15 +1,13 @@
 package com.side.infrastructure.jooq.repository;
 
+import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepository;
 import com.side.domain.repository.NoticeRepositoryManager;
 import com.side.infrastructure.jooq.config.RecordAuditListenerGenerator;
 import com.side.infrastructure.jooq.generated.tables.records.NoticeRecord;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.Configuration;
-import org.jooq.DSLContext;
-import org.jooq.InsertValuesStep6;
-import org.jooq.RecordListener;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
@@ -182,11 +180,27 @@ public class NoticeJooqRepository implements NoticeRepository {
     }
 
     @Override
-    public Notice find(Notice notice) {
+    public List<Notice> find(String keyword, NoticeSearchType type) {
 
-        return dsl.select()
-                  .from(NOTICE)
-                  .where(NOTICE.ID.eq(notice.id()))
-                  .fetchOneInto(Notice.class);
+        Condition condition;
+
+        if (type == NoticeSearchType.TITLE) {
+            condition = NOTICE.TITLE.containsIgnoreCase(keyword);
+
+        } else if (type == NoticeSearchType.CONTENT) {
+            condition = NOTICE.CONTENTS.containsIgnoreCase(keyword);
+
+        } else if (type == NoticeSearchType.ALL) {
+            condition = NOTICE.TITLE.containsIgnoreCase(keyword)
+                                    .or(NOTICE.CONTENTS.containsIgnoreCase(keyword));
+
+        } else {
+            condition = DSL.trueCondition();
+        }
+
+        return dsl.selectFrom(NOTICE)
+                  .where(condition)
+                  .orderBy(NOTICE.CREATED_AT.desc())
+                  .fetchInto(Notice.class);
     }
 }
