@@ -6,7 +6,6 @@ import com.side.domain.YesNoDeleteStatus;
 import com.side.domain.enums.SearchType;
 import com.side.domain.enums.UserStatus;
 import com.side.domain.exception.InvalidSearchCondition;
-import com.side.domain.exception.NotExistException;
 import com.side.domain.model.Article;
 import com.side.domain.model.PartyRecruit;
 import com.side.domain.repository.PartyRecruitReader;
@@ -34,7 +33,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
     private final DSLContext dsl;
 
     @Override
-    public Optional<PartyRecruit> findById(long partyRecruitId) {
+    public Optional<PartyRecruit> findByRecruitId(long partyRecruitId) {
 
         User createUser = USER.as("create_user");
         User modifyUser = USER.as("modify_user");

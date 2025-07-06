@@ -24,4 +24,9 @@ public class PartyRecruitUseCase {
 
         return partyRecruitService.getActiveRecruits(search);
     }
+
+    public PartyRecruit findByRecruitId(long partyRecruitId) {
+
+        return partyRecruitService.getByRecruitId(partyRecruitId);
+    }
 }

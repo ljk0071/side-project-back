@@ -58,7 +58,7 @@ public class PartyApplicationUseCase {
             throw new DuplicatePartyApplicationException(
                     "이미 해당 파티에 지원하셨습니다.",
                     partyRecruitId,
-                    partyRecruitService.getById(partyRecruitId)
+                    partyRecruitService.getByRecruitId(partyRecruitId)
                                        .article()
                                        .title()
             );
