@@ -1,18 +1,20 @@
 package com.side.rest.domain.board.controller;
 
 import com.side.rest.domain.board.dto.request.PartyRecruitRequestDto;
+import com.side.rest.domain.board.dto.request.SearchRequestDto;
+import com.side.rest.domain.board.dto.response.PartyRecruitResponseDto;
 import com.side.security.service.SecurityHelper;
 import com.side.usecase.board.PartyRecruitUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.side.rest.mapper.PartyRecruitMapper.PartyRecruitMapper;
+import static com.side.rest.mapper.SearchMapper.SearchMapper;
 
 @Slf4j
 @RestController
@@ -30,5 +32,15 @@ public class PartyRecruitController {
         partyRecruitUseCase.create(PartyRecruitMapper.toDomain(partyRequestDto));
 
         return ResponseEntity.ok(null);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PartyRecruitResponseDto>> getActiveRecruits(
+            @Validated SearchRequestDto dto
+    ) {
+
+        return ResponseEntity.ok(partyRecruitUseCase.getActiveRecruits(SearchMapper.toDomain(dto)).stream()
+                                                    .map(PartyRecruitMapper::toResponse)
+                                                    .toList());
     }
 }
