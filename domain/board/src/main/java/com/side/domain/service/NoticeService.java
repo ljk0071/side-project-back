@@ -1,6 +1,8 @@
 package com.side.domain.service;
 
 import com.side.domain.Metadata;
+import com.side.domain.YesNoDeleteStatus;
+import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Article;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepositoryManager;

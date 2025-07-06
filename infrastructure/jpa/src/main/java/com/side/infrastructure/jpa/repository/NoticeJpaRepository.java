@@ -1,6 +1,6 @@
 package com.side.infrastructure.jpa.repository;
 
-import com.side.domain.Metadata;
+import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepository;
 import com.side.domain.repository.NoticeRepositoryManager;
