@@ -5,8 +5,10 @@ import com.epages.restdocs.apispec.Schema;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.side.bootstrap.SideApplication;
+import com.side.domain.enums.SearchType;
 import com.side.rest.domain.board.dto.request.ArticleRequestDto;
 import com.side.rest.domain.board.dto.request.PartyRecruitRequestDto;
+import com.side.rest.domain.board.dto.request.SearchRequestDto;
 import com.side.rest.util.TestLoginUtil;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,10 +23,12 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
@@ -32,7 +36,10 @@ import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -251,4 +258,227 @@ class PartyRecruitControllerTest {
                             )
                     );
     }
+
+    @Test
+    @DisplayName("활성 모집글 조회 - 전체 검색")
+    void getActiveRecruits_Success() throws Exception {
+        // given
+        SearchRequestDto searchDto = fixtureMonkey.giveMeBuilder(SearchRequestDto.class)
+                                                  .set("searchConditions", List.of(SearchType.ALL))
+                                                  .set("searchKeyword", "파티")
+                                                  .sample();
+
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+        Map<String, String> result = tlu.login();
+
+        // when & then
+        MockHttpServletRequestBuilder mockMvcBuilder = get("/v1/party")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                .cookie(new Cookie("Authorization", result.get("accessToken")));
+
+        searchDto.getSearchConditions()
+                 .forEach(condition -> mockMvcBuilder.queryParam("searchConditions", condition.name()));
+
+        this.mockMvc.perform(mockMvcBuilder
+                    .queryParam("searchKeyword", searchDto.getSearchKeyword()))
+                    .andExpect(status().isOk())
+                    .andDo(
+                            document(
+                                    "활성 모집글 조회 - 성공",
+                                    resource(
+                                            ResourceSnippetParameters.builder()
+                                                                     .tag("게시글 정보")
+                                                                     .summary("활성 모집글을 검색합니다.")
+                                                                     .description("검색 조건과 키워드로 활성 상태의 파티 모집글을 조회합니다.")
+                                                                     .queryParameters(
+                                                                             parameterWithName("searchConditions")
+                                                                                     .description("검색 조건 (ALL, TITLE, CONTENTS)")
+                                                                                     .optional(),
+                                                                             parameterWithName("searchKeyword")
+                                                                                     .description("검색 키워드 (1-100자)")
+                                                                                     .optional()
+                                                                     )
+                                                                     .build()
+                                    )
+                            )
+                    );
+    }
+
+    @Test
+    @DisplayName("활성 모집글 조회 - 성공: TITLE 검색")
+    void getActiveRecruits_Success_TitleSearch() throws Exception {
+        // given
+        SearchRequestDto searchDto = fixtureMonkey.giveMeBuilder(SearchRequestDto.class)
+                                                  .set("searchConditions", List.of(SearchType.TITLE))
+                                                  .set("searchKeyword", "제목검색")
+                                                  .sample();
+
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+        Map<String, String> result = tlu.login();
+
+        // when & then
+        MockHttpServletRequestBuilder mockMvcBuilder = get("/v1/party")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                .cookie(new Cookie("Authorization", result.get("accessToken")));
+
+        searchDto.getSearchConditions()
+                 .forEach(condition -> mockMvcBuilder.queryParam("searchConditions", condition.name()));
+
+        this.mockMvc.perform(mockMvcBuilder
+                    .queryParam("searchKeyword", searchDto.getSearchKeyword()))
+                    .andExpect(status().isOk())
+                    .andDo(
+                            document(
+                                    "활성 모집글 조회 - 제목 검색",
+                                    resource(ResourceSnippetParameters.builder()
+                                                                      .tag("게시글 정보")
+                                                                      .summary("제목으로 활성 모집글 검색")
+                                                                      .description("제목 필드에서 키워드를 검색하여 활성 모집글을 조회합니다.")
+                                                                      .queryParameters(
+                                                                              parameterWithName("searchConditions")
+                                                                                      .description("검색 조건 (TITLE)")
+                                                                                      .optional(),
+                                                                              parameterWithName("searchKeyword")
+                                                                                      .description("검색 키워드")
+                                                                                      .optional()
+                                                                      )
+                                                                      .build())
+                            )
+                    );
+    }
+
+    @Test
+    @DisplayName("활성 모집글 조회 - 성공: 여러 검색 조건")
+    void getActiveRecruits_Success_MultipleConditions() throws Exception {
+        // given
+        SearchRequestDto searchDto = fixtureMonkey.giveMeBuilder(SearchRequestDto.class)
+                                                  .set("searchConditions", List.of(SearchType.TITLE, SearchType.CONTENTS))
+                                                  .set("searchKeyword", "검색어")
+                                                  .sample();
+
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+        Map<String, String> result = tlu.login();
+
+        // when & then
+        MockHttpServletRequestBuilder mockMvcBuilder = get("/v1/party")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                .cookie(new Cookie("Authorization", result.get("accessToken")));
+
+        searchDto.getSearchConditions()
+                 .forEach(condition -> mockMvcBuilder.queryParam("searchConditions", condition.name()));
+
+        this.mockMvc.perform(mockMvcBuilder
+                    .queryParam("searchKeyword", searchDto.getSearchKeyword()))
+                    .andExpect(status().isOk())
+                    .andDo(
+                            document(
+                                    "활성 모집글 조회 - 복합 검색",
+                                    resource(ResourceSnippetParameters.builder()
+                                                                      .tag("게시글 정보")
+                                                                      .summary("여러 조건으로 활성 모집글 검색")
+                                                                      .description("제목과 내용에서 키워드를 검색하여 활성 모집글을 조회합니다.")
+                                                                      .queryParameters(
+                                                                              parameterWithName("searchConditions")
+                                                                                      .description("검색 조건 (ALL, TITLE, CONTENTS)")
+                                                                                      .optional(),
+                                                                              parameterWithName("searchKeyword")
+                                                                                      .description("검색 키워드")
+                                                                                      .optional()
+                                                                      )
+                                                                      .build())
+                            )
+                    );
+    }
+
+    @Test
+    @DisplayName("활성 모집글 조회 - 실패: 검색 조건 누락")
+    void getActiveRecruits_Fail_EmptySearchConditions() throws Exception {
+        // given
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+        Map<String, String> result = tlu.login();
+
+        // when & then
+        this.mockMvc.perform(get("/v1/party")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                    .cookie(new Cookie("Authorization", result.get("accessToken")))
+                    .queryParam("searchKeyword", "검색어"))
+                    .andExpect(status().isBadRequest())
+                    .andDo(
+                            document(
+                                    "활성 모집글 조회 - 검색 조건 누락",
+                                    resource(ResourceSnippetParameters.builder()
+                                                                      .tag("게시글 정보")
+                                                                      .summary("활성 모집글 검색 실패 - 검색 조건 누락")
+                                                                      .description("검색 조건이 누락된 경우 400 Bad Request를 반환합니다.")
+                                                                      .build())
+                            )
+                    );
+    }
+
+    @Test
+    @DisplayName("활성 모집글 조회 - 실패: 검색 키워드 길이 초과")
+    void getActiveRecruits_Fail_KeywordTooLong() throws Exception {
+        // given
+        String longKeyword = "a".repeat(101); // 100자 초과
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+        Map<String, String> result = tlu.login();
+
+        // when & then
+        this.mockMvc.perform(get("/v1/party")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                    .cookie(new Cookie("Authorization", result.get("accessToken")))
+                    .queryParam("searchConditions", "ALL")
+                    .queryParam("searchKeyword", longKeyword))
+                    .andExpect(status().isBadRequest())
+                    .andDo(
+                            document(
+                                    "활성 모집글 조회 - 키워드 길이 초과",
+                                    resource(ResourceSnippetParameters.builder()
+                                                                      .tag("게시글 정보")
+                                                                      .summary("활성 모집글 검색 실패 - 키워드 길이 초과")
+                                                                      .description("검색 키워드가 100자를 초과한 경우 400 Bad Request를 반환합니다.")
+                                                                      .build())
+                            )
+                    );
+    }
+
+    @Test
+    @DisplayName("활성 모집글 조회 - 실패: 검색 키워드 빈 문자열")
+    void getActiveRecruits_Fail_EmptyKeyword() throws Exception {
+        // given
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+        Map<String, String> result = tlu.login();
+
+        // when & then
+        this.mockMvc.perform(get("/v1/party")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                    .cookie(new Cookie("Authorization", result.get("accessToken")))
+                    .queryParam("searchConditions", "ALL")
+                    .queryParam("searchKeyword", ""))
+                    .andExpect(status().isBadRequest())
+                    .andDo(
+                            document(
+                                    "활성 모집글 조회 - 빈 키워드",
+                                    resource(ResourceSnippetParameters.builder()
+                                                                      .tag("게시글 정보")
+                                                                      .summary("활성 모집글 검색 실패 - 빈 키워드")
+                                                                      .description("검색 키워드가 빈 문자열인 경우 400 Bad Request를 반환합니다.")
+                                                                      .build())
+                            )
+                    );
+    }
+
+
 }

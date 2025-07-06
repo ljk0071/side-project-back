@@ -10,11 +10,11 @@ import lombok.Getter;
 @Builder
 public class PartyRecruitResponseDto {
 
-    private Long id;
-    private Long revision;
-    private Long userUniqueId;
+    private long id;
+    private long revision;
+    private long userUniqueId;
     private ArticleResponseDto article;
-    private Integer maxMembers;
+    private int maxMembers;
     private YesNoDeleteStatus status;
     private MetadataResponseDto metadata;
 }

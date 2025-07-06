@@ -1,14 +1,19 @@
 package com.side.domain.service;
 
 import com.side.domain.Metadata;
+import com.side.domain.Search;
 import com.side.domain.YesNoDeleteStatus;
+import com.side.domain.exception.InvalidSearchCondition;
 import com.side.domain.exception.NotExistException;
 import com.side.domain.model.PartyRecruit;
 import com.side.domain.repository.PartyRecruitReader;
 import com.side.domain.repository.PartyRecruitWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -45,5 +50,18 @@ public class PartyRecruitService {
 
     public boolean isExistPartyRecruit(long partyRecruitId) {
         return findById(partyRecruitId).isPresent();
+    }
+
+    public List<PartyRecruit> getActiveRecruits(Search search) {
+
+        validateSearch(search);
+
+        return partyRecruitReader.getActiveRecruits(search);
+    }
+
+    private void validateSearch(Search search) {
+        if (CollectionUtils.isEmpty(search.searchConditions())) {
+            throw new InvalidSearchCondition("검색조건이 존재하지 않습니다. 검색 조건은 하나 이상이어야 합니다.");
+        }
     }
 }

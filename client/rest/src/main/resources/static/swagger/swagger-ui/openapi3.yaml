@@ -1,8 +1,9 @@
 openapi: 3.0.1
 info:
-  title: 메이플 파티
-  description: 메이플 파티 서버 API 목록
-  version: 0.1.0
+  title: Side Project API
+  description: "\n## 메이플 파티 백엔드 API 문서\n\n### 📋 주요 기능\n- 파티 모집글 관리\n- 이력서 관리  \n\
+    - 파티 지원서 관리\n- 공지사항 관리\n\n### 🔐 인증\nJWT 토큰을 사용한 인증이 필요합니다.\n"
+  version: 1.0.0
 servers:
 - url: http://localhost:8080
 tags: []
@@ -23,8 +24,8 @@ paths:
               로그인:
                 value: |-
                   {
-                    "userId" : "system",
-                    "password" : "gmlwls@9833"
+                    "password" : "gmlwls@9833",
+                    "userId" : "system"
                   }
       responses:
         "200":
@@ -32,27 +33,207 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/api-sign-in486549215"
+                $ref: "#/components/schemas/v1-party486549215"
               examples:
                 로그인:
                   value: |-
                     {
-                      "csrfToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiQ1NSRiIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MTUxNzExMSwiZXhwIjoxNzU0MTA5MTExfQ.AKawRX9TcY6TonmClVg7qfIVbR7t0OjSldf5XGJVAKA",
-                      "refreshToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiUkVGUkVTSCIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MTUxNzExMSwiZXhwIjoxNzU0MTA5MTExfQ.uHfdPeaeLYKbTK6cH6jzPZfOkZoknNrGMgGG_aElHQc"
+                      "csrfToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiQ1NSRiIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MTc4NTIyMywiZXhwIjoxNzU0Mzc3MjIzfQ.wBnbiHWDJAWhPlBglVwhHGSWQB624FtclGvX92R6mYQ",
+                      "refreshToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiUkVGUkVTSCIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MTc4NTIyMywiZXhwIjoxNzU0Mzc3MjIzfQ.r3xUn5QIWONlSlbs0H8YUi0_R66LLlRL9NAl8szfUPY"
                     }
+  /v1/notice:
+    post:
+      tags:
+      - 공지사항 정보
+      summary: 공지사항 등록 실패 - 내용 길이 초과
+      description: 내용이 255자를 초과한 경우 400 Bad Request를 반환합니다.
+      operationId: 공지사항 등록하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/공지사항 등록 요청 - 내용 길이 초과"
+            examples:
+              공지사항 등록하기 - 내용 길이 초과:
+                value: |-
+                  {
+                    "id" : null,
+                    "article" : {
+                      "title" : "공지사항 제목",
+                      "contents" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    }
+                  }
+              공지사항 등록하기 - 제목 길이 초과:
+                value: |-
+                  {
+                    "id" : null,
+                    "article" : {
+                      "title" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "contents" : "공지사항 내용입니다."
+                    }
+                  }
+              공지사항 등록하기 - 제목 내용 누락:
+                value: |-
+                  {
+                    "id" : null,
+                    "article" : {
+                      "title" : null,
+                      "contents" : null
+                    }
+                  }
+              공지사항 등록하기:
+                value: |-
+                  {
+                    "id" : null,
+                    "article" : {
+                      "title" : "공지사항 제목",
+                      "contents" : "공지사항 내용입니다."
+                    }
+                  }
+              공지사항 등록하기 - 게시글 정보 누락:
+                value: |-
+                  {
+                    "id" : null,
+                    "article" : null
+                  }
+      responses:
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party486549215"
+              examples:
+                공지사항 등록하기 - 내용 길이 초과:
+                  value: |-
+                    {
+                      "message" : "내용은 1-255자 사이여야 합니다"
+                    }
+                공지사항 등록하기 - 제목 길이 초과:
+                  value: |-
+                    {
+                      "message" : "제목은 1-100자 사이여야 합니다"
+                    }
+                공지사항 등록하기 - 제목 내용 누락:
+                  value: |-
+                    {
+                      "message" : "내용은 필수입니다,제목은 필수입니다"
+                    }
+                공지사항 등록하기 - 게시글 정보 누락:
+                  value: |-
+                    {
+                      "message" : "게시글 정보는 필수입니다"
+                    }
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party486549215"
+              examples:
+                공지사항 등록하기:
+                  value: 게시글을 성공적으로 작성했습니다
   /v1/party:
+    get:
+      tags:
+      - 게시글 정보
+      summary: 여러 조건으로 활성 모집글 검색
+      description: 제목과 내용에서 키워드를 검색하여 활성 모집글을 조회합니다.
+      operationId: '활성 모집글 조회 - '
+      parameters:
+      - name: searchConditions
+        in: query
+        description: "검색 조건 (ALL, TITLE, CONTENTS)"
+        required: false
+        schema:
+          type: string
+      - name: searchKeyword
+        in: query
+        description: 검색 키워드
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party486549215"
+              examples:
+                활성 모집글 조회 - 복합 검색:
+                  value: "[ ]"
+                활성 모집글 조회 - 제목 검색:
+                  value: "[ ]"
+                활성 모집글 조회 - 성공:
+                  value: "[ ]"
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party486549215"
+              examples:
+                활성 모집글 조회 - 키워드 길이 초과:
+                  value: |-
+                    {
+                      "message" : "검색 키워드는 1-100자 사이여야 합니다"
+                    }
+                활성 모집글 조회 - 검색 조건 누락:
+                  value: |-
+                    {
+                      "message" : "검색 조건은 최소 1개 이상 선택해야 합니다"
+                    }
+                활성 모집글 조회 - 빈 키워드:
+                  value: |-
+                    {
+                      "message" : "검색 키워드는 1-100자 사이여야 합니다"
+                    }
     post:
       tags:
       - 게시글 정보
-      summary: 게시글을 등록합니다.
-      description: 제목과 내용을 전송받아 게시글을 등록합니다.
+      summary: 파티 모집글 등록 실패 - 제목/내용 누락
+      description: 게시글 제목이나 내용이 누락된 경우 400 Bad Request를 반환합니다.
       operationId: 게시글 등록하기
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/게시글 등록 요청"
+              $ref: "#/components/schemas/게시글 등록 요청 - 제목 내용 누락"
             examples:
+              게시글 등록하기 - 제목 내용 누락:
+                value: |-
+                  {
+                    "id" : 68610,
+                    "userUniqueId" : -2658207690,
+                    "article" : {
+                      "title" : null,
+                      "contents" : null
+                    },
+                    "maxMembers" : -6,
+                    "status" : "YES"
+                  }
+              게시글 등록하기 - 게시글 정보 누락:
+                value: |-
+                  {
+                    "id" : 2380,
+                    "userUniqueId" : 39185,
+                    "article" : null,
+                    "maxMembers" : 1659937,
+                    "status" : "DELETE"
+                  }
+              게시글 등록하기 - 최대 인원 누락:
+                value: |-
+                  {
+                    "id" : 119355,
+                    "userUniqueId" : null,
+                    "article" : {
+                      "title" : "荿芌⃹扃뱒ႋↁ⤔",
+                      "contents" : "黫ꟓ䨏絊蛙퍦؁펠覗ᒜ쒫䬼凲"
+                    },
+                    "maxMembers" : null,
+                    "status" : "DELETE"
+                  }
               게시글 등록하기:
                 value: |-
                   {
@@ -62,9 +243,49 @@ paths:
                       "title" : "test",
                       "contents" : "testBody"
                     },
-                    "maxMembers" : 2
+                    "maxMembers" : 2,
+                    "status" : null
+                  }
+              게시글 등록하기 - 최대 인원 범위 초과:
+                value: |-
+                  {
+                    "id" : 1600794,
+                    "userUniqueId" : -7203527313684,
+                    "article" : {
+                      "title" : "멿밟霺ᩃ鹋㸬뫷븘䳉䤳되땍겎楳萮ｔ乞庵님㭕",
+                      "contents" : "歝浍赫啵◀嘻҇俑譙委⅜繭䴚뎱﹋ⴷ擴ﶰ㱓澵យ頺㇓৤딁፲‹㡹钸⾯켥탓䐨㵸㽇㓽棱㩥茤࠼푙ម꒕෈辻瀗ս叼ಗ゗㐉幩剁齪鍢廒骟⻵絮⿇휓ᝡ웊禡崐嬚鳞耾艑⑁柸্厬䥷⹜㫪㖴ﻗיּ覼⣗⮫윩鋼쁬簂蘜䕔쑕㝅㷷⸾ꪤꊪﭴꞙ퍄뺓＆ゟ㊿䐵䙽戍ﯼ敲뱽犖洊䷙ၒ倗筤ￇ璩⩱來랼椒꒱ꈩ놮渥칪竝쉪绖ᳪꦨ㢇륾핂鍋첊胦땠픺綫繙㹟戓꒩呍ڧ特룤映뢹Դゆ짼밧㵛瘆룺ᠸᭆ唤∴ṵ޹蟳콒낊屠㖃囎㰙좈睰㻗ꌱ诰⒨彵쀧ભꁮ᥾㑽횐旯蜈잽溠䫄籱䛸셮䝖属敊ϻ꓈짞鱤⭐鈣₮춫禾쮄픥衮犒틲찺뵮读岡쳀꫸菐뱾뒺̀읿鞇뾑횻丛営ｬ펾꺾尓ꎓす茡斢⫹䯻畮蠽샮뙽割귝幵琾鋬鈷릑ၬﲱ輎ᛜ삈普鞉곧塅噉늛㑿"
+                    },
+                    "maxMembers" : 10,
+                    "status" : null
                   }
       responses:
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party486549215"
+              examples:
+                게시글 등록하기 - 제목 내용 누락:
+                  value: |-
+                    {
+                      "message" : "Insert 시 id는 null이어야 합니다,내용은 필수입니다,최대 인원은 2명 이상이어야 합니다,Insert 시 id는 null이어야 합니다,등록 시 status는 null이어야 합니다,제목은 필수입니다"
+                    }
+                게시글 등록하기 - 게시글 정보 누락:
+                  value: |-
+                    {
+                      "message" : "게시글 정보는 필수입니다,등록 시 status는 null이어야 합니다,Insert 시 id는 null이어야 합니다,최대 인원은 6명 이하여야 합니다,Insert 시 id는 null이어야 합니다"
+                    }
+                게시글 등록하기 - 최대 인원 누락:
+                  value: |-
+                    {
+                      "message" : "Insert 시 id는 null이어야 합니다,최대 인원은 필수입니다,등록 시 status는 null이어야 합니다"
+                    }
+                게시글 등록하기 - 최대 인원 범위 초과:
+                  value: |-
+                    {
+                      "message" : "Insert 시 id는 null이어야 합니다,Insert 시 id는 null이어야 합니다,최대 인원은 6명 이하여야 합니다"
+                    }
         "200":
           description: "200"
   /v1/resume:
@@ -85,18 +306,158 @@ paths:
                   {
                     "id" : null,
                     "userUniqueId" : null,
-                    "contents" : "안녕하세요. 저는 백엔드 개발자입니다.\n\n- 경력: 5년\n- 주요 기술 스택: Java, Spring Boot, MySQL\n- 프로젝트 경험: 전자상거래 플랫폼 개발\n"
+                    "contents" : "안녕하세요. 저는 백엔드 개발자입니다.\n\n- 경력: 5년\n- 주요 기술 스택: Java, Spring Boot, MySQL\n- 프로젝트 경험: 전자상거래 플랫폼 개발\n",
+                    "status" : null
+                  }
+              이력서 등록하기 - 내용 누락:
+                value: |-
+                  {
+                    "id" : null,
+                    "userUniqueId" : null,
+                    "contents" : null,
+                    "status" : null
+                  }
+              이력서 등록하기 - 내용 길이 초과:
+                value: |-
+                  {
+                    "id" : null,
+                    "userUniqueId" : null,
+                    "contents" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "status" : null
+                  }
+              이력서 등록하기 - 빈 내용:
+                value: |-
+                  {
+                    "id" : null,
+                    "userUniqueId" : null,
+                    "contents" : "",
+                    "status" : null
                   }
       responses:
         "200":
           description: "200"
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party486549215"
+              examples:
+                이력서 등록하기 - 내용 누락:
+                  value: |-
+                    {
+                      "message" : "이력서 내용은 필수입니다"
+                    }
+                이력서 등록하기 - 내용 길이 초과:
+                  value: |-
+                    {
+                      "message" : "이력서 내용은 1-255자 사이여야 합니다"
+                    }
+                이력서 등록하기 - 빈 내용:
+                  value: |-
+                    {
+                      "message" : "이력서 내용은 필수입니다,이력서 내용은 1-255자 사이여야 합니다"
+                    }
+  /v1/party/application:
+    post:
+      tags:
+      - 파티 지원서 정보
+      summary: 파티 지원서 등록 실패 - 잘못된 값
+      description: 잘못된 값이 전송된 경우 400 Bad Request를 반환합니다.
+      operationId: 파티 지원서 등록하기
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/파티 지원서 등록 요청 - 잘못된 값"
+            examples:
+              파티 지원서 등록하기 - 잘못된 값:
+                value: |-
+                  {
+                    "id" : null,
+                    "revision" : null,
+                    "partyRecruitId" : -1,
+                    "resumeId" : 0,
+                    "status" : null
+                  }
+              파티 지원서 등록하기 - 필수 값 누락:
+                value: |-
+                  {
+                    "id" : null,
+                    "revision" : null,
+                    "partyRecruitId" : null,
+                    "resumeId" : null,
+                    "status" : null
+                  }
+              파티 지원서 등록하기:
+                value: |-
+                  {
+                    "id" : null,
+                    "revision" : null,
+                    "partyRecruitId" : 1,
+                    "resumeId" : 1,
+                    "status" : null
+                  }
+      responses:
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party486549215"
+              examples:
+                파티 지원서 등록하기 - 잘못된 값:
+                  value: |-
+                    {
+                      "message" : "파티 모집글 ID는 양수여야 합니다,이력서 ID는 양수여야 합니다"
+                    }
+                파티 지원서 등록하기 - 필수 값 누락:
+                  value: |-
+                    {
+                      "message" : "이력서 ID는 필수입니다,파티 모집글 ID는 필수입니다"
+                    }
+        "200":
+          description: "200"
 components:
   schemas:
-    게시글 등록 요청:
-      title: 게시글 등록 요청
+    공지사항 등록 요청 - 내용 길이 초과:
+      title: 공지사항 등록 요청 - 내용 길이 초과
+      required:
+      - article
+      type: object
+      properties:
+        article:
+          required:
+          - contents
+          - title
+          type: object
+          properties:
+            contents:
+              type: string
+              description: 공지사항 내용
+            title:
+              type: string
+              description: 공지사항 제목
+          description: 게시글 정보
+    로그인 요청:
+      title: 로그인 요청
+      required:
+      - password
+      - userId
+      type: object
+      properties:
+        password:
+          type: string
+          description: 비밀번호
+        userId:
+          type: string
+          description: 사용자 ID
+    게시글 등록 요청 - 제목 내용 누락:
+      title: 게시글 등록 요청 - 제목 내용 누락
       required:
       - article
       - maxMembers
+      - status
       - userUniqueId
       type: object
       properties:
@@ -116,30 +477,33 @@ components:
               type: string
               description: 게시글 제목
           description: 게시글 정보
+    파티 지원서 등록 요청 - 잘못된 값:
+      title: 파티 지원서 등록 요청 - 잘못된 값
+      required:
+      - partyRecruitId
+      - resumeId
+      type: object
+      properties:
+        resumeId:
+          type: number
+          description: 이력서 ID
+        partyRecruitId:
+          type: number
+          description: 파티 모집글 ID
+    v1-party486549215:
+      type: object
     이력서 등록 요청:
       title: 이력서 등록 요청
       required:
       - contents
+      - id
+      - status
+      - userUniqueId
       type: object
       properties:
         contents:
           type: string
           description: 이력서 내용
-    로그인 요청:
-      title: 로그인 요청
-      required:
-      - password
-      - userId
-      type: object
-      properties:
-        password:
-          type: string
-          description: 비밀번호
-        userId:
-          type: string
-          description: 사용자 ID
-    api-sign-in486549215:
-      type: object
   securitySchemes:
     Authorization:
       type: http
