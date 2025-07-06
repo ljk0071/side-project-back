@@ -24,16 +24,11 @@ public class JooqCodeGenerator {
                         new ForcedType()
                                 .withUserType("com.side.domain.enums.UserStatus")
                                 .withConverter("com.side.infrastructure.jooq.converter.UserStatusConverter")
-                                .withIncludeExpression("user.status")
-                                .withIncludeExpression("user_modify_log.status"),
+                                .withIncludeExpression("(user|user_modify_log)\\.status"),
                         new ForcedType()
                                 .withUserType("com.side.domain.YesNoDeleteStatus")
                                 .withConverter("com.side.infrastructure.jooq.converter.YesNoDeleteStatusConverter")
-                                .withIncludeExpression("*.status")
-                                .withExcludeExpression("user.status")
-                                .withExcludeExpression("user_modify_log.status")
-                                .withExcludeExpression("party_application.status")
-                                .withExcludeExpression("party_application_modify_log.status")
+                                .withIncludeExpression("(party_recruit|party_recruit_modify_log|notice|notice_modify_log|notice_comment|notice_comment_modify_log|resume|resume_modify_log)\\.status")
                 );
 
         // 타겟 설정 (생성된 코드의 패키지와 디렉토리 지정)
