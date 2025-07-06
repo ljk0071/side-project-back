@@ -94,12 +94,11 @@ class ResumeControllerTest {
                                                                       .requestSchema(Schema.schema("이력서 등록 요청"))
                                                                       .requestFields(
                                                                               fieldWithPath("id").type(JsonFieldType.NULL)
-                                                                                                 .description("이력서 ID (등록 시 null)")
-                                                                                                 .optional(),
+                                                                                                 .description("이력서 ID (등록 시 null)"),
                                                                               fieldWithPath("userUniqueId").type(JsonFieldType.NULL)
-                                                                                                           .description(
-                                                                                                                   "사용자 고유 ID (자동 설정)")
-                                                                                                           .optional(),
+                                                                                                           .description("사용자 고유 ID (자동 설정)"),
+                                                                              fieldWithPath("status").type(JsonFieldType.NULL)
+                                                                                                     .description("상태 (자동 설정)"),
                                                                               fieldWithPath("contents").type(JsonFieldType.STRING)
                                                                                                        .description("이력서 내용")
                                                                       )
