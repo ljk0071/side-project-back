@@ -15,5 +15,7 @@ public interface NoticeRepository {
     List<Notice> find(String keyword, NoticeSearchType type);
 
     Optional<Notice> findById(Long id);
+
+    void increaseViewCount(Long id);
 }
 

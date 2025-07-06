@@ -224,5 +224,9 @@ public class NoticeJooqRepository extends AutoAuditJooqRepository<NoticeRecord> 
                                        .build());
     }
 
+    @Override
+    public void increaseViewCount(Long id) {
+    }
+
 
 }

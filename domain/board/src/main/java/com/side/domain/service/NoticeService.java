@@ -64,4 +64,8 @@ public class NoticeService {
 
         return NoticeRepositoryManager.getNoticeRepository(JOOQ).findById(id);
     }
+
+    public void increaseViewCount(Long id) {
+        NoticeRepositoryManager.getNoticeRepository(JPA).increaseViewCount(id);
+    }
 }

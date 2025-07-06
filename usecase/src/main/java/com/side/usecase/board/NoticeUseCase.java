@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +38,15 @@ public class NoticeUseCase {
     @Transactional
     public Notice findById(Long id) {
 
-        return noticeService.findById(id)
-                            .orElseThrow(() -> new IllegalArgumentException("공지사항이 존재하지 않습니다."));
+
+        Notice notice = noticeService.findById(id)
+                                     .orElseThrow(() -> new IllegalArgumentException("공지사항이 존재하지 않습니다."));
+
+        CompletableFuture.runAsync(() -> {
+            noticeService.increaseViewCount(id);
+        });
+
+        return notice;
     }
 
 

@@ -50,4 +50,10 @@ public class NoticeJpaRepository implements NoticeRepository {
 
         throw new UnsupportedOperationException("사용 안함");
     }
+
+    @Override
+    public void increaseViewCount(Long id) {
+        repository.increaseViewCount(id);
+    }
+
 }
