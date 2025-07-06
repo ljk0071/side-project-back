@@ -34,4 +34,12 @@ public class NoticeUseCase {
         return noticeService.find(keyword, noticeSearchType);
     }
 
+    @Transactional
+    public Notice findById(Long id) {
+
+        return noticeService.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("공지사항이 존재하지 않습니다."));
+    }
+
+
 }

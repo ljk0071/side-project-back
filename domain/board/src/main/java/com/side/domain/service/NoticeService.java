@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static com.side.domain.RepositoryTypeEnum.JOOQ;
 import static com.side.domain.RepositoryTypeEnum.JPA;
@@ -59,4 +60,8 @@ public class NoticeService {
                                       .find(keyword, type);
     }
 
+    public Optional<Notice> findById(Long id) {
+
+        return NoticeRepositoryManager.getNoticeRepository(JOOQ).findById(id);
+    }
 }

@@ -67,5 +67,12 @@ public class NoticeController {
         return ResponseEntity.ok("게시글을 성공적으로 작성했습니다");
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<NoticeResponseDto> findNoticeById(@PathVariable Long id) {
+
+        Notice notice = noticeUseCase.findById(id);
+        NoticeResponseDto response = NoticeMapper.toResponse(notice);
+        return ResponseEntity.ok(response);
+    }
 
 }

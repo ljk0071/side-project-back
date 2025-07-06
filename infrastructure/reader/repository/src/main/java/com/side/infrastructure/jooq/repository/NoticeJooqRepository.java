@@ -1,6 +1,8 @@
 package com.side.infrastructure.jooq.repository;
 
+import com.side.domain.Metadata;
 import com.side.domain.enums.NoticeSearchType;
+import com.side.domain.model.Article;
 import com.side.domain.model.Notice;
 import com.side.domain.repository.NoticeRepository;
 import com.side.domain.repository.NoticeRepositoryManager;
@@ -13,14 +15,22 @@ import org.jooq.InsertValuesStep6;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
+import static com.side.infrastructure.jooq.generated.tables.Notice.NOTICE;
+import static com.side.infrastructure.jooq.generated.tables.User.USER;
+
+import com.side.infrastructure.jooq.generated.tables.User;
+
+
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
 import static com.side.domain.RepositoryTypeEnum.JOOQ;
 import static com.side.infrastructure.jooq.generated.tables.Notice.NOTICE;
+import static com.side.infrastructure.jooq.generated.tables.User.USER;
 
 @Slf4j
 @Repository
@@ -180,4 +190,39 @@ public class NoticeJooqRepository extends AutoAuditJooqRepository<NoticeRecord> 
                   .orderBy(NOTICE.CREATED_AT.desc())
                   .fetchInto(Notice.class);
     }
+
+    @Override
+    public Optional<Notice> findById(Long id) {
+
+        User createUser = USER.as("create_user");
+        User modifyUser = USER.as("modify_user");
+
+        return dsl.select(NOTICE.asterisk(),
+                          createUser.NAME.as("created_by_name"),
+                          modifyUser.NAME.as("modified_by_name")
+                  )
+                  .from(NOTICE)
+                  .where(NOTICE.ID.eq(id))
+                  .fetchOptional()
+                  .map(record -> Notice.builder()
+                                       .id(record.get(NOTICE.ID))
+                                       .revision(record.get(NOTICE.REVISION))
+                                       .viewCount(record.get(NOTICE.VIEW_COUNT))
+                                       .article(Article.builder()
+                                                       .title(record.get(NOTICE.TITLE))
+                                                       .contents(record.get(NOTICE.CONTENTS))
+                                                       .viewCount(record.get(NOTICE.VIEW_COUNT))
+                                                       .build())
+                                       .metadata(Metadata.builder()
+                                                         .createdBy(record.get(NOTICE.CREATED_BY))
+                                                         .createdByName(record.get("create_user_name", String.class))
+                                                         .createdAt(record.get(NOTICE.CREATED_AT))
+                                                         .modifiedBy(record.get(NOTICE.MODIFIED_BY))
+                                                         .modifiedByName(record.get("modified_user_name", String.class))
+                                                         .modifiedAt(record.get(NOTICE.MODIFIED_AT))
+                                                         .build())
+                                       .build());
+    }
+
+
 }
