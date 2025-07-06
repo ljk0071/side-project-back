@@ -9,4 +9,6 @@ dependencies {
 
     implementation 'org.jooq:jooq'
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
+
+    testImplementation project(':bootstrap')
 }
