@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PartyRecruitReader {
 
-    Optional<PartyRecruit> findById(long partyRecruitId);
+    Optional<PartyRecruit> findByRecruitId(long partyRecruitId);
 
     List<PartyRecruit> getActiveRecruits(Search search);
 }

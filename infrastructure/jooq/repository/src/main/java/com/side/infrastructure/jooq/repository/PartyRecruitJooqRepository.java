@@ -33,7 +33,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
     private final DSLContext dsl;
 
     @Override
-    public Optional<PartyRecruit> findById(long partyRecruitId) {
+    public Optional<PartyRecruit> findByRecruitId(long partyRecruitId) {
 
         User createUser = USER.as("create_user");
         User modifyUser = USER.as("modify_user");

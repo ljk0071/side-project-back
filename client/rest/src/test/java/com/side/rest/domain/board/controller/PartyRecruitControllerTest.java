@@ -37,6 +37,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -476,6 +477,104 @@ class PartyRecruitControllerTest {
                                                                       .summary("활성 모집글 검색 실패 - 빈 키워드")
                                                                       .description("검색 키워드가 빈 문자열인 경우 400 Bad Request를 반환합니다.")
                                                                       .build())
+                            )
+                    );
+    }
+
+    @Test
+    @DisplayName("파티 모집글 조회 - 성공")
+    void findByRecruitId_Success() throws Exception {
+        // given
+        Long partyRecruitId = 1L;
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+        Map<String, String> result = tlu.login();
+
+        // when & then
+        this.mockMvc.perform(get("/v1/party/{partyRecruitId}", partyRecruitId)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                    .cookie(new Cookie("Authorization", result.get("accessToken"))))
+                    .andExpect(status().isOk())
+                    .andDo(
+                            document(
+                                    "파티 모집글 조회 - 성공",
+                                    resource(
+                                            ResourceSnippetParameters.builder()
+                                                                     .tag("게시글 정보")
+                                                                     .summary("파티 모집글을 조회합니다.")
+                                                                     .description("파티 모집글 ID로 특정 모집글을 조회합니다.")
+                                                                     .pathParameters(
+                                                                             parameterWithName("partyRecruitId")
+                                                                                     .description("파티 모집글 ID")
+                                                                     )
+                                                                     .responseFields(
+                                                                             fieldWithPath("id").type(JsonFieldType.NUMBER)
+                                                                                                .description("파티 모집글 ID"),
+                                                                             fieldWithPath("revision").type(JsonFieldType.NUMBER)
+                                                                                                      .description("버전"),
+                                                                             fieldWithPath("userUniqueId").type(JsonFieldType.NUMBER)
+                                                                                                          .description("작성자 고유 ID"),
+                                                                             fieldWithPath("article").type(JsonFieldType.OBJECT)
+                                                                                                     .description("게시글 정보"),
+                                                                             fieldWithPath("article.title").type(JsonFieldType.STRING)
+                                                                                                           .description("게시글 제목"),
+                                                                             fieldWithPath("article.contents").type(JsonFieldType.STRING)
+                                                                                                              .description("게시글 내용"),
+                                                                             fieldWithPath("maxMembers").type(JsonFieldType.NUMBER)
+                                                                                                        .description("최대 인원"),
+                                                                             fieldWithPath("status").type(JsonFieldType.STRING)
+                                                                                                    .description("상태"),
+                                                                             fieldWithPath("metadata").type(JsonFieldType.OBJECT)
+                                                                                                      .description("메타데이터"),
+                                                                             fieldWithPath("metadata.createdByName").type(JsonFieldType.STRING)
+                                                                                                                    .description("생성자 이름").optional(),
+                                                                             fieldWithPath("metadata.createdAt").type(JsonFieldType.NUMBER)
+                                                                                                                .description("생성일시 (epoch timestamp)"),
+                                                                             fieldWithPath("metadata.modifiedByName").type(JsonFieldType.STRING)
+                                                                                                                     .description("수정자 이름").optional(),
+                                                                             fieldWithPath("metadata.modifiedAt").type(JsonFieldType.NUMBER)
+                                                                                                                 .description("수정일시 (epoch timestamp)").optional(),
+                                                                             fieldWithPath("metadata.deletedByName").type(JsonFieldType.STRING)
+                                                                                                                     .description("삭제자 이름").optional(),
+                                                                             fieldWithPath("metadata.deletedAt").type(JsonFieldType.NUMBER)
+                                                                                                                 .description("삭제일시 (epoch timestamp)").optional()
+                                                                     )
+                                                                     .build()
+                                    )
+                            )
+                    );
+    }
+
+    @Test
+    @DisplayName("파티 모집글 조회 - 실패: 존재하지 않는 ID")
+    void findByRecruitId_Fail_NotFound() throws Exception {
+        // given
+        Long nonExistentId = 999999L;
+        TestLoginUtil tlu = new TestLoginUtil(mockMvc, objectMapper);
+        Map<String, String> result = tlu.login();
+
+        // when & then
+        this.mockMvc.perform(get("/v1/party/{partyRecruitId}", nonExistentId)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("X-CSRF-TOKEN", result.get("csrfToken"))
+                    .cookie(new Cookie("Authorization", result.get("accessToken"))))
+                    .andExpect(status().isBadRequest())
+                    .andDo(
+                            document(
+                                    "파티 모집글 조회 - 존재하지 않는 ID",
+                                    resource(
+                                            ResourceSnippetParameters.builder()
+                                                                     .tag("게시글 정보")
+                                                                     .summary("파티 모집글 조회 실패 - 존재하지 않는 ID")
+                                                                     .description("존재하지 않는 파티 모집글 ID로 조회 시 400 Bad Request를 반환합니다.")
+                                                                     .pathParameters(
+                                                                             parameterWithName("partyRecruitId")
+                                                                                     .description("파티 모집글 ID")
+                                                                     )
+                                                                     .build()
+                                    )
                             )
                     );
     }

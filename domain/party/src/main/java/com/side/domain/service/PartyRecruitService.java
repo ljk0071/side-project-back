@@ -11,7 +11,6 @@ import com.side.domain.repository.PartyRecruitWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,17 +38,17 @@ public class PartyRecruitService {
                            .build();
     }
 
-    public Optional<PartyRecruit> findById(long partyRecruitId) {
-        return partyRecruitReader.findById(partyRecruitId);
+    public Optional<PartyRecruit> findByRecruitId(long partyRecruitId) {
+        return partyRecruitReader.findByRecruitId(partyRecruitId);
     }
 
-    public PartyRecruit getById(long partyRecruitId) {
-        return partyRecruitReader.findById(partyRecruitId)
+    public PartyRecruit getByRecruitId(long partyRecruitId) {
+        return partyRecruitReader.findByRecruitId(partyRecruitId)
                                  .orElseThrow(() -> new NotExistException("존재하지 않는 파티모집글 입니다.", partyRecruitId));
     }
 
     public boolean isExistPartyRecruit(long partyRecruitId) {
-        return findById(partyRecruitId).isPresent();
+        return findByRecruitId(partyRecruitId).isPresent();
     }
 
     public List<PartyRecruit> getActiveRecruits(Search search) {
