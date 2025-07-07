@@ -4,12 +4,14 @@ import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
 import com.side.domain.service.NoticeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NoticeUseCase {
@@ -44,6 +46,9 @@ public class NoticeUseCase {
 
         CompletableFuture.runAsync(() -> {
             noticeService.increaseViewCount(id);
+        }).exceptionally(ex -> {
+            log.error("조회수 증가 실패: {}", ex.getMessage());
+            return null;
         });
 
         return notice;
