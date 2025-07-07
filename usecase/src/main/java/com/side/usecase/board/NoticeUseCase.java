@@ -47,7 +47,7 @@ public class NoticeUseCase {
         CompletableFuture.runAsync(() -> {
             noticeService.increaseViewCount(id);
         }).exceptionally(ex -> {
-            log.error("조회수 증가 실패: {}", ex.getMessage());
+            log.error("조회수 증가 실패: ", ex);
             return null;
         });
 
