@@ -5,7 +5,11 @@ import lombok.Getter;
 @Getter
 public class NotExistException extends RuntimeException {
 
-    private final long id;
+    private long id;
+
+    public NotExistException(String message) {
+        super(message);
+    }
 
     public NotExistException(String message, long id) {
         super(message);
