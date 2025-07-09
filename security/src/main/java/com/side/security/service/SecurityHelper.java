@@ -1,8 +1,11 @@
 package com.side.security.service;
 
 import com.side.domain.model.User;
+import com.side.security.exception.NotLogInException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Optional;
 
 public class SecurityHelper {
 
@@ -12,14 +15,20 @@ public class SecurityHelper {
 
     public static User getAuthenticatedUser() {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                                                .orElseThrow(() -> new NotLogInException("로그인 상태가 아닙니다."));
 
-        Object user = isAuthenticated() ? authentication.getPrincipal() : null;
+        Object user = authentication.getPrincipal();
 
+        // 비로그인 상태일 경우 anonymous가 출력
         if (user instanceof String) {
-            user = User.builder().build();
+            throw new NotLogInException("로그인 상태가 아닙니다.");
         }
 
         return (User) user;
+    }
+
+    public static long getAuthenticatedUserUniqueId() {
+        return getAuthenticatedUser().uniqueId();
     }
 }
