@@ -1,5 +1,7 @@
 package com.side.usecase.resume;
 
+import com.side.domain.KoreanJosaUtil;
+import com.side.domain.enums.PartyApplicationStatusTypeEnum;
 import com.side.domain.exception.DuplicatePartyApplicationException;
 import com.side.domain.exception.NotExistException;
 import com.side.domain.service.PartyApplicationService;
@@ -63,5 +65,13 @@ public class PartyApplicationUseCase {
                                        .title()
             );
         }
+    }
+
+    @Transactional
+    public String changeStatus(long partyApplicationId, PartyApplicationStatusTypeEnum status) {
+
+        partyApplicationService.changeStatus(partyApplicationId, status);
+
+        return KoreanJosaUtil.JosaBuilder.of(status.getNote()).euro() + " 변경 되었습니다.";
     }
 }

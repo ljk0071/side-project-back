@@ -24,8 +24,8 @@ paths:
               로그인:
                 value: |-
                   {
-                    "userId" : "system",
-                    "password" : "gmlwls@9833"
+                    "password" : "gmlwls@9833",
+                    "userId" : "system"
                   }
       responses:
         "200":
@@ -33,13 +33,13 @@ paths:
           content:
             application/json;charset=UTF-8:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 로그인:
                   value: |-
                     {
-                      "csrfToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiQ1NSRiIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MTc4NjY5NiwiZXhwIjoxNzU0Mzc4Njk2fQ.tyw_iw7fj0kML1aoGhJIv3-WWFQ7GECpB1YQN2sh3jM",
-                      "refreshToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiUkVGUkVTSCIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MTc4NjY5NiwiZXhwIjoxNzU0Mzc4Njk2fQ.9p_QVEeE_CtI_bvSTzETHGvT6Uf-R-_r0SFfxuEGrLg"
+                      "csrfToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiQ1NSRiIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MjEwMzUyMSwiZXhwIjoxNzU0Njk1NTIxfQ.1DGMvdqMes4fWHNrZVodZ5E2nboWAoHgomaIqdcye5A",
+                      "refreshToken" : "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiUkVGUkVTSCIsInN1YiI6InN5c3RlbSIsImlhdCI6MTc1MjEwMzUyMSwiZXhwIjoxNzU0Njk1NTIxfQ.9vy9j5DH_ZK12w7xwfqQlBoueAT0uE86rukOJijAM1U"
                     }
   /v1/notice:
     post:
@@ -102,7 +102,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 공지사항 등록하기 - 내용 길이 초과:
                   value: |-
@@ -117,7 +117,7 @@ paths:
                 공지사항 등록하기 - 제목 내용 누락:
                   value: |-
                     {
-                      "message" : "내용은 필수입니다,제목은 필수입니다"
+                      "message" : "제목은 필수입니다,내용은 필수입니다"
                     }
                 공지사항 등록하기 - 게시글 정보 누락:
                   value: |-
@@ -129,7 +129,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 공지사항 등록하기:
                   value: 게시글을 성공적으로 작성했습니다
@@ -159,20 +159,98 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 활성 모집글 조회 - 복합 검색:
                   value: "[ ]"
                 활성 모집글 조회 - 제목 검색:
                   value: "[ ]"
                 활성 모집글 조회 - 성공:
-                  value: "[ ]"
+                  value: |-
+                    [ {
+                      "id" : 169,
+                      "revision" : 0,
+                      "userUniqueId" : 0,
+                      "article" : {
+                        "title" : "테스트 파티 모집",
+                        "contents" : null
+                      },
+                      "maxMembers" : 0,
+                      "status" : null,
+                      "metadata" : null
+                    }, {
+                      "id" : 164,
+                      "revision" : 0,
+                      "userUniqueId" : 0,
+                      "article" : {
+                        "title" : "테스트 파티 모집",
+                        "contents" : null
+                      },
+                      "maxMembers" : 0,
+                      "status" : null,
+                      "metadata" : null
+                    }, {
+                      "id" : 165,
+                      "revision" : 0,
+                      "userUniqueId" : 0,
+                      "article" : {
+                        "title" : "테스트 파티 모집",
+                        "contents" : null
+                      },
+                      "maxMembers" : 0,
+                      "status" : null,
+                      "metadata" : null
+                    }, {
+                      "id" : 166,
+                      "revision" : 0,
+                      "userUniqueId" : 0,
+                      "article" : {
+                        "title" : "테스트 파티 모집",
+                        "contents" : null
+                      },
+                      "maxMembers" : 0,
+                      "status" : null,
+                      "metadata" : null
+                    }, {
+                      "id" : 167,
+                      "revision" : 0,
+                      "userUniqueId" : 0,
+                      "article" : {
+                        "title" : "테스트 파티 모집",
+                        "contents" : null
+                      },
+                      "maxMembers" : 0,
+                      "status" : null,
+                      "metadata" : null
+                    }, {
+                      "id" : 168,
+                      "revision" : 0,
+                      "userUniqueId" : 0,
+                      "article" : {
+                        "title" : "테스트 파티 모집",
+                        "contents" : null
+                      },
+                      "maxMembers" : 0,
+                      "status" : null,
+                      "metadata" : null
+                    }, {
+                      "id" : 163,
+                      "revision" : 0,
+                      "userUniqueId" : 0,
+                      "article" : {
+                        "title" : "테스트 파티 모집",
+                        "contents" : null
+                      },
+                      "maxMembers" : 0,
+                      "status" : null,
+                      "metadata" : null
+                    } ]
         "400":
           description: "400"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 활성 모집글 조회 - 키워드 길이 초과:
                   value: |-
@@ -204,35 +282,35 @@ paths:
               게시글 등록하기 - 제목 내용 누락:
                 value: |-
                   {
-                    "id" : 798548639755633328,
-                    "userUniqueId" : null,
+                    "id" : -258323,
+                    "userUniqueId" : 76,
                     "article" : {
                       "title" : null,
                       "contents" : null
                     },
-                    "maxMembers" : -4263777,
+                    "maxMembers" : -6572,
                     "status" : "YES"
                   }
               게시글 등록하기 - 게시글 정보 누락:
                 value: |-
                   {
-                    "id" : 26934,
-                    "userUniqueId" : -31,
+                    "id" : 6786,
+                    "userUniqueId" : 305459,
                     "article" : null,
-                    "maxMembers" : -54739,
-                    "status" : "YES"
+                    "maxMembers" : -4994,
+                    "status" : null
                   }
               게시글 등록하기 - 최대 인원 누락:
                 value: |-
                   {
-                    "id" : -7986357,
-                    "userUniqueId" : -223,
+                    "id" : 4419,
+                    "userUniqueId" : null,
                     "article" : {
-                      "title" : "챍㴃쌋痬㳝㤴殾﹦呆ꍞ蹸싆貋々나昴㦫瀩쨆踨芅ᘗჶ笮",
-                      "contents" : "ꔓ캭䵁矈혌绡옰솴达͙越嗷띦១อ龀쬙笑쉠㟫࠷甛끩"
+                      "title" : "ꧢ溕",
+                      "contents" : null
                     },
                     "maxMembers" : null,
-                    "status" : "YES"
+                    "status" : "DELETE"
                   }
               게시글 등록하기:
                 value: |-
@@ -249,11 +327,11 @@ paths:
               게시글 등록하기 - 최대 인원 범위 초과:
                 value: |-
                   {
-                    "id" : -4364,
-                    "userUniqueId" : -2673,
+                    "id" : -277,
+                    "userUniqueId" : null,
                     "article" : {
-                      "title" : "鎫鏂꾆맟肌儷汴촱ㄓ⼓堼蛄㕒⡝줙퀊緀봽꜖ᙻ阽긖ർ㗊ਯﶹ桕ﭶ럖䂐歗",
-                      "contents" : "ல"
+                      "title" : "",
+                      "contents" : "蒗멹꿺拐뜻鳕쬀ㅘ鞋ⴎ餂긝웼웤ួ챻햆鮮㬕ﷻ곿螧᧌ᠤ໹槁⢼됴୤遊ﰸ㊞懁儒ﻡﬡꑝᱱ齖⽱쿥濊䤺㰅鼎ո퉠裥㡯뱙೅更戧⾑ꮧゑ줭穛澎츭ᶍ囖䙈⑐뒪䘫洌颱㙄괆鯛좩δ籈᫔竈ﴡ䣎ᩝꤖ洕贩磂㙳覗櫕漮亃췣啅ᚈꢯ聘ꛏ鈺驋ã讜ਓ吁⣰㻿껆䵯椖㏽燬䗒捶姉긑捘π粙荲⃣ࡘ쫮쑵泺閝䠇࿻ឍ郓傂贳翋ᶠ穰ꞛ촃偶蠬䮶壪˹㞶ᛯ웰ᗐ퀮グ恽Ɔ켎ꂆ蟐쵺幏哑⹗䌬鸈孷濥亽懹釾䏂륿걻㼽둦䚧㠶㕊䄡菹Δ瘜㏱闸銓瑘鸉ု﯐ꌻﴁ䛣쵨궉Ģㅶ航ꜰ茚䔫ⷦ㈫슅星ﺄヺ書㽄鼻쎑㗞֙뗋⠃"
                     },
                     "maxMembers" : 10,
                     "status" : "DELETE"
@@ -264,27 +342,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 게시글 등록하기 - 제목 내용 누락:
                   value: |-
                     {
-                      "message" : "제목은 필수입니다,등록 시 status는 null이어야 합니다,내용은 필수입니다,최대 인원은 2명 이상이어야 합니다,Insert 시 id는 null이어야 합니다"
+                      "message" : "Insert 시 id는 null이어야 합니다,제목은 필수입니다,등록 시 status는 null이어야 합니다,최대 인원은 2명 이상이어야 합니다,Insert 시 id는 null이어야 합니다,내용은 필수입니다"
                     }
                 게시글 등록하기 - 게시글 정보 누락:
                   value: |-
                     {
-                      "message" : "게시글 정보는 필수입니다,Insert 시 id는 null이어야 합니다,등록 시 status는 null이어야 합니다,Insert 시 id는 null이어야 합니다,최대 인원은 2명 이상이어야 합니다"
+                      "message" : "게시글 정보는 필수입니다,Insert 시 id는 null이어야 합니다,Insert 시 id는 null이어야 합니다,최대 인원은 2명 이상이어야 합니다"
                     }
                 게시글 등록하기 - 최대 인원 누락:
                   value: |-
                     {
-                      "message" : "최대 인원은 필수입니다,등록 시 status는 null이어야 합니다,Insert 시 id는 null이어야 합니다,Insert 시 id는 null이어야 합니다"
+                      "message" : "최대 인원은 필수입니다,내용은 필수입니다,등록 시 status는 null이어야 합니다,Insert 시 id는 null이어야 합니다"
                     }
                 게시글 등록하기 - 최대 인원 범위 초과:
                   value: |-
                     {
-                      "message" : "등록 시 status는 null이어야 합니다,최대 인원은 6명 이하여야 합니다,Insert 시 id는 null이어야 합니다,Insert 시 id는 null이어야 합니다"
+                      "message" : "Insert 시 id는 null이어야 합니다,최대 인원은 6명 이하여야 합니다,제목은 1-100자 사이여야 합니다,등록 시 status는 null이어야 합니다,제목은 필수입니다"
                     }
         "200":
           description: "200"
@@ -341,7 +419,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 이력서 등록하기 - 내용 누락:
                   value: |-
@@ -356,7 +434,7 @@ paths:
                 이력서 등록하기 - 빈 내용:
                   value: |-
                     {
-                      "message" : "이력서 내용은 1-255자 사이여야 합니다,이력서 내용은 필수입니다"
+                      "message" : "이력서 내용은 필수입니다,이력서 내용은 1-255자 사이여야 합니다"
                     }
   /v1/party/application:
     post:
@@ -394,8 +472,8 @@ paths:
                   {
                     "id" : null,
                     "revision" : null,
-                    "partyRecruitId" : 1,
-                    "resumeId" : 1,
+                    "partyRecruitId" : 207,
+                    "resumeId" : 201,
                     "status" : null
                   }
       responses:
@@ -404,7 +482,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 파티 지원서 등록하기 - 잘못된 값:
                   value: |-
@@ -414,7 +492,7 @@ paths:
                 파티 지원서 등록하기 - 필수 값 누락:
                   value: |-
                     {
-                      "message" : "이력서 ID는 필수입니다,파티 모집글 ID는 필수입니다"
+                      "message" : "파티 모집글 ID는 필수입니다,이력서 ID는 필수입니다"
                     }
         "200":
           description: "200"
@@ -438,7 +516,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/v1-party486549215"
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
               examples:
                 파티 모집글 조회 - 존재하지 않는 ID:
                   value: |-
@@ -472,6 +550,77 @@ paths:
                         "deletedByName" : null,
                         "deletedAt" : null
                       }
+                    }
+  /v1/party/application/176/REJECTED:
+    patch:
+      tags:
+      - 파티 지원서 정보
+      summary: 파티 지원서 상태를 거절로 변경합니다.
+      description: 파티 지원서를 거절 상태로 변경합니다.
+      operationId: 파티 지원서 상태 변경하기 - 거절
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
+              examples:
+                파티 지원서 상태 변경하기 - 거절:
+                  value: 거부됨으로 변경 되었습니다.
+  /v1/party/application/177/ACCEPTED:
+    patch:
+      tags:
+      - 파티 지원서 정보
+      summary: 파티 지원서 상태를 변경합니다.
+      description: 파티 지원서 ID와 상태를 전송받아 지원서 상태를 변경합니다.
+      operationId: 파티 지원서 상태 변경하기
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
+              examples:
+                파티 지원서 상태 변경하기:
+                  value: 승인됨으로 변경 되었습니다.
+  /v1/party/application/178/CANCELED:
+    patch:
+      tags:
+      - 파티 지원서 정보
+      summary: 파티 지원서 상태를 취소로 변경합니다.
+      description: 파티 지원서를 취소 상태로 변경합니다.
+      operationId: 파티 지원서 상태 변경하기 - 취소
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
+              examples:
+                파티 지원서 상태 변경하기 - 취소:
+                  value: 취소됨으로 변경 되었습니다.
+  /v1/party/application/999/ACCEPTED:
+    patch:
+      tags:
+      - 파티 지원서 정보
+      summary: 파티 지원서 상태 변경 실패 - 존재하지 않는 지원서
+      description: 존재하지 않는 지원서 ID로 상태 변경 시도 시 400 Bad Request를 반환합니다.
+      operationId: 파티 지원서 상태 변경하기 - 존재하지 않는 지원서
+      responses:
+        "400":
+          description: "400"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/v1-party-application-177-ACCEPTED486549215"
+              examples:
+                파티 지원서 상태 변경하기 - 존재하지 않는 지원서:
+                  value: |-
+                    {
+                      "message" : "존재 하지 않는 파티 지원 상황입니다."
                     }
 components:
   schemas:
@@ -613,7 +762,7 @@ components:
         partyRecruitId:
           type: number
           description: 파티 모집글 ID
-    v1-party486549215:
+    v1-party-application-177-ACCEPTED486549215:
       type: object
     이력서 등록 요청:
       title: 이력서 등록 요청

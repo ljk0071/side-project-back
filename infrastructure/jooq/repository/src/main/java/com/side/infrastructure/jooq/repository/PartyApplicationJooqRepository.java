@@ -75,6 +75,22 @@ public class PartyApplicationJooqRepository implements PartyApplicationReader {
     }
 
     @Override
+    public Optional<PartyApplication> findByRecruitIdAndResumeId(Long partyRecruitId, Long resumeId) {
+        return dsl.selectFrom(PARTY_APPLICATION)
+                  .where(PARTY_APPLICATION.PARTY_RECRUIT_ID.eq(partyRecruitId))
+                  .and(PARTY_APPLICATION.RESUME_ID.eq(resumeId))
+                  .fetchOptionalInto(PartyApplication.class);
+    }
+
+    @Override
+    public Optional<PartyApplication> findByPartyApplicationId(long partyApplicationId) {
+        return dsl.selectFrom(PARTY_APPLICATION)
+                  .where(PARTY_APPLICATION.ID.eq(partyApplicationId))
+                  .fetchOptional()
+                  .map(this::toDomain);
+    }
+
+    @Override
     public List<PartyApplication> findAll() {
         return dsl.selectFrom(PARTY_APPLICATION)
                   .fetch()

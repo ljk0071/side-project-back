@@ -1,6 +1,8 @@
 package com.side.infrastructure.jpa.repository;
 
 import com.side.bootstrap.SideApplication;
+import com.side.domain.enums.PartyApplicationStatusTypeEnum;
+import com.side.domain.exception.NotExistException;
 import com.side.domain.model.*;
 import com.side.domain.service.PartyApplicationService;
 import com.side.domain.service.PartyRecruitService;
@@ -15,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -38,6 +41,9 @@ class PartyApplicationJpaRepositoryTest {
 
     @Autowired
     private PartyApplicationService service;
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     private Long savedPartyRecruitId;
     private Long savedResumeId;
@@ -106,5 +112,78 @@ class PartyApplicationJpaRepositoryTest {
         assertThatThrownBy(() -> writer.create(application2))
                 .as("동일한 파티에 동일한 이력서로 중복시 unique key에러")
                 .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @Test
+    @DisplayName("파티 지원서 상태 변경 - 성공")
+    void changeStatus_Success() {
+
+        PartyApplicationStatusTypeEnum newStatus = PartyApplicationStatusTypeEnum.ACCEPTED;
+
+        // given
+        PartyApplication application = service.initForCreate(savedPartyRecruitId, savedResumeId);
+        long applicationId = writer.create(application);
+
+        // when && then
+        transactionTemplate.executeWithoutResult(status -> {
+            writer.changeStatus(applicationId, newStatus);
+            status.flush();
+        });
+        PartyApplication updatedApplication = reader.findById(applicationId).orElseThrow();
+        assertThat(updatedApplication.status()).isEqualTo(newStatus);
+    }
+
+    @Test
+    @DisplayName("파티 지원서 상태 변경 - 존재하지 않는 지원서")
+    void changeStatus_NotExistApplication_ShouldThrowException() {
+        // given
+        long nonExistentApplicationId = 999L;
+        PartyApplicationStatusTypeEnum newStatus = PartyApplicationStatusTypeEnum.ACCEPTED;
+
+        // when & then
+        assertThatThrownBy(() -> writer.changeStatus(nonExistentApplicationId, newStatus))
+                .isInstanceOf(NotExistException.class)
+                .hasMessage("존재 하지 않는 파티 지원 상황입니다.");
+    }
+
+    @Test
+    @DisplayName("파티 지원서 상태 변경 - 모든 상태 변경 테스트")
+    void changeStatus_AllStatusTypes() {
+
+        // given
+        PartyApplication application = service.initForCreate(savedPartyRecruitId, savedResumeId);
+        long applicationId = writer.create(application);
+
+        // when & then - ACCEPTED
+        transactionTemplate.executeWithoutResult(status -> {
+            writer.changeStatus(applicationId, PartyApplicationStatusTypeEnum.ACCEPTED);
+            status.flush();
+        });
+        PartyApplication acceptedApplication = reader.findById(applicationId).orElseThrow();
+        assertThat(acceptedApplication.status()).isEqualTo(PartyApplicationStatusTypeEnum.ACCEPTED);
+
+        // when & then - REJECTED
+        transactionTemplate.executeWithoutResult(status -> {
+            writer.changeStatus(applicationId, PartyApplicationStatusTypeEnum.REJECTED);
+            status.flush();
+        });
+        PartyApplication rejectedApplication = reader.findById(applicationId).orElseThrow();
+        assertThat(rejectedApplication.status()).isEqualTo(PartyApplicationStatusTypeEnum.REJECTED);
+
+        // when & then - CANCELED
+        transactionTemplate.executeWithoutResult(status -> {
+            writer.changeStatus(applicationId, PartyApplicationStatusTypeEnum.CANCELED);
+            status.flush();
+        });
+        PartyApplication canceledApplication = reader.findById(applicationId).orElseThrow();
+        assertThat(canceledApplication.status()).isEqualTo(PartyApplicationStatusTypeEnum.CANCELED);
+
+        // when & then - PENDING
+        transactionTemplate.executeWithoutResult(status -> {
+            writer.changeStatus(applicationId, PartyApplicationStatusTypeEnum.PENDING);
+            status.flush();
+        });
+        PartyApplication pendingApplication = reader.findById(applicationId).orElseThrow();
+        assertThat(pendingApplication.status()).isEqualTo(PartyApplicationStatusTypeEnum.PENDING);
     }
 }
