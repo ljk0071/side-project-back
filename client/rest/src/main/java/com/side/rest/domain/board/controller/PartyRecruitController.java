@@ -1,6 +1,5 @@
 package com.side.rest.domain.board.controller;
 
-import com.side.domain.repository.PartyRecruitReader;
 import com.side.rest.domain.board.dto.request.PartyRecruitRequestDto;
 import com.side.rest.domain.board.dto.request.SearchRequestDto;
 import com.side.rest.domain.board.dto.response.PartyRecruitResponseDto;
@@ -49,7 +48,7 @@ public class PartyRecruitController {
     public ResponseEntity<PartyRecruitResponseDto> findByRecruitId(
             @PathVariable(value = "partyRecruitId") Long partyRecruitId
     ) {
-        
+
         return ResponseEntity.ok(PartyRecruitMapper.toResponse(partyRecruitUseCase.findByRecruitId(partyRecruitId)));
     }
 }

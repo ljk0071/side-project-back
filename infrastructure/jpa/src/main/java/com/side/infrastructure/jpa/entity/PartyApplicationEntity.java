@@ -9,7 +9,6 @@ import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -43,4 +42,8 @@ public class PartyApplicationEntity {
 
     @Embedded
     private MetadataEntity metadata;
+
+    public void changeStatus(PartyApplicationStatusTypeEnum statusType) {
+        this.status = statusType;
+    }
 }

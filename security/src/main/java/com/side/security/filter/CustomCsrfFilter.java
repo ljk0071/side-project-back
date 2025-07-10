@@ -59,7 +59,6 @@ public class CustomCsrfFilter extends OncePerRequestFilter {
         JwtClaims jwtClaims = jwtService.getJwtClaims(token);
 
         if (JwtTokenType.CSRF != jwtClaims.getTokenType() &&
-                getAuthenticatedUser().userId() != null &&
                 !Objects.equals(getAuthenticatedUser().userId(), jwtClaims.getUserId())) {
 
             throw new InvalidTokenException("CSRF Token이 아닙니다.");

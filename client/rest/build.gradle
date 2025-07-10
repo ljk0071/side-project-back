@@ -27,6 +27,7 @@ dependencies {
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:${fixtureMonkeyVersion}")
 
     testImplementation project(':bootstrap')
+    testImplementation project(':infrastructure:datasource')
 }
 
 

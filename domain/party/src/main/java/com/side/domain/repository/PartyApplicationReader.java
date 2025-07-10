@@ -15,5 +15,9 @@ public interface PartyApplicationReader {
 
     boolean existsByPartyRecruitIdAndResumeId(Long partyRecruitId, Long resumeId);
 
+    Optional<PartyApplication> findByRecruitIdAndResumeId(Long partyRecruitId, Long resumeId);
+
+    Optional<PartyApplication> findByPartyApplicationId(long partyApplicationId);
+
     List<PartyApplication> findAll();
 }
