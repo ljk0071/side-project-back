@@ -52,11 +52,14 @@ public class JwtRefreshFilter extends OncePerRequestFilter {
         }
 
         SecurityDto userDetails = securityService.loadUserByUsername(userId);
+        long userUniqueId = userDetails.getUniqueId();
 
-        log.debug("재인증 성공 uniqueId: {}, userId: {}", userDetails.getUniqueId(), userId);
+        log.debug("재인증 성공 userUniqueId: {}, userId: {}", userUniqueId, userId);
 
         responseUtils.doLoginSuccessAction(
+                userUniqueId,
                 userId,
+                userDetails.getUsername(),
                 userDetails,
                 request,
                 response

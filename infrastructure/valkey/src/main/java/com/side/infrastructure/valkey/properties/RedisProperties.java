@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class RedisProperties {
 
     private String connectionIp;
-    private String connectionPort;
+    private int connectionPort;
     private String password;
     private long timeout;
 
