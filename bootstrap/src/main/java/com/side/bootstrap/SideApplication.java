@@ -26,6 +26,7 @@ import java.util.TimeZone;
         "com.side.rest.domain.*.controller",
         "com.side.websocket.config",
         "com.side.websocket.controller",
+        "com.side.websocket.service",
         "com.side.usecase",
         "com.side.domain.service",
         "com.side.domain.memory",

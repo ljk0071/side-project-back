@@ -1,7 +1,11 @@
+plugins {
+    id "java-library"
+}
+
 dependencies {
 
     // 도메인 의존성 추가
     implementation project(":domain:memory")
 
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    api("org.springframework.boot:spring-boot-starter-data-redis")
 }

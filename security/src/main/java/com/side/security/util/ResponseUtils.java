@@ -55,6 +55,8 @@ public class ResponseUtils {
     }
 
     public void createLoginSuccessResponse(
+            long userUniqueId,
+            String userName,
             String csrfToken,
             String refreshToken,
             HttpServletResponse response
@@ -63,6 +65,8 @@ public class ResponseUtils {
         Map<String, Object> result = new HashMap<>();
         result.put("csrfToken", csrfToken);
         result.put("refreshToken", refreshToken);
+        result.put("userUniqueId", userUniqueId);
+        result.put("name", userName);
 
         try (PrintWriter writer = response.getWriter()) {
             writer.write(objectMapper.writeValueAsString(result));
@@ -70,7 +74,9 @@ public class ResponseUtils {
     }
 
     public void doLoginSuccessAction(
+            long userUniqueId,
             String userId,
+            String userName,
             SecurityDto userDetails,
             HttpServletRequest request,
             HttpServletResponse response
@@ -88,6 +94,6 @@ public class ResponseUtils {
         // refreshToken과 csrfToken을 client에 반환
         setSuccessJsonResponse(response);
         String csrfToken = jwtService.generateCsrfToken(userId);
-        createLoginSuccessResponse(csrfToken, refreshToken, response);
+        createLoginSuccessResponse(userUniqueId, userName, csrfToken, refreshToken, response);
     }
 }

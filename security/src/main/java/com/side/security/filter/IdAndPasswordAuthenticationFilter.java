@@ -77,11 +77,14 @@ public class IdAndPasswordAuthenticationFilter extends AbstractAuthenticationPro
         SecurityDto userDetails = (SecurityDto) authResult.getPrincipal();
 
         String userId = userDetails.getUserId();
+        long userUniqueId = userDetails.getUniqueId();
 
-        log.debug("인증 성공 uniqueId: {}, userId: {}", userDetails.getUniqueId(), userId);
+        log.debug("인증 성공 userUniqueId: {}, userId: {}", userUniqueId, userId);
 
         responseUtils.doLoginSuccessAction(
+                userUniqueId,
                 userId,
+                userDetails.getUsername(),
                 userDetails,
                 request,
                 response

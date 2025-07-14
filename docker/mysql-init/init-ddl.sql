@@ -452,5 +452,12 @@ insert into user (revision, user_id, password, name, email, status, type, create
     values (0, 'system', '$2a$10$feGvADMjJsX5ebEP7emA6eX7uO9w2sCCROTce0D0lXBqyW3XqXnEi', '시스템', 'test@gmail.com',
             'A', 'ADMIN', now(), 1);
 
+insert into user (revision, user_id, password, name, email, status, type, created_at, created_by)
+    values (0, 'testUser', '$2a$10$/SibkoqGV/b.jexrNNNl5OgviGS7XcZKO1V6cqLBdWfuQYCUig7su', '테스트 유저', 'test@gmail.com',
+            'A', 'NORMAL', now(), 1);
+
 insert into user_role (revision, status, role_id, user_unique_id, created_at, created_by)
     values (0, 'Y', 3, 1, now(), 1);
+
+insert into user_role (revision, status, role_id, user_unique_id, created_at, created_by)
+    values (0, 'Y', 2, 2, now(), 1);

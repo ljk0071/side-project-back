@@ -5,7 +5,12 @@ dependencies {
 
     implementation("org.springframework:spring-tx")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
 
+    implementation(project(":infrastructure:valkey"))
+    implementation(project(":security"))
+
+    // 테스트 의존성
+    testImplementation(project(":bootstrap"))
+    testImplementation(project(":client:rest"))
 }

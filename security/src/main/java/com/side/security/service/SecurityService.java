@@ -23,6 +23,7 @@ public class SecurityService implements UserDetailsService {
         return SecurityDto.builder()
                           .uniqueId(user.uniqueId())
                           .userId(userId)
+                          .username(user.name())
                           .password(user.password())
                           .authorities(user.roles().stream()
                                            .map(role -> new SimpleGrantedAuthority(role.code()))

@@ -35,7 +35,7 @@ public class UserJooqRepository implements UserRepository {
 
     @Override
     public User findByUserId(String userId) {
-        return dsl.select(USER.UNIQUE_ID, USER.USER_ID, USER.PASSWORD, USER.STATUS, ROLE.ID, ROLE.CODE, ROLE.NAME)
+        return dsl.select(USER.UNIQUE_ID, USER.USER_ID, USER.NAME, USER.PASSWORD, USER.STATUS, ROLE.ID, ROLE.CODE, ROLE.NAME)
                   .from(USER)
                   .innerJoin(USER_ROLE)
                   .on(USER.UNIQUE_ID.eq(USER_ROLE.USER_UNIQUE_ID))
@@ -46,6 +46,7 @@ public class UserJooqRepository implements UserRepository {
                                   User.builder()
                                       .uniqueId(record.get(USER.UNIQUE_ID))
                                       .userId(record.get(USER.USER_ID))
+                                      .name(record.get(USER.NAME))
                                       .password(record.get(USER.PASSWORD))
                                       .status(record.get(USER.STATUS))
                                       .build(),
