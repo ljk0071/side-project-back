@@ -2,6 +2,7 @@ package com.side.bootstrap;
 
 import com.side.infrastructure.datasource.DataSourceProperties;
 import com.side.infrastructure.valkey.properties.RedisProperties;
+import com.side.security.config.DiscordOAuth2Properties;
 import com.side.security.jwt.config.JwtProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +13,8 @@ import java.util.TimeZone;
 @ConfigurationPropertiesScan(basePackageClasses = {
         JwtProperties.class,
         RedisProperties.class,
-        DataSourceProperties.class})
+        DataSourceProperties.class,
+        DiscordOAuth2Properties.class})
 @SpringBootApplication(scanBasePackages = {
         "com.side.security.config",
         "com.side.security.service",
@@ -23,7 +25,10 @@ import java.util.TimeZone;
         "com.side.security.jwt.service",
         "com.side.rest.advice",
         "com.side.rest.config",
+        "com.side.rest.login",
         "com.side.rest.domain.*.controller",
+        "com.side.rest.external.config",
+        "com.side.rest.util",
         "com.side.websocket.config",
         "com.side.websocket.controller",
         "com.side.websocket.service",
@@ -36,6 +41,7 @@ import java.util.TimeZone;
         "com.side.infrastructure.jpa.config",
         "com.side.infrastructure.jpa.converter",
         "com.side.infrastructure.jpa.repository",
+        "com.side.infrastructure.jdbc",
         "com.side.infrastructure.valkey.cache.config",
         "com.side.infrastructure.valkey.cache.service",
         "com.side.infrastructure.valkey.config",
