@@ -102,7 +102,7 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The column <code>test_db.user.email</code>. 이메일
      */
-    public final TableField<UserRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255).nullable(false), this, "이메일");
+    public final TableField<UserRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255), this, "이메일");
 
     /**
      * The column <code>test_db.user.status</code>.

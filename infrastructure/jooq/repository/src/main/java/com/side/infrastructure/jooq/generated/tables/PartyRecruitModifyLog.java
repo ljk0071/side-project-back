@@ -84,7 +84,7 @@ public class PartyRecruitModifyLog extends TableImpl<PartyRecruitModifyLogRecord
     /**
      * The column <code>test_db.party_recruit_modify_log.title</code>. 게시글제목
      */
-    public final TableField<PartyRecruitModifyLogRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(100).nullable(false), this, "게시글제목");
+    public final TableField<PartyRecruitModifyLogRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(100), this, "게시글제목");
 
     /**
      * The column <code>test_db.party_recruit_modify_log.contents</code>. 게시글내용

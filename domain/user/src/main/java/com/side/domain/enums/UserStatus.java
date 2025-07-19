@@ -15,4 +15,15 @@ public enum UserStatus {
 
     private final String value;
     private final String note;
+
+    public static UserStatus fromCode(String code) {
+
+        return switch (code) {
+            case "P" -> PENDING;
+            case "A" -> ACTIVE;
+            case "L" -> LOCKED;
+            case "O" -> DELETED;
+            default -> throw new IllegalArgumentException();
+        };
+    }
 }

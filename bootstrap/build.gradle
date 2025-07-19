@@ -15,8 +15,8 @@ dependencies {
     implementation project(":infrastructure:datasource")
     implementation project(":infrastructure:valkey")
 
-    implementation project(":infrastructure:jooq:repository")
-    implementation project(":infrastructure:jpa")
+    implementation project(":infrastructure:reader:repository")
+    implementation project(":infrastructure:writer")
 
     developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 

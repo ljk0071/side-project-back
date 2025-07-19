@@ -84,7 +84,7 @@ public class PartyRecruit extends TableImpl<PartyRecruitRecord> {
     /**
      * The column <code>test_db.party_recruit.title</code>. 게시글제목
      */
-    public final TableField<PartyRecruitRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(100).nullable(false), this, "게시글제목");
+    public final TableField<PartyRecruitRecord, String> TITLE = createField(DSL.name("title"), SQLDataType.VARCHAR(100), this, "게시글제목");
 
     /**
      * The column <code>test_db.party_recruit.contents</code>. 게시글내용

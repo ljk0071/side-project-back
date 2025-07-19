@@ -98,7 +98,7 @@ public class UserModifyLog extends TableImpl<UserModifyLogRecord> {
     /**
      * The column <code>test_db.user_modify_log.email</code>. 이메일
      */
-    public final TableField<UserModifyLogRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255).nullable(false), this, "이메일");
+    public final TableField<UserModifyLogRecord, String> EMAIL = createField(DSL.name("email"), SQLDataType.VARCHAR(255), this, "이메일");
 
     /**
      * The column <code>test_db.user_modify_log.status</code>.
