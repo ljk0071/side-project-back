@@ -4,7 +4,10 @@ import com.side.domain.enums.PartyApplicationStatusTypeEnum;
 import com.side.infrastructure.jpa.common.MetadataEntity;
 import com.side.infrastructure.jpa.converter.PartyApplicationStatusConverter;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

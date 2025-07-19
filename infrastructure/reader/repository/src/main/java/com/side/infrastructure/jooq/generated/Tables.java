@@ -4,35 +4,13 @@
 package com.side.infrastructure.jooq.generated;
 
 
-import com.side.infrastructure.jooq.generated.tables.LoginAttemptLog;
-import com.side.infrastructure.jooq.generated.tables.Notice;
-import com.side.infrastructure.jooq.generated.tables.NoticeComment;
-import com.side.infrastructure.jooq.generated.tables.NoticeCommentModifyLog;
-import com.side.infrastructure.jooq.generated.tables.NoticeModifyLog;
-import com.side.infrastructure.jooq.generated.tables.Notification;
-import com.side.infrastructure.jooq.generated.tables.PartyApplication;
-import com.side.infrastructure.jooq.generated.tables.PartyApplicationModifyLog;
-import com.side.infrastructure.jooq.generated.tables.PartyRecruit;
-import com.side.infrastructure.jooq.generated.tables.PartyRecruitModifyLog;
-import com.side.infrastructure.jooq.generated.tables.Resume;
-import com.side.infrastructure.jooq.generated.tables.ResumeModifyLog;
-import com.side.infrastructure.jooq.generated.tables.Role;
-import com.side.infrastructure.jooq.generated.tables.RoleHierarchy;
-import com.side.infrastructure.jooq.generated.tables.RoleHierarchyModifyLog;
-import com.side.infrastructure.jooq.generated.tables.RoleModifyLog;
-import com.side.infrastructure.jooq.generated.tables.User;
-import com.side.infrastructure.jooq.generated.tables.UserDiscordAuth;
-import com.side.infrastructure.jooq.generated.tables.UserDiscordAuthModifyLog;
-import com.side.infrastructure.jooq.generated.tables.UserModifyLog;
-import com.side.infrastructure.jooq.generated.tables.UserReaction;
-import com.side.infrastructure.jooq.generated.tables.UserRole;
-import com.side.infrastructure.jooq.generated.tables.UserRoleModifyLog;
+import com.side.infrastructure.jooq.generated.tables.*;
 
 
 /**
  * Convenience access to all tables in test_db.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
+@SuppressWarnings({"all", "unchecked", "rawtypes", "this-escape"})
 public class Tables {
 
     /**

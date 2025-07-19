@@ -1,9 +1,7 @@
 package com.side.domain.service;
 
-import com.side.domain.AsyncUtil;
 import com.side.domain.Metadata;
 import com.side.domain.enums.PartyApplicationStatusTypeEnum;
-import com.side.domain.exception.NotExistException;
 import com.side.domain.model.PartyApplication;
 import com.side.domain.repository.PartyApplicationReader;
 import com.side.domain.repository.PartyApplicationWriter;
@@ -11,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 @RequiredArgsConstructor

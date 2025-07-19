@@ -32,7 +32,7 @@ import com.side.infrastructure.jooq.generated.tables.UserRoleModifyLog;
 /**
  * Convenience access to all tables in test_db.
  */
-@SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
+@SuppressWarnings({"all", "unchecked", "rawtypes", "this-escape"})
 public class Tables {
 
     /**

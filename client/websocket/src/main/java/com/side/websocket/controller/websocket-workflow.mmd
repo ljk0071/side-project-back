@@ -1,7 +1,7 @@
 sequenceDiagram
     participant Client as 클라이언트
     participant REST as REST API
-    participant SockJS as SockJS Client  
+    participant SockJS as SockJS Client
     participant Spring as Spring WebSocket
     participant STOMP as STOMP Handler
     participant Controller as ChatController
@@ -9,33 +9,27 @@ sequenceDiagram
     participant RedisSubscriber as RedisSubscriber
     participant Redis as Redis/Valkey
     participant MessageTemplate as SimpMessageSendingOperations
-    
     Note over Client, Redis: 현재 Redis 기반 분산 채팅 시스템 워크플로우
-
 %% 0. 채팅방 생성 (사전 준비)
     Client ->> REST: POST /api/chat/rooms
     REST ->> Controller: createChatRoom(request)
     Controller ->> Service: createChatRoom(roomName, creatorId)
     Service ->> Redis: 채팅방 정보 저장 (Hash)
     Controller ->> Client: 201 CREATED + ChatRoomDto
-
 %% 1. WebSocket 연결 단계
     Client ->> SockJS: new SockJS('/ws/chat')
     SockJS ->> Spring: HTTP Upgrade 요청
     Spring ->> Spring: JWT 인증 및 Handshake
     Spring ->> SockJS: 101 Switching Protocols
     SockJS ->> Client: WebSocket 연결 성공
-
-%% 2. STOMP 연결 단계  
+%% 2. STOMP 연결 단계
     Client ->> SockJS: STOMP CONNECT (with JWT)
     SockJS ->> STOMP: STOMP 프로토콜 처리
     STOMP ->> Client: STOMP CONNECTED
-
 %% 3. 채팅방 구독 단계
     Client ->> STOMP: SUBSCRIBE /topic/chat/{roomId}
     STOMP ->> STOMP: 구독 등록
     STOMP ->> Client: 구독 확인
-
 %% 4. 채팅방 입장 단계
     Client ->> STOMP: SEND /chat/{roomId}/join
     STOMP ->> Controller: @MessageMapping("/chat/{roomId}/join")
@@ -48,7 +42,6 @@ sequenceDiagram
     Redis ->> RedisSubscriber: onMessage() 호출
     RedisSubscriber ->> MessageTemplate: convertAndSend("/topic/chat/{roomId}")
     MessageTemplate ->> Client: 입장 메시지 브로드캐스트
-
 %% 5. 채팅 메시지 전송 단계
     Client ->> STOMP: SEND /chat/{roomId}/send + ChatMessageDto
     STOMP ->> Controller: @MessageMapping("/chat/{roomId}/send")
@@ -59,7 +52,6 @@ sequenceDiagram
     Redis ->> RedisSubscriber: onMessage() 호출
     RedisSubscriber ->> MessageTemplate: convertAndSend("/topic/chat/{roomId}")
     MessageTemplate ->> Client: 채팅 메시지 브로드캐스트 (발신자 포함)
-
 %% 6. 채팅방 퇴장 단계
     Client ->> STOMP: SEND /chat/{roomId}/leave
     STOMP ->> Controller: @MessageMapping("/chat/{roomId}/leave")
@@ -72,24 +64,20 @@ sequenceDiagram
     Redis ->> RedisSubscriber: onMessage() 호출
     RedisSubscriber ->> MessageTemplate: convertAndSend("/topic/chat/{roomId}")
     MessageTemplate ->> Client: 퇴장 메시지 브로드캐스트
-
 %% 7. 연결 종료 단계
     Client ->> STOMP: STOMP DISCONNECT
     STOMP ->> Spring: 연결 해제 처리
     Spring ->> Client: WebSocket 연결 종료
-
     Note over Client, Redis: 주요 특징
     Note over Client: • Redis/Valkey 기반 분산 메시징
-    Note over Client: • JWT 기반 인증 
+    Note over Client: • JWT 기반 인증
     Note over Client: • 발신자도 자신의 메시지 수신
     Note over Client: • 채팅방별 독립적인 Redis 채널
-
     Note over Client, Redis: REST API 엔드포인트
     Note over Client: • POST /api/chat/rooms (채팅방 생성)
     Note over Client: • GET /api/chat/rooms (채팅방 목록)
     Note over Client: • GET /api/chat/rooms/{roomId} (채팅방 조회)
     Note over Client: • GET /api/chat/rooms/{roomId}/users (참여자 목록)
-
     Note over Client, Redis: WebSocket 엔드포인트
     Note over Client: • 연결: /ws/chat, /wss/chat (SockJS)
     Note over Client: • 구독: /topic/chat/{roomId}

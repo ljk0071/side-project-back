@@ -13,7 +13,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatMessageDto {
-    
+
     private String messageId;
     private String roomId;
     private Long senderId;
@@ -22,30 +22,30 @@ public class ChatMessageDto {
     private ChatMessage.MessageType type;
     private Instant timestamp;
     private boolean isDeleted;
-    
+
     public static ChatMessageDto from(ChatMessage message) {
         return ChatMessageDto.builder()
-                .messageId(message.getMessageId())
-                .roomId(message.getRoomId())
-                .senderId(message.getSenderId())
-                .senderName(message.getSenderName())
-                .content(message.getContent())
-                .type(message.getType())
-                .timestamp(message.getTimestamp())
-                .isDeleted(message.isDeleted())
-                .build();
+                             .messageId(message.getMessageId())
+                             .roomId(message.getRoomId())
+                             .senderId(message.getSenderId())
+                             .senderName(message.getSenderName())
+                             .content(message.getContent())
+                             .type(message.getType())
+                             .timestamp(message.getTimestamp())
+                             .isDeleted(message.isDeleted())
+                             .build();
     }
-    
+
     public ChatMessage toEntity() {
         return ChatMessage.builder()
-                .messageId(this.messageId)
-                .roomId(this.roomId)
-                .senderId(this.senderId)
-                .senderName(this.senderName)
-                .content(this.content)
-                .type(this.type)
-                .timestamp(this.timestamp)
-                .isDeleted(this.isDeleted)
-                .build();
+                          .messageId(this.messageId)
+                          .roomId(this.roomId)
+                          .senderId(this.senderId)
+                          .senderName(this.senderName)
+                          .content(this.content)
+                          .type(this.type)
+                          .timestamp(this.timestamp)
+                          .isDeleted(this.isDeleted)
+                          .build();
     }
 }

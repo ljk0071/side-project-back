@@ -5,13 +5,13 @@ info:
     - 파티 지원서 관리\n- 공지사항 관리\n\n### 🔐 인증\nJWT 토큰을 사용한 인증이 필요합니다.\n"
   version: 1.0.0
 servers:
-- url: http://localhost:8080
-tags: []
+  - url: http://localhost:8080
+tags: [ ]
 paths:
   /api/sign/in:
     post:
       tags:
-      - 인증
+        - 인증
       summary: 사용자 로그인
       description: 사용자 ID와 비밀번호로 로그인합니다.
       operationId: 로그인
@@ -44,7 +44,7 @@ paths:
   /v1/notice:
     post:
       tags:
-      - 공지사항 정보
+        - 공지사항 정보
       summary: 공지사항 등록 실패 - 내용 길이 초과
       description: 내용이 255자를 초과한 경우 400 Bad Request를 반환합니다.
       operationId: 공지사항 등록하기
@@ -136,23 +136,23 @@ paths:
   /v1/party:
     get:
       tags:
-      - 게시글 정보
+        - 게시글 정보
       summary: 여러 조건으로 활성 모집글 검색
       description: 제목과 내용에서 키워드를 검색하여 활성 모집글을 조회합니다.
       operationId: '활성 모집글 조회 - '
       parameters:
-      - name: searchConditions
-        in: query
-        description: "검색 조건 (ALL, TITLE, CONTENTS)"
-        required: false
-        schema:
-          type: string
-      - name: searchKeyword
-        in: query
-        description: 검색 키워드
-        required: false
-        schema:
-          type: string
+        - name: searchConditions
+          in: query
+          description: "검색 조건 (ALL, TITLE, CONTENTS)"
+          required: false
+          schema:
+            type: string
+        - name: searchKeyword
+          in: query
+          description: 검색 키워드
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: "200"
@@ -269,7 +269,7 @@ paths:
                     }
     post:
       tags:
-      - 게시글 정보
+        - 게시글 정보
       summary: 파티 모집글 등록 실패 - 제목/내용 누락
       description: 게시글 제목이나 내용이 누락된 경우 400 Bad Request를 반환합니다.
       operationId: 게시글 등록하기
@@ -369,7 +369,7 @@ paths:
   /v1/resume:
     post:
       tags:
-      - 이력서 정보
+        - 이력서 정보
       summary: 이력서를 등록합니다.
       description: 이력서 내용을 전송받아 이력서를 등록합니다.
       operationId: 이력서 등록하기
@@ -439,7 +439,7 @@ paths:
   /v1/party/application:
     post:
       tags:
-      - 파티 지원서 정보
+        - 파티 지원서 정보
       summary: 파티 지원서 등록 실패 - 잘못된 값
       description: 잘못된 값이 전송된 경우 400 Bad Request를 반환합니다.
       operationId: 파티 지원서 등록하기
@@ -499,17 +499,17 @@ paths:
   /v1/party/{partyRecruitId}:
     get:
       tags:
-      - 게시글 정보
+        - 게시글 정보
       summary: 파티 모집글 조회 실패 - 존재하지 않는 ID
       description: 존재하지 않는 파티 모집글 ID로 조회 시 400 Bad Request를 반환합니다.
       operationId: '파티 모집글 조회 - '
       parameters:
-      - name: partyRecruitId
-        in: path
-        description: 파티 모집글 ID
-        required: true
-        schema:
-          type: string
+        - name: partyRecruitId
+          in: path
+          description: 파티 모집글 ID
+          required: true
+          schema:
+            type: string
       responses:
         "400":
           description: "400"
@@ -554,7 +554,7 @@ paths:
   /v1/party/application/176/REJECTED:
     patch:
       tags:
-      - 파티 지원서 정보
+        - 파티 지원서 정보
       summary: 파티 지원서 상태를 거절로 변경합니다.
       description: 파티 지원서를 거절 상태로 변경합니다.
       operationId: 파티 지원서 상태 변경하기 - 거절
@@ -571,7 +571,7 @@ paths:
   /v1/party/application/177/ACCEPTED:
     patch:
       tags:
-      - 파티 지원서 정보
+        - 파티 지원서 정보
       summary: 파티 지원서 상태를 변경합니다.
       description: 파티 지원서 ID와 상태를 전송받아 지원서 상태를 변경합니다.
       operationId: 파티 지원서 상태 변경하기
@@ -588,7 +588,7 @@ paths:
   /v1/party/application/178/CANCELED:
     patch:
       tags:
-      - 파티 지원서 정보
+        - 파티 지원서 정보
       summary: 파티 지원서 상태를 취소로 변경합니다.
       description: 파티 지원서를 취소 상태로 변경합니다.
       operationId: 파티 지원서 상태 변경하기 - 취소
@@ -605,7 +605,7 @@ paths:
   /v1/party/application/999/ACCEPTED:
     patch:
       tags:
-      - 파티 지원서 정보
+        - 파티 지원서 정보
       summary: 파티 지원서 상태 변경 실패 - 존재하지 않는 지원서
       description: 존재하지 않는 지원서 ID로 상태 변경 시도 시 400 Bad Request를 반환합니다.
       operationId: 파티 지원서 상태 변경하기 - 존재하지 않는 지원서
@@ -626,18 +626,18 @@ components:
   schemas:
     v1-party-partyRecruitId-1535023103:
       required:
-      - article
-      - id
-      - maxMembers
-      - metadata
-      - revision
-      - status
-      - userUniqueId
+        - article
+        - id
+        - maxMembers
+        - metadata
+        - revision
+        - status
+        - userUniqueId
       type: object
       properties:
         metadata:
           required:
-          - createdAt
+            - createdAt
           type: object
           properties:
             createdAt:
@@ -675,8 +675,8 @@ components:
           description: 파티 모집글 ID
         article:
           required:
-          - contents
-          - title
+            - contents
+            - title
           type: object
           properties:
             contents:
@@ -695,13 +695,13 @@ components:
     공지사항 등록 요청 - 내용 길이 초과:
       title: 공지사항 등록 요청 - 내용 길이 초과
       required:
-      - article
+        - article
       type: object
       properties:
         article:
           required:
-          - contents
-          - title
+            - contents
+            - title
           type: object
           properties:
             contents:
@@ -714,8 +714,8 @@ components:
     로그인 요청:
       title: 로그인 요청
       required:
-      - password
-      - userId
+        - password
+        - userId
       type: object
       properties:
         password:
@@ -727,10 +727,10 @@ components:
     게시글 등록 요청 - 제목 내용 누락:
       title: 게시글 등록 요청 - 제목 내용 누락
       required:
-      - article
-      - maxMembers
-      - status
-      - userUniqueId
+        - article
+        - maxMembers
+        - status
+        - userUniqueId
       type: object
       properties:
         maxMembers:
@@ -738,8 +738,8 @@ components:
           description: 최대 멤버수
         article:
           required:
-          - contents
-          - title
+            - contents
+            - title
           type: object
           properties:
             contents:
@@ -752,8 +752,8 @@ components:
     파티 지원서 등록 요청 - 잘못된 값:
       title: 파티 지원서 등록 요청 - 잘못된 값
       required:
-      - partyRecruitId
-      - resumeId
+        - partyRecruitId
+        - resumeId
       type: object
       properties:
         resumeId:
@@ -767,10 +767,10 @@ components:
     이력서 등록 요청:
       title: 이력서 등록 요청
       required:
-      - contents
-      - id
-      - status
-      - userUniqueId
+        - contents
+        - id
+        - status
+        - userUniqueId
       type: object
       properties:
         contents:
@@ -786,5 +786,5 @@ components:
       in: header
       name: X-CSRF-TOKEN
 security:
-  - Authorization: []
-  - X-CSRF-TOKEN: []
+  - Authorization: [ ]
+  - X-CSRF-TOKEN: [ ]

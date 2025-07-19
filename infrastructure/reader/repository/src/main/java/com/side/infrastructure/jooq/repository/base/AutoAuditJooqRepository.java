@@ -28,6 +28,15 @@ public abstract class AutoAuditJooqRepository<R extends UpdatableRecordImpl<R>> 
     }
 
     /**
+     * 커스텀 Audit 로직이 필요한 경우 사용할 수 있는 생성자
+     */
+    protected AutoAuditJooqRepository(DSLContext dsl, RecordListener customAuditListener) {
+        Configuration config = dsl.configuration().derive();
+        config.set(customAuditListener);
+        this.dsl = DSL.using(config);
+    }
+
+    /**
      * 표준 Audit 리스너를 생성합니다.
      * 생성 시: createdAt, createdBy 설정
      * 수정 시: modifiedAt, modifiedBy 설정
@@ -60,15 +69,6 @@ public abstract class AutoAuditJooqRepository<R extends UpdatableRecordImpl<R>> 
         } catch (Exception e) {
             // 해당 필드가 없는 Record의 경우 무시 (일부 테이블에는 audit 필드가 없을 수 있음)
         }
-    }
-
-    /**
-     * 커스텀 Audit 로직이 필요한 경우 사용할 수 있는 생성자
-     */
-    protected AutoAuditJooqRepository(DSLContext dsl, RecordListener customAuditListener) {
-        Configuration config = dsl.configuration().derive();
-        config.set(customAuditListener);
-        this.dsl = DSL.using(config);
     }
 
     /**

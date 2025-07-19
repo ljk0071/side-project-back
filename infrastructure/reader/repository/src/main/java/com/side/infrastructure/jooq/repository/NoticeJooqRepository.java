@@ -7,10 +7,10 @@ import com.side.domain.repository.NoticeRepositoryManager;
 import com.side.infrastructure.jooq.generated.tables.records.NoticeRecord;
 import com.side.infrastructure.jooq.repository.base.AutoAuditJooqRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.*;
-import org.jooq.impl.DSL;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep6;
+import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;

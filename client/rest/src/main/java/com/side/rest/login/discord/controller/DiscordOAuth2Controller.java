@@ -33,13 +33,10 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequestMapping("/v1/discord")
 public class DiscordOAuth2Controller {
 
-    private final UserUseCase userUseCase;
-
-    private final JwtService jwtService;
-
-    private final DiscordOAuth2Properties discordOAuth2Properties;
-
     private static final int MAX_AGE = 10000;
+    private final UserUseCase userUseCase;
+    private final JwtService jwtService;
+    private final DiscordOAuth2Properties discordOAuth2Properties;
 
     @GetMapping("/redirect")
     public void handleDiscordCallback(

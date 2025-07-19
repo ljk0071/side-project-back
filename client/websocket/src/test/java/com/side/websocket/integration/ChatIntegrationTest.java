@@ -31,14 +31,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("채팅 통합 테스트")
 class ChatIntegrationTest {
 
+    private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
     @Autowired
     private ChatRoomService chatRoomService;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     private WebSocketStompClient stompClient;
-    private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
     private String roomId;
     private WebSocketHttpHeaders headers;
 
