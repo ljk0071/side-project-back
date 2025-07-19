@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ReflectionCache<T> {
 
     private static final Map<String, Method> CACHED_METHOD = new ConcurrentHashMap<>();
-    private static final Map<String, Field[]> CACHED_FILEDS = new ConcurrentHashMap<>();
+    private static final Map<String, Field[]> CACHED_FIELDS = new ConcurrentHashMap<>();
 
     private ReflectionCache() {
     }
@@ -39,7 +39,7 @@ public class ReflectionCache<T> {
             return Optional.empty();
         }
 
-        return Optional.of(CACHED_FILEDS.computeIfAbsent(obj.getClass().getSimpleName(),
+        return Optional.of(CACHED_FIELDS.computeIfAbsent(obj.getClass().getSimpleName(),
                 name -> obj.getClass().getDeclaredFields()));
     }
 }
