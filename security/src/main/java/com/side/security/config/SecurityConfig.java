@@ -1,15 +1,15 @@
 package com.side.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.side.domain.memory.service.MemoryService;
+import com.side.domain.service.UserService;
 import com.side.security.filter.CustomCsrfFilter;
 import com.side.security.filter.IdAndPasswordAuthenticationFilter;
 import com.side.security.filter.SecurityFilterChainExceptionHandler;
+import com.side.security.filter.SignOutFilter;
 import com.side.security.jwt.filter.JwtAuthenticationFilter;
 import com.side.security.jwt.filter.JwtRefreshFilter;
 import com.side.security.jwt.service.JwtService;
 import com.side.security.service.SecurityService;
-import com.side.security.util.ResponseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +33,7 @@ import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -45,10 +46,8 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
-    private final ResponseUtils responseUtils;
     private final JwtService jwtService;
-    private final MemoryService memoryService;
-    private final SecurityService securityService;
+    private final UserService userService;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomCsrfFilter csrfFilter;
@@ -86,30 +85,55 @@ public class SecurityConfig {
                                         .build();
     }
 
+
     @Bean
     @Order(1)
-    public SecurityFilterChain refreshFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain discordLoginFilterChain(HttpSecurity http) throws Exception {
 
-        JwtRefreshFilter refreshFilter = new JwtRefreshFilter(
-                jwtService,
-                memoryService,
-                securityService,
-                responseUtils
-        );
-
-        return applyCommonSecurity(http).securityMatcher("/api/auth/refresh", "/swagger-ui")
-                                        .addFilterBefore(refreshFilter, UsernamePasswordAuthenticationFilter.class)
+        return applyCommonSecurity(http).securityMatcher("/v1/discord/redirect")
                                         .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                                         .build();
     }
 
     @Bean
     @Order(2)
+    public SecurityFilterChain signOutFilterChain(HttpSecurity http) throws Exception {
+
+        SignOutFilter signOutFilter = new SignOutFilter();
+
+        return applyCommonSecurity(http).securityMatcher("/api/sign/out")
+                                        .addFilterAfter(signOutFilter, CorsFilter.class)
+                                        .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                                        .build();
+    }
+
+
+    @Bean
+    @Order(3)
+    public SecurityFilterChain refreshFilterChain(HttpSecurity http) throws Exception {
+
+        JwtRefreshFilter refreshFilter = new JwtRefreshFilter(
+                jwtService,
+                userService,
+                objectMapper
+        );
+
+        return applyCommonSecurity(http).securityMatcher("/api/auth/refresh")
+                                        .addFilterBefore(refreshFilter, UsernamePasswordAuthenticationFilter.class)
+                                        .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                                        .build();
+    }
+
+    @Bean
+    @Order(4)
     public SecurityFilterChain loginFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws
             Exception {
 
-        IdAndPasswordAuthenticationFilter loginFilter = new IdAndPasswordAuthenticationFilter(authenticationManager,
-                objectMapper, responseUtils);
+        IdAndPasswordAuthenticationFilter loginFilter = new IdAndPasswordAuthenticationFilter(
+                authenticationManager,
+                jwtService,
+                objectMapper
+        );
 
         return applyCommonSecurity(http).securityMatcher("/api/sign/in")
                                         .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
@@ -118,12 +142,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Order(3)
+    @Order(5)
     public SecurityFilterChain generalSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        return applyAuthenticationFilters(applyCommonSecurity(http).securityMatcher("/**")).authorizeHttpRequests(
-                                                                                                   auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated())
-                                                                                           .build();
+        return applyAuthenticationFilters(applyCommonSecurity(http)
+                .securityMatcher("/**"))
+                .authorizeHttpRequests(
+                        auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                                    .permitAll()
+                                    .anyRequest()
+                                    .authenticated())
+                .build();
     }
 
     @Bean
@@ -184,6 +213,14 @@ public class SecurityConfig {
     public FilterRegistrationBean<SecurityFilterChainExceptionHandler> securityFilterChainExceptionHandlerRegistration(
             SecurityFilterChainExceptionHandler filter) {
         FilterRegistrationBean<SecurityFilterChainExceptionHandler> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean<SignOutFilter> signOutFilterRegistration(
+            SignOutFilter filter) {
+        FilterRegistrationBean<SignOutFilter> registration = new FilterRegistrationBean<>(filter);
         registration.setEnabled(false);
         return registration;
     }

@@ -3,7 +3,7 @@ package com.side.security.filter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.security.jwt.dto.SecurityDto;
-import com.side.security.util.ResponseUtils;
+import com.side.security.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,27 +17,31 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.side.security.constant.FilterConstant.PASSWORD;
 import static com.side.security.constant.FilterConstant.USER_ID;
+import static com.side.security.util.ResponseUtil.createCookie;
+import static com.side.security.util.ResponseUtil.createLoginSuccessResponse;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
 public class IdAndPasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
     private final ObjectMapper objectMapper;
-    private final ResponseUtils responseUtils;
 
     public IdAndPasswordAuthenticationFilter(
             AuthenticationManager authenticationManager,
-            ObjectMapper objectMapper,
-            ResponseUtils responseUtils
+            JwtService jwtService,
+            ObjectMapper objectMapper
     ) {
         // 로그인 경로 설정
         super("/api/sign/in");
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
         this.objectMapper = objectMapper;
-        this.responseUtils = responseUtils;
     }
 
     @Override
@@ -81,12 +85,26 @@ public class IdAndPasswordAuthenticationFilter extends AbstractAuthenticationPro
 
         log.debug("인증 성공 userUniqueId: {}, userId: {}", userUniqueId, userId);
 
-        responseUtils.doLoginSuccessAction(
+        response.addCookie(createCookie(
+                true,
+                request.getScheme(),
+                AUTHORIZATION,
+                jwtService.createAccessToken(userDetails.getUserId(), userDetails.getAuthorities()
+                                                                                 .stream()
+                                                                                 .map(Objects::toString)
+                                                                                 .toList()),
+                null
+        ));
+
+        String refreshToken = jwtService.createRefreshToken(userId);
+        jwtService.createWhiteListForRefreshToken(userId, refreshToken);
+
+        createLoginSuccessResponse(
                 userUniqueId,
-                userId,
                 userDetails.getUsername(),
-                userDetails,
-                request,
+                jwtService.createCsrfToken(userId),
+                refreshToken,
+                objectMapper,
                 response
         );
     }
