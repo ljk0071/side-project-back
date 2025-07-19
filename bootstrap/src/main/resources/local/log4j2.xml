@@ -17,7 +17,7 @@
     <Loggers>
 
         <!-- 루트 로거 설정 -->
-        <Root level="INFO">
+        <Root level="DEBUG">
             <AppenderRef ref="Console"/>
         </Root>
 
