@@ -13,22 +13,22 @@ public class DataSourceConfig {
         HikariDataSource hikariDataSource = new HikariDataSource();
 
         hikariDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        hikariDataSource.setJdbcUrl(dataSourceProperties.getJdbcUrl());
-        hikariDataSource.setUsername(dataSourceProperties.getUsername());
-        hikariDataSource.setPassword(dataSourceProperties.getPassword());
+        hikariDataSource.setJdbcUrl(dataSourceProperties.jdbcUrl());
+        hikariDataSource.setUsername(dataSourceProperties.username());
+        hikariDataSource.setPassword(dataSourceProperties.password());
 
-        hikariDataSource.setMaximumPoolSize(dataSourceProperties.getMaximumPoolSize());
-        hikariDataSource.setMinimumIdle(dataSourceProperties.getMinimumIdle());
+        hikariDataSource.setMaximumPoolSize(dataSourceProperties.maximumPoolSize());
+        hikariDataSource.setMinimumIdle(dataSourceProperties.minimumIdle());
         hikariDataSource.setConnectionTestQuery("SELECT 1");
         hikariDataSource.setConnectionInitSql("SELECT 1");
-        hikariDataSource.setAutoCommit(dataSourceProperties.isAutoCommit());
-        hikariDataSource.setIsolateInternalQueries(dataSourceProperties.isIsolateInternalQueries());
-        hikariDataSource.setTransactionIsolation(dataSourceProperties.getTransactionIsolate());
-        hikariDataSource.setConnectionTimeout(dataSourceProperties.getConnectionTimeout());
-        hikariDataSource.setIdleTimeout(dataSourceProperties.getIdleTimeout());
-        hikariDataSource.setMaxLifetime(dataSourceProperties.getMaxLifetime()); // 30분
-        hikariDataSource.setLeakDetectionThreshold(dataSourceProperties.getLeakDetectionThreshold()); // 2초
-        hikariDataSource.setPoolName(dataSourceProperties.getPoolName());
+        hikariDataSource.setAutoCommit(dataSourceProperties.autoCommit());
+        hikariDataSource.setIsolateInternalQueries(dataSourceProperties.isolateInternalQueries());
+        hikariDataSource.setTransactionIsolation(dataSourceProperties.transactionIsolate());
+        hikariDataSource.setConnectionTimeout(dataSourceProperties.connectionTimeout());
+        hikariDataSource.setIdleTimeout(dataSourceProperties.idleTimeout());
+        hikariDataSource.setMaxLifetime(dataSourceProperties.maxLifetime()); // 30분
+        hikariDataSource.setLeakDetectionThreshold(dataSourceProperties.leakDetectionThreshold()); // 2초
+        hikariDataSource.setPoolName(dataSourceProperties.poolName());
 
         return hikariDataSource;
     }

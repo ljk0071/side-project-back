@@ -27,7 +27,7 @@ public class RedisConfig {
     public RedisConnectionFactory redisConnectionFactory(RedisProperties redisProperties) {
         // Configure socket options
         SocketOptions socketOptions = SocketOptions.builder()
-                                                   .connectTimeout(Duration.ofMillis(redisProperties.getTimeout()))
+                                                   .connectTimeout(Duration.ofMillis(redisProperties.timeout()))
                                                    .build();
 
         // Configure client options
@@ -40,9 +40,9 @@ public class RedisConfig {
 
         // Create standalone configuration
         RedisStandaloneConfiguration standaloneConfig = new RedisStandaloneConfiguration();
-        standaloneConfig.setHostName(redisProperties.getConnectionIp());
-        standaloneConfig.setPort(redisProperties.getConnectionPort());
-        standaloneConfig.setPassword(RedisPassword.of(redisProperties.getPassword()));
+        standaloneConfig.setHostName(redisProperties.connectionIp());
+        standaloneConfig.setPort(redisProperties.connectionPort());
+        standaloneConfig.setPassword(RedisPassword.of(redisProperties.password()));
 
         // Create and return the connection factory
         return new LettuceConnectionFactory(standaloneConfig, lettuceClientConfig);
