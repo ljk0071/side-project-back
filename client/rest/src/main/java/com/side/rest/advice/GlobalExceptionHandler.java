@@ -43,7 +43,6 @@ public class GlobalExceptionHandler {
                              }
 
                          })
-
                          .exceptionally(ex -> {
                              if (ex != null) {
                                  log.error("예상치 못한 에러 발생: ", ex);
@@ -61,7 +60,9 @@ public class GlobalExceptionHandler {
             sendErrorLogAsyncWebhookIfNotLocal(e);
         }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .header("Content-Type", "application/json; charset=UTF-8")
+                             .body(Map.of("message", e.getMessage()));
     }
 
     @ExceptionHandler(NotExistException.class)
@@ -72,6 +73,7 @@ public class GlobalExceptionHandler {
         log.error(errorMessage);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .header("Content-Type", "application/json; charset=UTF-8")
                              .body(Map.of("message", e.getMessage()));
     }
 
@@ -83,6 +85,7 @@ public class GlobalExceptionHandler {
         log.error("{} {}", errorMessage, e.getPartyRecruitId());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .header("Content-Type", "application/json; charset=UTF-8")
                              .body(Map.of("message", errorMessage));
     }
 
@@ -97,6 +100,8 @@ public class GlobalExceptionHandler {
 
         log.error("parameter validation 실패: {}", errorMessage);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", errorMessage));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .header("Content-Type", "application/json; charset=UTF-8")
+                             .body(Map.of("message", errorMessage));
     }
 }
