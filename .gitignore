@@ -42,6 +42,7 @@ out/
 CLAUDE.md
 
 bootstrap/src/main/resources/jwt.yml
+bootstrap/src/main/resources/discord.yml
 bootstrap/src/main/resources/local/valkey.yml
 bootstrap/src/main/resources/prod/valkey.yml
 bootstrap/src/main/resources/local/mysql.yml
