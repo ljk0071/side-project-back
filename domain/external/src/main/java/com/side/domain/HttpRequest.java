@@ -1,18 +1,16 @@
 package com.side.domain;
 
-public interface HttpRequest<O, T> {
+import java.util.Map;
 
-    void get(String url, O data);
+public interface HttpRequest {
 
-    T get(String url, O data, Class<T> returnType);
+    <O, T> T get(String url, Map<String, String> headers, O data, Class<T> returnType);
 
-    void post(String url, O data);
+    <O, T> T post(String url, Map<String, String> headers, O data, Class<T> returnType);
 
-    T post(String url, O data, Class<T> returnType);
+    <O, T> T patch(String url, Map<String, String> headers, O data, Class<T> returnType);
 
-    void patch(String url, O data);
+    <O, T> T put(String url, Map<String, String> headers, O data, Class<T> returnType);
 
-    void put(String url, O data);
-
-    void delete(String url, O data);
+    <O, T> T delete(String url, Map<String, String> headers, O data, Class<T> returnType);
 }
