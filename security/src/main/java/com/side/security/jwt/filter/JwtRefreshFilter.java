@@ -57,12 +57,12 @@ public class JwtRefreshFilter extends OncePerRequestFilter {
 
         response.addCookie(createCookie(
                 true,
-                request.getScheme(),
                 AUTHORIZATION,
                 jwtService.createAccessToken(user.userId(), user.roles()
                                                                 .stream()
                                                                 .map(Role::code)
                                                                 .toList()),
+                request.getScheme(),
                 null
         ));
 

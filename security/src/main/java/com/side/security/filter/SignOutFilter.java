@@ -37,9 +37,9 @@ public class SignOutFilter extends OncePerRequestFilter {
     private Cookie createInvalidCookie(String scheme) {
         return createCookie(
                 true,
-                scheme,
                 AUTHORIZATION,
                 null,
+                scheme,
                 0
         );
     }

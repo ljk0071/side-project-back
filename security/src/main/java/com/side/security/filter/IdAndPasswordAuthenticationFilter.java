@@ -87,12 +87,12 @@ public class IdAndPasswordAuthenticationFilter extends AbstractAuthenticationPro
 
         response.addCookie(createCookie(
                 true,
-                request.getScheme(),
                 AUTHORIZATION,
                 jwtService.createAccessToken(userDetails.getUserId(), userDetails.getAuthorities()
                                                                                  .stream()
                                                                                  .map(Objects::toString)
                                                                                  .toList()),
+                request.getScheme(),
                 null
         ));
 
