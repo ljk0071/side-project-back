@@ -22,7 +22,7 @@ public enum UserStatus {
             case "P" -> PENDING;
             case "A" -> ACTIVE;
             case "L" -> LOCKED;
-            case "O" -> DELETED;
+            case "D" -> DELETED;
             default -> throw new IllegalArgumentException();
         };
     }
