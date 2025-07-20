@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OAuth2ResponseDto {
 
-    @JsonProperty("token_token")
+    @JsonProperty("token_type")
     private String tokenType;
 
     @JsonProperty("access_token")
