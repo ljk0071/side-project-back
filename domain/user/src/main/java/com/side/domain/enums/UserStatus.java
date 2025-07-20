@@ -23,7 +23,7 @@ public enum UserStatus {
             case "A" -> ACTIVE;
             case "L" -> LOCKED;
             case "D" -> DELETED;
-            default -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException("유효하지 않은 UserStatus code: " + code);
         };
     }
 }
