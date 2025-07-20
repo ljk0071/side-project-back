@@ -1,9 +1,11 @@
 package com.side.security.jwt.service;
 
 import com.side.domain.GenericClassToken;
+import com.side.domain.memory.constants.RedisKeyNames;
+import com.side.domain.memory.service.MemoryService;
+import com.side.security.exception.InvalidTokenException;
 import com.side.security.jwt.claims.JwtClaims;
 import com.side.security.jwt.config.JwtProperties;
-import com.side.security.jwt.dto.SecurityDto;
 import com.side.security.jwt.enums.JwtTokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Slf4j
@@ -29,6 +31,7 @@ public class JwtService {
     private static final String TOKEN_TYPE = "token_type";
     private static final String ROLES = "roles";
 
+    private final MemoryService memoryService;
     private final JwtProperties jwtProperties;
 
     private SecretKey getSignInKey() {
@@ -48,21 +51,28 @@ public class JwtService {
                    .and();
     }
 
-    public String generateToken(SecurityDto userDetails) {
-        return jwtbuilder(userDetails.getUserId(), jwtProperties.expirationTime(), JwtTokenType.ACCESS.name())
-                .claim(ROLES, userDetails.getAuthorities()
-                                         .stream()
-                                         .map(Objects::toString)
-                                         .toList())
+    public String createAccessToken(String userId, List<String> roles) {
+        return jwtbuilder(userId, jwtProperties.expirationTime(), JwtTokenType.ACCESS.name())
+                .claim(ROLES, roles)
                 .compact();
     }
 
-    public String generateRefreshToken(String userId) {
+    public String createRefreshToken(String userId) {
         return jwtbuilder(userId, jwtProperties.refreshExpirationTime(), JwtTokenType.REFRESH.name())
                 .compact();
     }
 
-    public String generateCsrfToken(String userId) {
+    public void createWhiteListForRefreshToken(String userId, String refreshToken) {
+        String key = RedisKeyNames.JWT_REFRESH_TOKEN + userId;
+        memoryService.create(key, refreshToken, jwtProperties.refreshExpirationTime(), TimeUnit.MILLISECONDS);
+    }
+
+    public String getRefreshTokenFromWhiteList(String userId) {
+        return memoryService.find(RedisKeyNames.JWT_REFRESH_TOKEN + userId, String.class)
+                            .orElseThrow(() -> new InvalidTokenException("refresh token이 없습니다."));
+    }
+
+    public String createCsrfToken(String userId) {
         return jwtbuilder(userId, jwtProperties.refreshExpirationTime(), JwtTokenType.CSRF.name())
                 .compact();
     }

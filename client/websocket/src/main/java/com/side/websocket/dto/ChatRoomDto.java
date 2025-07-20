@@ -12,7 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatRoomDto {
-    
+
     private String roomId;
     private String roomName;
     private Long creatorId;
@@ -20,7 +20,7 @@ public class ChatRoomDto {
     private int maxParticipants;
     private boolean isActive;
     private Instant createdAt;
-    
+
     @Data
     @Builder
     @NoArgsConstructor
@@ -29,7 +29,7 @@ public class ChatRoomDto {
         private String roomName;
         private Integer maxParticipants;
     }
-    
+
     @Data
     @Builder
     @NoArgsConstructor

@@ -48,7 +48,7 @@ public class ChatRoomService {
         if (roomData == null) {
             return null;
         }
-        
+
         try {
             return objectMapper.convertValue(roomData, ChatRoom.class);
         } catch (Exception e) {

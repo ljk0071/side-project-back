@@ -6,7 +6,7 @@ spring:
     name: side
 
   config:
-    import: classpath:jwt.yml
+    import: classpath:jwt.yml, classpath:discord.yml
 
   jpa:
     open-in-view: false

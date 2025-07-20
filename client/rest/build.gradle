@@ -16,8 +16,11 @@ dependencies {
     implementation("org.springframework:spring-aop")
     implementation("jakarta.validation:jakarta.validation-api")
 
-    implementation("org.mapstruct:mapstruct:1.6.3")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+    // Apache HttpClient 의존성 추가 (RestClient 리다이렉트 처리용)
+    implementation("org.apache.httpcomponents.client5:httpclient5")
+
+    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
 
     asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")

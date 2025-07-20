@@ -26,14 +26,6 @@ public class ChatMessage {
     @Builder.Default
     private boolean isDeleted = false;
 
-    public enum MessageType {
-        CHAT,       // 일반 채팅
-        JOIN,       // 입장
-        LEAVE,      // 퇴장
-        SYSTEM,     // 시스템 메시지
-        NOTIFICATION // 알림
-    }
-
     public static ChatMessage createSystemMessage(String roomId, String content) {
         return ChatMessage.builder()
                           .messageId(generateMessageId())
@@ -69,5 +61,13 @@ public class ChatMessage {
 
     private static String generateMessageId() {
         return "MSG_" + System.currentTimeMillis() + "_" + System.nanoTime();
+    }
+
+    public enum MessageType {
+        CHAT,       // 일반 채팅
+        JOIN,       // 입장
+        LEAVE,      // 퇴장
+        SYSTEM,     // 시스템 메시지
+        NOTIFICATION // 알림
     }
 }

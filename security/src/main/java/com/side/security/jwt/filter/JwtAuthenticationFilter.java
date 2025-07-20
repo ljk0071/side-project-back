@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        User user = userService.findByUserId(userId);
+        User user = userService.getByUserId(userId);
 
         if (UserStatus.ACTIVE != user.status()) {
             log.error("[It's Not ACTIVE USER] token : {}, userId : {}", accessToken, userId);

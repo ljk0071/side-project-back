@@ -2,7 +2,6 @@ package com.side.usecase.board;
 
 import com.side.domain.enums.NoticeSearchType;
 import com.side.domain.model.Notice;
-import com.side.domain.repository.NoticeRepository;
 import com.side.domain.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

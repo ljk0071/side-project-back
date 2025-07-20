@@ -37,8 +37,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -528,17 +526,22 @@ class PartyRecruitControllerTest {
                                                                              fieldWithPath("metadata").type(JsonFieldType.OBJECT)
                                                                                                       .description("메타데이터"),
                                                                              fieldWithPath("metadata.createdByName").type(JsonFieldType.STRING)
-                                                                                                                    .description("생성자 이름").optional(),
+                                                                                                                    .description("생성자 이름")
+                                                                                                                    .optional(),
                                                                              fieldWithPath("metadata.createdAt").type(JsonFieldType.NUMBER)
                                                                                                                 .description("생성일시 (epoch timestamp)"),
                                                                              fieldWithPath("metadata.modifiedByName").type(JsonFieldType.STRING)
-                                                                                                                     .description("수정자 이름").optional(),
+                                                                                                                     .description("수정자 이름")
+                                                                                                                     .optional(),
                                                                              fieldWithPath("metadata.modifiedAt").type(JsonFieldType.NUMBER)
-                                                                                                                 .description("수정일시 (epoch timestamp)").optional(),
+                                                                                                                 .description("수정일시 (epoch timestamp)")
+                                                                                                                 .optional(),
                                                                              fieldWithPath("metadata.deletedByName").type(JsonFieldType.STRING)
-                                                                                                                     .description("삭제자 이름").optional(),
+                                                                                                                    .description("삭제자 이름")
+                                                                                                                    .optional(),
                                                                              fieldWithPath("metadata.deletedAt").type(JsonFieldType.NUMBER)
-                                                                                                                 .description("삭제일시 (epoch timestamp)").optional()
+                                                                                                                .description("삭제일시 (epoch timestamp)")
+                                                                                                                .optional()
                                                                      )
                                                                      .build()
                                     )

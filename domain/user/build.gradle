@@ -3,6 +3,4 @@ dependencies {
     implementation(project(":domain:util"))
 
     implementation("org.springframework:spring-context")
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

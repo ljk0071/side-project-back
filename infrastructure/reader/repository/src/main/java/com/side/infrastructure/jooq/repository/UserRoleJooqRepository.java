@@ -1,0 +1,38 @@
+package com.side.infrastructure.jooq.repository;
+
+import com.side.domain.model.Role;
+import com.side.domain.repository.UserRoleReader;
+import com.side.infrastructure.jooq.generated.tables.UserRole;
+import lombok.RequiredArgsConstructor;
+import org.jooq.DSLContext;
+import org.springframework.stereotype.Repository;
+
+import java.util.Collection;
+
+import static com.side.infrastructure.jooq.generated.tables.Role.ROLE;
+import static com.side.infrastructure.jooq.generated.tables.User.USER;
+
+@Repository
+@RequiredArgsConstructor
+public class UserRoleJooqRepository implements UserRoleReader {
+
+    private final DSLContext dsl;
+
+
+    @Override
+    public Collection<Role> loadRoleByUserId(String userId) {
+
+        return dsl.select(ROLE.ID, ROLE.NAME)
+                  .from(UserRole.USER_ROLE)
+                  .innerJoin(ROLE)
+                  .on(UserRole.USER_ROLE.ROLE_ID.eq(ROLE.ID))
+                  .innerJoin(USER)
+                  .on(USER.UNIQUE_ID.eq(UserRole.USER_ROLE.USER_UNIQUE_ID))
+                  .where(USER.USER_ID.eq(userId))
+                  .fetch()
+                  .map(record -> Role.builder()
+                                     .id(record.get(ROLE.ID))
+                                     .name(record.get(ROLE.NAME))
+                                     .build());
+    }
+}

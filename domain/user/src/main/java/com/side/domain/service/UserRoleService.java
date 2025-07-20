@@ -2,17 +2,25 @@ package com.side.domain.service;
 
 
 import com.side.domain.model.Role;
-import com.side.domain.repository.UserRoleRepositoryManager;
+import com.side.domain.repository.UserRoleReader;
+import com.side.domain.repository.UserRoleWriter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
-import static com.side.domain.RepositoryTypeEnum.JOOQ;
-
+@RequiredArgsConstructor
 @Service
 public class UserRoleService {
 
+    private final UserRoleReader userRoleReader;
+    private final UserRoleWriter userRoleWriter;
+
     public Collection<Role> loadRoleByUserId(String userId) {
-        return UserRoleRepositoryManager.getUserRoleRepository(JOOQ).loadRoleByUserId(userId);
+        return userRoleReader.loadRoleByUserId(userId);
+    }
+
+    public long createNormalUser(long userUniqueId) {
+        return userRoleWriter.createNormalUser(userUniqueId);
     }
 }

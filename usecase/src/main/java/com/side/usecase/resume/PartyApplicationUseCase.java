@@ -19,12 +19,10 @@ import java.util.concurrent.Executors;
 @RequiredArgsConstructor
 public class PartyApplicationUseCase {
 
+    private static final String IS_EXIST_PARTY_RECRUIT = "isExistPartyRecruit";
+    private static final String HAS_APPLIED_TO_PARTY = "hasAppliedToParty";
     private final PartyRecruitService partyRecruitService;
     private final PartyApplicationService partyApplicationService;
-
-    private static final String IS_EXIST_PARTY_RECRUIT = "isExistPartyRecruit";
-
-    private static final String HAS_APPLIED_TO_PARTY = "hasAppliedToParty";
 
     /**
      * 주어진 partyRecruitId와 resumeId에 대한 새로운 파티 신청을 생성합니다.

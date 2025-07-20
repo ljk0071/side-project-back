@@ -18,7 +18,7 @@ public class SecurityService implements UserDetailsService {
     @Override
     public SecurityDto loadUserByUsername(String userId) throws UsernameNotFoundException {
 
-        User user = userService.findByUserId(userId);
+        User user = userService.getByUserId(userId);
 
         return SecurityDto.builder()
                           .uniqueId(user.uniqueId())
