@@ -126,18 +126,18 @@ public class DiscordOAuth2Controller {
 
         if (dto.getError() != null) {
             if ("access_denied".equals(dto.getError())) {
-                response.sendRedirect(returnUrl + " ?error=canceledByUser");
+                response.sendRedirect(returnUrl + "?error=canceledByUser");
                 return true;
             }
 
             log.error("알 수 없는 에러가 발생 하였습니다 : {}", dto.getErrorDescription());
-            response.sendRedirect(returnUrl + " ?error=unknown");
+            response.sendRedirect(returnUrl + "?error=unknown");
             return true;
         }
 
         if (dto.getCode() == null) {
             log.error("code가 전달되지 않았습니다.");
-            response.sendRedirect(returnUrl + " ?error=codeNotFound");
+            response.sendRedirect(returnUrl + "?error=codeNotFound");
             return true;
         }
 
