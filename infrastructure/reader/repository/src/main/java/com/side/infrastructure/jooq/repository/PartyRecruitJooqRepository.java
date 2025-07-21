@@ -74,7 +74,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
 
     public List<PartyRecruit> getActiveRecruits(@NonNull Search search) {
 
-        var query = dsl.select(PARTY_RECRUIT.ID, PARTY_RECRUIT.TITLE)
+        var query = dsl.select(PARTY_RECRUIT.ID, PARTY_RECRUIT.CONTENTS)
                        .from(PARTY_RECRUIT)
                        .where(PARTY_RECRUIT.STATUS.eq(YesNoDeleteStatus.YES));
 
@@ -88,7 +88,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
                     .fetch(record -> PartyRecruit.builder()
                                                  .id(record.get(PARTY_RECRUIT.ID))
                                                  .article(Article.builder()
-                                                                 .title(record.get(PARTY_RECRUIT.TITLE))
+                                                                 .contents(record.get(PARTY_RECRUIT.CONTENTS))
                                                                  .build())
                                                  .build());
     }

@@ -1,5 +1,6 @@
 package com.side.rest.domain.board.controller;
 
+import com.side.rest.ApiResponse;
 import com.side.rest.domain.board.dto.request.PartyRecruitRequestDto;
 import com.side.rest.domain.board.dto.request.SearchRequestDto;
 import com.side.rest.domain.board.dto.response.PartyRecruitResponseDto;
@@ -25,30 +26,31 @@ public class PartyRecruitController {
     private final PartyRecruitUseCase partyRecruitUseCase;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody @Validated(PartyRecruitRequestDto.Insert.class) PartyRecruitRequestDto partyRequestDto) {
+    public ResponseEntity<ApiResponse<Void>> create(@RequestBody @Validated(PartyRecruitRequestDto.Insert.class) PartyRecruitRequestDto partyRequestDto) {
 
         partyRequestDto.setUserUniqueId(SecurityHelper.getAuthenticatedUser().uniqueId());
 
         partyRecruitUseCase.create(PartyRecruitMapper.toDomain(partyRequestDto));
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(ApiResponse.success("게시글 작성이 완료되었습니다."));
     }
 
     @GetMapping
-    public ResponseEntity<List<PartyRecruitResponseDto>> getActiveRecruits(
+    public ResponseEntity<ApiResponse<List<PartyRecruitResponseDto>>> getActiveRecruits(
             @Validated SearchRequestDto dto
     ) {
 
-        return ResponseEntity.ok(partyRecruitUseCase.getActiveRecruits(SearchMapper.toDomain(dto)).stream()
-                                                    .map(PartyRecruitMapper::toResponse)
-                                                    .toList());
+        return ResponseEntity.ok(ApiResponse.success(null, partyRecruitUseCase.getActiveRecruits(SearchMapper.toDomain(dto))
+                                                                              .stream()
+                                                                              .map(PartyRecruitMapper::toResponse)
+                                                                              .toList()));
     }
 
     @GetMapping("/{partyRecruitId}")
-    public ResponseEntity<PartyRecruitResponseDto> findByRecruitId(
+    public ResponseEntity<ApiResponse<PartyRecruitResponseDto>> findByRecruitId(
             @PathVariable(value = "partyRecruitId") Long partyRecruitId
     ) {
 
-        return ResponseEntity.ok(PartyRecruitMapper.toResponse(partyRecruitUseCase.findByRecruitId(partyRecruitId)));
+        return ResponseEntity.ok(ApiResponse.success(null, PartyRecruitMapper.toResponse(partyRecruitUseCase.findByRecruitId(partyRecruitId))));
     }
 }

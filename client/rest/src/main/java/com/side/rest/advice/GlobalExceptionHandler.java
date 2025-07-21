@@ -4,10 +4,11 @@ import com.side.domain.exception.DuplicatePartyApplicationException;
 import com.side.domain.exception.NotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,7 +17,9 @@ import org.springframework.web.client.RestClient;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -92,16 +95,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
-        String errorMessage = e.getBindingResult()
-                               .getAllErrors()
-                               .stream()
-                               .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                               .collect(Collectors.joining(","));
+        StringJoiner joiner = new StringJoiner(",");
 
-        log.error("parameter validation 실패: {}", errorMessage);
+        Map<String, List<ObjectError>> errorGroupByField = e.getBindingResult()
+                                                            .getAllErrors()
+                                                            .stream()
+                                                            .collect(Collectors.groupingBy(v -> ((FieldError) v).getField()));
+
+        errorGroupByField.forEach((k, v) -> {
+            if (v.size() > 1) {
+                v.stream()
+                 .filter(error -> "NotBlank".equals(error.getCode()))
+                 .findAny()
+                 .ifPresent(error -> joiner.add(error.getDefaultMessage()));
+            }
+        });
+
+        log.error("parameter validation 실패: {}", joiner);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .header("Content-Type", "application/json; charset=UTF-8")
-                             .body(Map.of("message", errorMessage));
+                             .body(Map.of("message", joiner.toString()));
     }
 }

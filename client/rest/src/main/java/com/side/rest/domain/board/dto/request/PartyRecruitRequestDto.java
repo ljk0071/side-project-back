@@ -20,7 +20,7 @@ public class PartyRecruitRequestDto {
     @Valid
     @NotNull(message = "게시글 정보는 필수입니다")
     private ArticleRequestDto article;
-    @NotNull(message = "최대 인원은 필수입니다")
+    //        @NotNull(message = "최대 인원은 필수입니다")
     @Min(value = 2, message = "최대 인원은 2명 이상이어야 합니다")
     @Max(value = 6, message = "최대 인원은 6명 이하여야 합니다")
     private Integer maxMembers;
