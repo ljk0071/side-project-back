@@ -143,6 +143,15 @@ public class SecurityConfig {
 
     @Bean
     @Order(5)
+    public SecurityFilterChain anonymousSecurityFilterChain(HttpSecurity http) throws Exception {
+
+        return applyCommonSecurity(http.securityMatcher("/v1/party"))
+                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, "/**").permitAll())
+                .build();
+    }
+
+    @Bean
+    @Order(6)
     public SecurityFilterChain generalSecurityFilterChain(HttpSecurity http) throws Exception {
 
         return applyAuthenticationFilters(applyCommonSecurity(http)
