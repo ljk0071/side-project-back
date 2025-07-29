@@ -4,12 +4,14 @@ import com.side.domain.KoreanJosaUtil;
 import com.side.domain.enums.PartyApplicationStatusTypeEnum;
 import com.side.domain.exception.DuplicatePartyApplicationException;
 import com.side.domain.exception.NotExistException;
+import com.side.domain.model.PartyApplication;
 import com.side.domain.service.PartyApplicationService;
 import com.side.domain.service.PartyRecruitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -21,6 +23,7 @@ public class PartyApplicationUseCase {
 
     private static final String IS_EXIST_PARTY_RECRUIT = "isExistPartyRecruit";
     private static final String HAS_APPLIED_TO_PARTY = "hasAppliedToParty";
+    private static final String IS_MY_PARTY = "isMyParty";
     private final PartyRecruitService partyRecruitService;
     private final PartyApplicationService partyApplicationService;
 
@@ -47,11 +50,17 @@ public class PartyApplicationUseCase {
 
             executorService.execute(() -> validationResult.put(IS_EXIST_PARTY_RECRUIT, partyRecruitService.isExistPartyRecruit(partyRecruitId)));
 
+            executorService.execute(() -> validationResult.put(IS_MY_PARTY, partyApplicationService.isMyParty(partyRecruitId, resumeId)));
+
             executorService.execute(() -> validationResult.put(HAS_APPLIED_TO_PARTY, partyApplicationService.hasAppliedToParty(partyRecruitId, resumeId)));
         }
 
         if (!validationResult.get(IS_EXIST_PARTY_RECRUIT)) {
             throw new NotExistException("존재하지 않는 파티모집글 입니다.", partyRecruitId);
+        }
+
+        if (validationResult.get(IS_MY_PARTY)) {
+            throw new NotExistException("자신의 파티모집글에는 지원 할 수 없습니다.", partyRecruitId);
         }
 
         if (validationResult.get(HAS_APPLIED_TO_PARTY)) {
@@ -60,9 +69,20 @@ public class PartyApplicationUseCase {
                     partyRecruitId,
                     partyRecruitService.getByRecruitId(partyRecruitId)
                                        .article()
-                                       .title()
+                                       .contents()
             );
         }
+    }
+
+    /**
+     * 현재 사용자의 파티 지원 목록을 조회합니다.
+     *
+     * @param userUniqueId 사용자 고유 ID
+     * @return 사용자가 지원한 파티 신청 목록
+     */
+    @Transactional(readOnly = true)
+    public List<PartyApplication> findByUserUniqueId(Long userUniqueId) {
+        return partyApplicationService.findByUserUniqueId(userUniqueId);
     }
 
     @Transactional

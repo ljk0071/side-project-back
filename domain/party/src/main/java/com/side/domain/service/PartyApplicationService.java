@@ -8,6 +8,7 @@ import com.side.domain.repository.PartyApplicationWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,6 +46,17 @@ public class PartyApplicationService {
 
     public boolean hasAppliedToParty(Long partyRecruitId, Long resumeId) {
         return partyApplicationReader.existsByPartyRecruitIdAndResumeId(partyRecruitId, resumeId);
+    }
+
+    public boolean isMyParty(Long partyRecruitId, Long resumeId) {
+        return partyApplicationReader.findPartyRecruiterCreatorAndResumeCreator(partyRecruitId, resumeId)
+                                     .stream()
+                                     .distinct()
+                                     .count() == 1;
+    }
+
+    public List<PartyApplication> findByUserUniqueId(Long userUniqueId) {
+        return partyApplicationReader.findByUserUniqueId(userUniqueId);
     }
 
     public void changeStatus(long partyApplicationId, PartyApplicationStatusTypeEnum status) {

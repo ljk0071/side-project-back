@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.side.infrastructure.jooq.generated.Tables.PARTY_RECRUIT;
+import static com.side.infrastructure.jooq.generated.Tables.RESUME;
 import static com.side.infrastructure.jooq.generated.tables.PartyApplication.PARTY_APPLICATION;
 import static com.side.infrastructure.jooq.generated.tables.User.USER;
 
@@ -75,6 +77,18 @@ public class PartyApplicationJooqRepository implements PartyApplicationReader {
     }
 
     @Override
+    public List<Long> findPartyRecruiterCreatorAndResumeCreator(Long partyRecruitId, Long resumeId) {
+        return dsl.select(PARTY_RECRUIT.USER_UNIQUE_ID, RESUME.USER_UNIQUE_ID)
+                  .from(PARTY_RECRUIT, RESUME)
+                  .where(PARTY_RECRUIT.ID.eq(partyRecruitId))
+                  .and(RESUME.ID.eq(resumeId))
+                  .fetchOne(record -> List.of(
+                          record.getValue(PARTY_RECRUIT.USER_UNIQUE_ID),
+                          record.getValue(RESUME.USER_UNIQUE_ID)
+                  ));
+    }
+
+    @Override
     public Optional<PartyApplication> findByRecruitIdAndResumeId(Long partyRecruitId, Long resumeId) {
         return dsl.selectFrom(PARTY_APPLICATION)
                   .where(PARTY_APPLICATION.PARTY_RECRUIT_ID.eq(partyRecruitId))
@@ -95,6 +109,31 @@ public class PartyApplicationJooqRepository implements PartyApplicationReader {
         return dsl.selectFrom(PARTY_APPLICATION)
                   .fetch()
                   .map(this::toDomain);
+    }
+
+    @Override
+    public List<PartyApplication> findByUserUniqueId(Long userUniqueId) {
+
+        User createUser = USER.as("create_user");
+        User modifyUser = USER.as("modify_user");
+
+        return dsl.select(
+                          PARTY_APPLICATION.asterisk(),
+                          createUser.NAME.as("create_user_name"),
+                          modifyUser.NAME.as("modify_user_name")
+                  )
+                  .from(PARTY_APPLICATION)
+                  .join(RESUME).on(PARTY_APPLICATION.RESUME_ID.eq(RESUME.ID))
+                  .leftJoin(createUser)
+                  .on(PARTY_APPLICATION.CREATED_BY.eq(createUser.UNIQUE_ID))
+                  .and(createUser.STATUS.eq(UserStatus.ACTIVE))
+                  .leftJoin(modifyUser)
+                  .on(PARTY_APPLICATION.MODIFIED_BY.eq(modifyUser.UNIQUE_ID))
+                  .and(modifyUser.STATUS.eq(UserStatus.ACTIVE))
+                  .where(RESUME.USER_UNIQUE_ID.eq(userUniqueId))
+                  .orderBy(PARTY_APPLICATION.CREATED_AT.desc())
+                  .fetch()
+                  .map(this::toDomainWithUserInfo);
     }
 
     private PartyApplication toDomain(PartyApplicationRecord record) {
