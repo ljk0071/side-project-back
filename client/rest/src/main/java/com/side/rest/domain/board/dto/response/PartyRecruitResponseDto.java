@@ -14,6 +14,7 @@ public class PartyRecruitResponseDto {
     private long revision;
     private long userUniqueId;
     private ArticleResponseDto article;
+    private int currentMembers;
     private int maxMembers;
     private YesNoDeleteStatus status;
     private MetadataResponseDto metadata;
