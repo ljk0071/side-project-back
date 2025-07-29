@@ -143,24 +143,15 @@ public class SecurityConfig {
 
     @Bean
     @Order(5)
-    public SecurityFilterChain anonymousSecurityFilterChain(HttpSecurity http) throws Exception {
-
-        return applyCommonSecurity(http.securityMatcher("/v1/party"))
-                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, "/**").permitAll())
-                .build();
-    }
-
-    @Bean
-    @Order(6)
     public SecurityFilterChain generalSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        return applyAuthenticationFilters(applyCommonSecurity(http)
-                .securityMatcher("/**"))
-                .authorizeHttpRequests(
-                        auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
-                                    .permitAll()
-                                    .anyRequest()
-                                    .authenticated())
+        return applyAuthenticationFilters(applyCommonSecurity(http).securityMatcher("/**"))
+                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                                                   .permitAll()
+                                                   .requestMatchers(HttpMethod.GET, "/v1/party")
+                                                   .permitAll()
+                                                   .anyRequest()
+                                                   .authenticated())
                 .build();
     }
 
@@ -195,7 +186,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
 
         // 브라우저가 JavaScript로 접근할 수 있는 응답 헤더를 지정
-        config.setExposedHeaders(List.of("Authorization", "Access-Control-Allow-*"));
+        config.setExposedHeaders(List.of("Authorization", "Access-Control-Allow-*", "RTR"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

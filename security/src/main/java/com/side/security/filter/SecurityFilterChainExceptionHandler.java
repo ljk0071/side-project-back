@@ -34,14 +34,17 @@ public class SecurityFilterChainExceptionHandler extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
 
+            if (e instanceof ExpiredJwtException) {
+                response.addHeader("RTR", "Y");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
             response.setStatus(getStatusCodeByExceptionSource(e));
         }
     }
 
     private int getStatusCodeByExceptionSource(Exception e) {
-        if (e instanceof ExpiredJwtException) {
-            return HttpServletResponse.SC_UNAUTHORIZED;
-        }
 
         log.error("필터 내에서 에러 발생", e);
 
