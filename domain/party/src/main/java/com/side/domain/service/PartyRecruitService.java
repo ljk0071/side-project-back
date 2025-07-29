@@ -47,6 +47,16 @@ public class PartyRecruitService {
                                  .orElseThrow(() -> new NotExistException("존재하지 않는 파티모집글 입니다.", partyRecruitId));
     }
 
+    public boolean isMyPartyRecruit(long partyRecruitId, long userUniqueId) {
+        PartyRecruit partyRecruit = getByRecruitId(partyRecruitId);
+        return userUniqueId == partyRecruit.userUniqueId();
+    }
+
+    public int deleteRecruit(long partyRecruitId) {
+
+        return partyRecruitWriter.deleteRecruit(partyRecruitId);
+    }
+
     public boolean isExistPartyRecruit(long partyRecruitId) {
         return findByRecruitId(partyRecruitId).isPresent();
     }

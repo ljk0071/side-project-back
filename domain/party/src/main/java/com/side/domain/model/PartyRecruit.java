@@ -10,6 +10,7 @@ public record PartyRecruit(
         Long revision,
         Long userUniqueId,
         Article article,
+        Integer currentMembers,
         Integer maxMembers,
         YesNoDeleteStatus status,
         Metadata metadata

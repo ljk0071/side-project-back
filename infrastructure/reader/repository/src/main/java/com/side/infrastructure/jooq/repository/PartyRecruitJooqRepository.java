@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static com.side.infrastructure.jooq.generated.Tables.PARTY_RECRUIT;
+import static com.side.infrastructure.jooq.generated.Tables.*;
 import static com.side.infrastructure.jooq.generated.tables.User.USER;
 
 @Slf4j
@@ -74,7 +74,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
 
     public List<PartyRecruit> getActiveRecruits(@NonNull Search search) {
 
-        var query = dsl.select(PARTY_RECRUIT.ID, PARTY_RECRUIT.CONTENTS)
+        var query = dsl.select(PARTY_RECRUIT.ID, PARTY_RECRUIT.CONTENTS, PARTY_RECRUIT.USER_UNIQUE_ID)
                        .from(PARTY_RECRUIT)
                        .where(PARTY_RECRUIT.STATUS.eq(YesNoDeleteStatus.YES));
 
@@ -87,6 +87,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
         return query.orderBy(PARTY_RECRUIT.CREATED_AT.desc())
                     .fetch(record -> PartyRecruit.builder()
                                                  .id(record.get(PARTY_RECRUIT.ID))
+                                                 .userUniqueId(record.get(PARTY_RECRUIT.USER_UNIQUE_ID))
                                                  .article(Article.builder()
                                                                  .contents(record.get(PARTY_RECRUIT.CONTENTS))
                                                                  .build())
