@@ -32,7 +32,7 @@ public class PartyRecruitController {
 
         partyRecruitUseCase.create(PartyRecruitMapper.toDomain(partyRequestDto));
 
-        return ResponseEntity.ok(ApiResponse.success("게시글 작성이 완료되었습니다."));
+        return ResponseEntity.ok(ApiResponse.success("게시글 작성이 완료되었습니다.", null));
     }
 
     @GetMapping
@@ -48,9 +48,19 @@ public class PartyRecruitController {
 
     @GetMapping("/{partyRecruitId}")
     public ResponseEntity<ApiResponse<PartyRecruitResponseDto>> findByRecruitId(
-            @PathVariable(value = "partyRecruitId") Long partyRecruitId
+            @PathVariable(value = "partyRecruitId") long partyRecruitId
     ) {
 
         return ResponseEntity.ok(ApiResponse.success(null, PartyRecruitMapper.toResponse(partyRecruitUseCase.findByRecruitId(partyRecruitId))));
+    }
+
+    @DeleteMapping("/{partyRecruitId}")
+    public ResponseEntity<ApiResponse<Void>> deleteRecruit(
+            @PathVariable(value = "partyRecruitId") long partyRecruitId
+    ) {
+
+        partyRecruitUseCase.deleteRecruit(partyRecruitId, SecurityHelper.getAuthenticatedUserUniqueId());
+
+        return ResponseEntity.ok(ApiResponse.success(null, null));
     }
 }
