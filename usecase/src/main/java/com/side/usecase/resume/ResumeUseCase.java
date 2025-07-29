@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ResumeUseCase {
@@ -21,5 +23,16 @@ public class ResumeUseCase {
     @Transactional
     public long create(Resume resume) {
         return resumeService.create(resume);
+    }
+
+    /**
+     * 사용자 고유 ID로 이력서를 조회합니다.
+     *
+     * @param userUniqueId 사용자 고유 ID
+     * @return 이력서 Optional 객체
+     */
+    @Transactional(readOnly = true)
+    public Optional<Resume> findByUserUniqueId(Long userUniqueId) {
+        return resumeService.findByUserUniqueId(userUniqueId);
     }
 }
