@@ -2,6 +2,7 @@ package com.side.rest.advice;
 
 import com.side.domain.exception.DuplicatePartyApplicationException;
 import com.side.domain.exception.NotExistException;
+import com.side.domain.exception.NotMyPartyRecruit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -62,6 +63,18 @@ public class GlobalExceptionHandler {
         if (!env.matchesProfiles("local")) {
             sendErrorLogAsyncWebhookIfNotLocal(e);
         }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .header("Content-Type", "application/json; charset=UTF-8")
+                             .body(Map.of("message", e.getMessage()));
+    }
+
+    @ExceptionHandler(NotMyPartyRecruit.class)
+    public ResponseEntity<Map<String, String>> handleNotMyPartyRecruit(NotMyPartyRecruit e) {
+
+        String errorMessage = e.getMessage() + " : " + e.getPartyRecruitId();
+
+        log.error(errorMessage);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .header("Content-Type", "application/json; charset=UTF-8")
