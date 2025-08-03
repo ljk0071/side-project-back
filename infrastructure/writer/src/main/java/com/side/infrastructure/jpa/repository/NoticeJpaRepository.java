@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.side.domain.RepositoryTypeEnum.JPA;
 import static com.side.infrastructure.jpa.mapper.NoticeMapper.NoticeMapper;
@@ -43,4 +44,16 @@ public class NoticeJpaRepository implements NoticeRepository {
 
         throw new UnsupportedOperationException("사용 안함");
     }
+
+    @Override
+    public Optional<Notice> findById(Long id) {
+
+        throw new UnsupportedOperationException("사용 안함");
+    }
+
+    @Override
+    public void increaseViewCount(Long id) {
+        repository.increaseViewCount(id);
+    }
+
 }
