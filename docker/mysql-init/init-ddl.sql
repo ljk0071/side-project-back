@@ -90,7 +90,7 @@ create table user
     user_id             varchar(50)  not null comment '유저id',
     password            varchar(255) not null comment '비밀번호',
     password_updated_at datetime comment '패스워드변경일시',
-    name                varchar(50)  not null comment '이름',
+    name                varchar(50) comment '이름',
     email               varchar(255) null comment '이메일',
     status              char(1)      not null comment '상태:P(Pending),A(Active),L(Locked),S(Suspended),D(Deleted)',
     type                varchar(20)  not null comment '타입:ADMIN,NORMAL',
@@ -114,7 +114,7 @@ create table user_modify_log
     user_id             varchar(50)  not null comment '유저id',
     password            varchar(255) not null comment '비밀번호',
     password_updated_at datetime comment '패스워드변경일시',
-    name                varchar(50)  not null comment '이름',
+    name                varchar(50) comment '이름',
     email               varchar(255) comment '이메일',
     status              char(1)      not null comment '상태:P(Pending),A(Active),L(Locked),S(Suspended),D(Deleted)',
     type                varchar(20)  not null comment '타입:admin,normal',
@@ -273,12 +273,10 @@ create table party_recruit_modify_log
     contents       varchar(255) not null comment '게시글내용',
     max_members    int          null comment '최대모집인원',
     status         char(1)      not null comment '상태:Y(Yes/활성),N(No/비활성),D(Deleted/삭제)',
-    recruit_status varchar(20)  not null comment '모집상태:recruiting,closed,completed',
     created_at     datetime     not null comment '생성일시',
     created_by     bigint       not null comment '생성자',
     index idx_party_recruit_modify_log_user_unique_id (user_unique_id),
-    index idx_party_recruit_modify_log_status_created_at (status, created_at desc),
-    index idx_party_recruit_modify_log_recruit_status (recruit_status)
+    index idx_party_recruit_modify_log_status_created_at (status, created_at desc)
 );
 
 create table resume
@@ -372,6 +370,21 @@ create table notification
     PRIMARY KEY (id, created_at),
     index idx_notification_user_unique_id_is_read_created_at (user_unique_id, is_read, created_at desc)
 );
+
+-- chat_message_log: 채팅 메시지 로그 테이블
+CREATE TABLE chat_message_log
+(
+    id           bigint auto_increment comment '채팅 메시지 로그 ID',
+    room_id      varchar(255) not null comment '채팅방 ID',
+    sender_id    bigint       not null comment '발신자 사용자 고유 ID',
+    message_type varchar(50)  not null comment '메시지 타입 (CHAT, JOIN, LEAVE, NOTIFICATION)',
+    content      text comment '메시지 내용',
+    metadata     json comment '추가 메타데이터',
+    created_at   datetime     not null default current_timestamp comment '생성일시',
+    PRIMARY KEY (id),
+    index idx_chat_message_log_room_id_created_at (room_id, created_at desc),
+    index idx_chat_message_log_sender_id (sender_id)
+) comment '채팅 메시지 로그';
 
 -- role_hierarchy: 역할의 계층 구조 정의
 ALTER TABLE role_hierarchy

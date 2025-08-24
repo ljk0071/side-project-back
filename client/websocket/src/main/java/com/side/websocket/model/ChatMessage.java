@@ -1,5 +1,6 @@
 package com.side.websocket.model;
 
+import com.side.domain.enums.PartyApplicationStatusTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,10 +15,12 @@ import java.time.Instant;
 public class ChatMessage {
 
     private String messageId;
-    private String roomId;
+    private long partyRecruitId;
     private Long senderId;
     private String senderName;
-    private String content;
+    private String contents;
+    private boolean application;
+    private PartyApplicationStatusTypeEnum statusType;
     private MessageType type;
 
     @Builder.Default
@@ -26,35 +29,63 @@ public class ChatMessage {
     @Builder.Default
     private boolean isDeleted = false;
 
-    public static ChatMessage createSystemMessage(String roomId, String content) {
+    public static ChatMessage notifyApplication(long partyRecruitId, String contents) {
         return ChatMessage.builder()
                           .messageId(generateMessageId())
-                          .roomId(roomId)
+                          .partyRecruitId(partyRecruitId)
                           .senderId(0L)
                           .senderName("System")
-                          .content(content)
+                          .contents(contents)
+                          .application(true)
                           .type(MessageType.SYSTEM)
                           .build();
     }
 
-    public static ChatMessage createJoinMessage(String roomId, Long userId, String userName) {
+    public static ChatMessage createSystemMessage(long partyRecruitId, String content) {
         return ChatMessage.builder()
                           .messageId(generateMessageId())
-                          .roomId(roomId)
-                          .senderId(userId)
-                          .senderName(userName)
-                          .content(userName + "님이 입장했습니다.")
+                          .partyRecruitId(partyRecruitId)
+                          .senderId(0L)
+                          .senderName("System")
+                          .contents(content)
+                          .application(false)
+                          .type(MessageType.SYSTEM)
+                          .build();
+    }
+
+    public static ChatMessage createJoinMessage(long partyRecruitId, String userName) {
+        return ChatMessage.builder()
+                          .messageId(generateMessageId())
+                          .partyRecruitId(partyRecruitId)
+                          .senderId(0L)
+                          .senderName("System")
+                          .contents(userName + "님이 입장했습니다.")
+                          .application(false)
                           .type(MessageType.JOIN)
                           .build();
     }
 
-    public static ChatMessage createLeaveMessage(String roomId, Long userId, String userName) {
+    public static ChatMessage notifyToSubscribe(long partyRecruitId, long userUniqueId, PartyApplicationStatusTypeEnum statusType) {
         return ChatMessage.builder()
                           .messageId(generateMessageId())
-                          .roomId(roomId)
+                          .partyRecruitId(partyRecruitId)
+                          .senderId(userUniqueId)
+                          .senderName(null)
+                          .contents(null)
+                          .application(false)
+                          .statusType(statusType)
+                          .type(MessageType.NOTIFICATION)
+                          .build();
+    }
+
+    public static ChatMessage createLeaveMessage(long partyRecruitId, Long userId, String userName) {
+        return ChatMessage.builder()
+                          .messageId(generateMessageId())
+                          .partyRecruitId(partyRecruitId)
                           .senderId(userId)
                           .senderName(userName)
-                          .content(userName + "님이 퇴장했습니다.")
+                          .contents(userName + "님이 퇴장했습니다.")
+                          .application(false)
                           .type(MessageType.LEAVE)
                           .build();
     }

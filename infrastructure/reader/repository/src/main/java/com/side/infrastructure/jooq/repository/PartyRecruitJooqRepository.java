@@ -10,6 +10,7 @@ import com.side.domain.model.Article;
 import com.side.domain.model.PartyRecruit;
 import com.side.domain.repository.PartyRecruitReader;
 import com.side.infrastructure.jooq.generated.tables.User;
+import com.side.security.service.SecurityHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,24 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
                   .on(PARTY_RECRUIT.MODIFIED_BY.eq(modifyUser.UNIQUE_ID))
                   .and(modifyUser.STATUS.eq(UserStatus.ACTIVE))
                   .where(PARTY_RECRUIT.ID.eq(partyRecruitId))
+                  .fetchOptional(this::toDomainWithUserInfo);
+    }
+
+    @Override
+    public Optional<PartyRecruit> findByUserUniqueId(long userUniqueId) {
+        User createUser = USER.as("create_user");
+        User modifyUser = USER.as("modify_user");
+
+        return dsl.select(PARTY_RECRUIT.asterisk(), createUser.NAME.as("create_user_name"), modifyUser.NAME.as("modify_user_name"))
+                  .from(PARTY_RECRUIT)
+                  .leftJoin(createUser)
+                  .on(PARTY_RECRUIT.CREATED_BY.eq(createUser.UNIQUE_ID))
+                  .and(createUser.STATUS.eq(UserStatus.ACTIVE))
+                  .leftJoin(modifyUser)
+                  .on(PARTY_RECRUIT.MODIFIED_BY.eq(modifyUser.UNIQUE_ID))
+                  .and(modifyUser.STATUS.eq(UserStatus.ACTIVE))
+                  .where(PARTY_RECRUIT.USER_UNIQUE_ID.eq(userUniqueId))
+                  .and(PARTY_RECRUIT.STATUS.eq(YesNoDeleteStatus.YES))
                   .fetchOptional(this::toDomainWithUserInfo);
     }
 

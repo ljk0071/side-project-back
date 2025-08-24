@@ -38,7 +38,7 @@ public class JpaConfig {
         boolean isProd = env.acceptsProfiles(Profiles.of("prod"));
 
         Properties jpaProperties = new Properties();
-        jpaProperties.put("hibernate.hbm2ddl.auto", isProd ? "validate" : "none");
+        jpaProperties.put("hibernate.hbm2ddl.auto", isProd ? "none" : "none");
         jpaProperties.put("hibernate.show_sql", isProd ? "false" : "true");
         jpaProperties.put("hibernate.format_sql", isProd ? "false" : "true");
         em.setJpaProperties(jpaProperties);

@@ -69,8 +69,8 @@ class PartyApplicationServiceTest {
         PartyApplication result = partyApplicationService.initForCreate(partyRecruitId, resumeId);
 
         // then
-        assertThat(result.partyRecruitId()).isEqualTo(partyRecruitId);
-        assertThat(result.resumeId()).isEqualTo(resumeId);
+        assertThat(result.partyRecruit().id()).isEqualTo(partyRecruitId);
+        assertThat(result.resume().id()).isEqualTo(resumeId);
         assertThat(result.revision()).isEqualTo(0L);
         assertThat(result.status()).isEqualTo(PartyApplicationStatusTypeEnum.PENDING);
         assertThat(result.metadata()).isNotNull();

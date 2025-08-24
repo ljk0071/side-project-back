@@ -27,12 +27,18 @@ public class RedisSubscriber implements MessageListener {
             log.debug("Redis 메시지 수신 - 채널: {}, 내용: {}", channelName, publishMessage);
 
             ChatMessage chatMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
-            String destination = "/topic/chat/" + chatMessage.getRoomId();
+            String destination;
 
-            messagingTemplate.convertAndSend(destination, chatMessage);
+            if (channelName.startsWith("chat.")) {
+                destination = "/topic/chat/" + chatMessage.getPartyRecruitId();
+                messagingTemplate.convertAndSend(destination, chatMessage);
+            } else {
+                destination = "/queue/" + chatMessage.getSenderId() + "/notification";
+                messagingTemplate.convertAndSend(destination, chatMessage);
+            }
 
             log.debug("WebSocket 브로드캐스트 완료 - 목적지: {}, 발신자: {}, 내용: {}",
-                    destination, chatMessage.getSenderName(), chatMessage.getContent());
+                    destination, chatMessage.getSenderName(), chatMessage.getContents());
         } catch (JsonProcessingException e) {
             log.error("Redis 메시지 파싱 실패: {}", new String(message.getBody()), e);
         }

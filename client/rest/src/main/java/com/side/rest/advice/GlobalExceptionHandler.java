@@ -1,6 +1,7 @@
 package com.side.rest.advice;
 
 import com.side.domain.exception.DuplicatePartyApplicationException;
+import com.side.domain.exception.InvalidPartyRecruitCreateException;
 import com.side.domain.exception.NotExistException;
 import com.side.domain.exception.NotMyPartyRecruit;
 import lombok.RequiredArgsConstructor;
@@ -129,5 +130,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .header("Content-Type", "application/json; charset=UTF-8")
                              .body(Map.of("message", joiner.toString()));
+    }
+
+    @ExceptionHandler(InvalidPartyRecruitCreateException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPartyRecruitCreateException(InvalidPartyRecruitCreateException e) {
+
+        log.error(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .header("Content-Type", "application/json; charset=UTF-8")
+                             .body(Map.of("message", e.getMessage()));
     }
 }

@@ -15,21 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Builder
 public class ChatRoom {
 
-    private String roomId;
-    private String roomName;
+    private long partyRecruitId;
     private Long creatorId;
 
-    @Builder.Default
-    private Instant createdAt = Instant.now();
+    private Instant createdAt;
 
-    @Builder.Default
-    private Set<Long> participants = ConcurrentHashMap.newKeySet();
+    private Set<Long> participants;
 
-    @Builder.Default
-    private int maxParticipants = 100;
-
-    @Builder.Default
-    private boolean isActive = true;
+    private boolean isActive;
 
     public void addParticipant(Long userId) {
         participants.add(userId);
@@ -40,10 +33,7 @@ public class ChatRoom {
     }
 
     public int getParticipantCount() {
-        return participants.size();
+        return participants != null ? participants.size() : 0;
     }
 
-    public boolean isFull() {
-        return participants.size() >= maxParticipants;
-    }
 }

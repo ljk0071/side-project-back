@@ -15,10 +15,10 @@ import java.time.Instant;
 public class ChatMessageDto {
 
     private String messageId;
-    private String roomId;
+    private long partyRecruitId;
     private Long senderId;
     private String senderName;
-    private String content;
+    private String contents;
     private ChatMessage.MessageType type;
     private Instant timestamp;
     private boolean isDeleted;
@@ -26,10 +26,10 @@ public class ChatMessageDto {
     public static ChatMessageDto from(ChatMessage message) {
         return ChatMessageDto.builder()
                              .messageId(message.getMessageId())
-                             .roomId(message.getRoomId())
+                             .partyRecruitId(message.getPartyRecruitId())
                              .senderId(message.getSenderId())
                              .senderName(message.getSenderName())
-                             .content(message.getContent())
+                             .contents(message.getContents())
                              .type(message.getType())
                              .timestamp(message.getTimestamp())
                              .isDeleted(message.isDeleted())
@@ -39,10 +39,10 @@ public class ChatMessageDto {
     public ChatMessage toEntity() {
         return ChatMessage.builder()
                           .messageId(this.messageId)
-                          .roomId(this.roomId)
+                          .partyRecruitId(this.partyRecruitId)
                           .senderId(this.senderId)
                           .senderName(this.senderName)
-                          .content(this.content)
+                          .contents(this.contents)
                           .type(this.type)
                           .timestamp(this.timestamp)
                           .isDeleted(this.isDeleted)

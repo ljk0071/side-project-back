@@ -3,6 +3,7 @@ package com.side.domain.service;
 import com.side.domain.Metadata;
 import com.side.domain.Search;
 import com.side.domain.YesNoDeleteStatus;
+import com.side.domain.exception.InvalidPartyRecruitCreateException;
 import com.side.domain.exception.InvalidSearchCondition;
 import com.side.domain.exception.NotExistException;
 import com.side.domain.model.PartyRecruit;
@@ -25,7 +26,20 @@ public class PartyRecruitService {
 
     public long create(PartyRecruit partyRecruit) {
 
+        validation(partyRecruit.userUniqueId());
+
         return partyRecruitWriter.create(initForCreate(partyRecruit));
+    }
+
+    public void validation(long userUniqueId) {
+        partyRecruitReader.findByUserUniqueId(userUniqueId)
+                          .ifPresent(partyRecruit -> {
+                              throw new InvalidPartyRecruitCreateException("이미 모집중인 파티 진행글이 있습니다.");
+                          });
+    }
+
+    public Optional<PartyRecruit> findByUserUniqueId(long userUniqueId) {
+        return partyRecruitReader.findByUserUniqueId(userUniqueId);
     }
 
     public PartyRecruit initForCreate(PartyRecruit partyRecruit) {

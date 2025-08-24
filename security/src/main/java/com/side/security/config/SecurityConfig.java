@@ -174,7 +174,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Origin 허용 패턴 (포트 와일드카드)
-        config.setAllowedOriginPatterns(List.of("http://localhost:[*]", "http://127.0.0.1:[*]"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:[*]", "http://127.0.0.1:[*]", "https://maple-party.com:[*]"));
 
         // 허용 메서드
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));

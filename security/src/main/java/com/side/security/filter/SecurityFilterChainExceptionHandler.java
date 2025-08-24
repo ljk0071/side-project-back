@@ -1,5 +1,7 @@
 package com.side.security.filter;
 
+import com.side.security.exception.InvalidTokenException;
+import com.side.security.exception.NotFoundTokenException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,6 +39,17 @@ public class SecurityFilterChainExceptionHandler extends OncePerRequestFilter {
             if (e instanceof ExpiredJwtException) {
                 response.addHeader("RTR", "Y");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            if (e instanceof NotFoundTokenException) {
+                response.addHeader("RTR", "Y");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            if (e instanceof InvalidTokenException ite) {
+                response.setStatus(ite.isNeedLogin() ? HttpServletResponse.SC_UNAUTHORIZED : HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
 

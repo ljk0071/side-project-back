@@ -1,3 +1,6 @@
+server:
+  forward-headers-strategy: native
+
 spring:
   profiles:
     default: local
@@ -14,6 +17,9 @@ spring:
   jmx:
     enabled: false
 
+  threads:
+    virtual:
+      enabled: true
 
 management:
   endpoints:

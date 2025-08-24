@@ -64,12 +64,12 @@ public class JwtService {
 
     public void createWhiteListForRefreshToken(String userId, String refreshToken) {
         String key = RedisKeyNames.JWT_REFRESH_TOKEN + userId;
-        memoryService.create(key, refreshToken, jwtProperties.refreshExpirationTime(), TimeUnit.MILLISECONDS);
+        memoryService.create(key, refreshToken, jwtProperties.refreshExpirationTime(), TimeUnit.SECONDS);
     }
 
     public String getRefreshTokenFromWhiteList(String userId) {
         return memoryService.find(RedisKeyNames.JWT_REFRESH_TOKEN + userId, String.class)
-                            .orElseThrow(() -> new InvalidTokenException("refresh token이 없습니다."));
+                            .orElseThrow(() -> new InvalidTokenException("refresh token이 없습니다.", true));
     }
 
     public String createCsrfToken(String userId) {

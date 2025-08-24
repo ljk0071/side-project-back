@@ -27,12 +27,13 @@ public class ResponseUtil {
         Cookie cookie = new Cookie(key, value);
 
         cookie.setPath(ALL_PATH);
-        cookie.setAttribute(SAME_SITE, LAX);
+        cookie.setAttribute(SAME_SITE, NONE);
         cookie.setHttpOnly(isHttpOnly);
 
-        if (HTTPS.equals(scheme)) {
-            cookie.setSecure(true);
-        }
+        cookie.setSecure(true);
+//        if (HTTPS.equals(scheme)) {
+//            cookie.setSecure(true);
+//        }
 
         if (maxAge != null) {
             cookie.setMaxAge(maxAge);

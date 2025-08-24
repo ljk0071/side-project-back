@@ -6,8 +6,13 @@ dependencies {
     implementation("org.springframework:spring-tx")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
+    implementation("jakarta.validation:jakarta.validation-api")
+
+    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
 
     implementation(project(":infrastructure:valkey"))
+    implementation(project(":infrastructure:datasource"))
     implementation(project(":security"))
 
     // 테스트 의존성

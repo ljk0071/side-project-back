@@ -48,7 +48,7 @@ public class JwtRefreshFilter extends OncePerRequestFilter {
         String refreshTokenInRedis = jwtService.getRefreshTokenFromWhiteList(userId);
 
         if (!refreshToken.equals(refreshTokenInRedis)) {
-            throw new InvalidTokenException("만료된 refresh token입니다.");
+            throw new InvalidTokenException("만료된 refresh token입니다.", true);
         }
 
         User user = userService.getByUserId(userId);

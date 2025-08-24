@@ -1,7 +1,6 @@
 package com.side.usecase.board;
 
 import com.side.domain.Search;
-import com.side.domain.exception.NotExistException;
 import com.side.domain.exception.NotMyPartyRecruit;
 import com.side.domain.model.PartyRecruit;
 import com.side.domain.service.PartyRecruitService;
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 
 @Service
@@ -22,13 +22,17 @@ public class PartyRecruitUseCase {
     private static final String IS_MY_PARTY_RECRUIT = "isMyPartyRecruit";
 
     @Transactional
-    public void create(PartyRecruit partyRecruit) {
-        partyRecruitService.create(partyRecruit);
+    public long create(PartyRecruit partyRecruit) {
+        return partyRecruitService.create(partyRecruit);
     }
 
     public List<PartyRecruit> getActiveRecruits(Search search) {
 
         return partyRecruitService.getActiveRecruits(search);
+    }
+
+    public Optional<PartyRecruit> findByUserUniqueId(long userUniqueId) {
+        return partyRecruitService.findByUserUniqueId(userUniqueId);
     }
 
     public PartyRecruit findByRecruitId(long partyRecruitId) {

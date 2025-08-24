@@ -9,6 +9,7 @@ import com.side.security.service.SecurityHelper;
 import com.side.usecase.resume.PartyApplicationUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,17 @@ public class PartyApplicationController {
         List<PartyApplicationResponseDto> responseList = PartyApplicationMapper.toResponseList(applications);
 
         return ResponseEntity.ok(ApiResponse.success("내가 지원한 파티 목록 조회 성공", responseList));
+    }
+
+
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<List<PartyApplicationResponseDto>>> findResumes() {
+
+        val result = partyApplicationUseCase.findResumes(SecurityHelper.getAuthenticatedUserUniqueId());
+
+        return ResponseEntity.ok(ApiResponse.success("내가 파티의 지원자 목록 조회 성공", result.stream()
+                                                                                  .map(PartyApplicationMapper::toResponse)
+                                                                                  .toList()));
     }
 
 

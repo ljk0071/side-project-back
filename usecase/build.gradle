@@ -5,6 +5,8 @@ plugins {
 dependencies {
 
     implementation project(":security")
+    implementation project(":client:websocket")
+    implementation(project(":infrastructure:valkey"))
 
     // 도메인 의존성 추가
     rootProject.addDomainDependencies(project)

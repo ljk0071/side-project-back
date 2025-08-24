@@ -10,5 +10,7 @@ public interface PartyRecruitReader {
 
     Optional<PartyRecruit> findByRecruitId(long partyRecruitId);
 
+    Optional<PartyRecruit> findByUserUniqueId(long userUniqueId);
+
     List<PartyRecruit> getActiveRecruits(Search search);
 }

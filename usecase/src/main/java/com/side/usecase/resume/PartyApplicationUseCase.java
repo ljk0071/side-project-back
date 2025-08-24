@@ -1,5 +1,7 @@
 package com.side.usecase.resume;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.domain.KoreanJosaUtil;
 import com.side.domain.enums.PartyApplicationStatusTypeEnum;
 import com.side.domain.exception.DuplicatePartyApplicationException;
@@ -7,25 +9,44 @@ import com.side.domain.exception.NotExistException;
 import com.side.domain.model.PartyApplication;
 import com.side.domain.service.PartyApplicationService;
 import com.side.domain.service.PartyRecruitService;
+import com.side.websocket.model.ChatMessage;
+import com.side.websocket.service.ChatRoomService;
+import com.side.websocket.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Service
+import static com.side.websocket.model.ChatMessage.notifyApplication;
+
 @RequiredArgsConstructor
+@Service
 public class PartyApplicationUseCase {
 
     private static final String IS_EXIST_PARTY_RECRUIT = "isExistPartyRecruit";
     private static final String HAS_APPLIED_TO_PARTY = "hasAppliedToParty";
     private static final String IS_MY_PARTY = "isMyParty";
+
     private final PartyRecruitService partyRecruitService;
     private final PartyApplicationService partyApplicationService;
+    private final RedisMessageListenerContainer redisMessageListenerContainer;
+    private final RedisSubscriber redisSubscriber;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ChatRoomService chatRoomService;
+    private final ObjectMapper objectMapper;
+    private final Executor executor;
+
+    private final Map<Long, ChannelTopic> channelTopics = new ConcurrentHashMap<>();
 
     /**
      * 주어진 partyRecruitId와 resumeId에 대한 새로운 파티 신청을 생성합니다.
@@ -39,7 +60,20 @@ public class PartyApplicationUseCase {
 
         validationForCreate(partyRecruitId, resumeId);
 
-        return partyApplicationService.create(partyRecruitId, resumeId);
+        long partyApplicationId = partyApplicationService.create(partyRecruitId, resumeId);
+
+        PartyApplication application = partyApplicationService.getByIdAndResumeId(partyApplicationId, resumeId);
+
+        try {
+            chatRoomService.sendMessage(partyRecruitId, notifyApplication(partyRecruitId, objectMapper.writeValueAsString(Map.of("application", application))));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        ChannelTopic topic = channelTopics.computeIfAbsent(partyRecruitId, k -> new ChannelTopic("notify:" + application.resume()
+                                                                                                                        .userUniqueId()));
+        redisMessageListenerContainer.addMessageListener(redisSubscriber, topic);
+
+        return partyApplicationId;
     }
 
     public void validationForCreate(long partyRecruitId, long resumeId) {
@@ -90,6 +124,35 @@ public class PartyApplicationUseCase {
 
         partyApplicationService.changeStatus(partyApplicationId, status);
 
+        if (status == PartyApplicationStatusTypeEnum.ACCEPTED) {
+
+            PartyApplication partyApplication = partyApplicationService.getByApplicationId(partyApplicationId);
+
+            val partyRecruitId = partyApplication.partyRecruit().id();
+
+            val applicantUniqueId = partyApplication.resume().userUniqueId();
+
+            List<Long> otherIds = partyApplicationService.getOtherApplications(partyApplicationId, applicantUniqueId);
+
+            otherIds.forEach(otherId -> partyApplicationService.changeStatus(otherId, PartyApplicationStatusTypeEnum.CANCELED));
+
+            redisTemplate.convertAndSend("notify:" + applicantUniqueId, ChatMessage.notifyToSubscribe(partyRecruitId, applicantUniqueId, PartyApplicationStatusTypeEnum.ACCEPTED));
+        }
+
+        if (status == PartyApplicationStatusTypeEnum.REJECTED) {
+            PartyApplication partyApplication = partyApplicationService.getByApplicationId(partyApplicationId);
+
+            val partyRecruitId = partyApplication.partyRecruit().id();
+
+            val applicantUniqueId = partyApplication.resume().userUniqueId();
+
+            redisTemplate.convertAndSend("notify:" + applicantUniqueId, ChatMessage.notifyToSubscribe(partyRecruitId, applicantUniqueId, PartyApplicationStatusTypeEnum.REJECTED));
+        }
+
         return KoreanJosaUtil.JosaBuilder.of(status.getNote()).euro() + " 변경 되었습니다.";
+    }
+
+    public List<PartyApplication> findResumes(long userUniqueId) {
+        return partyApplicationService.findResumes(userUniqueId);
     }
 }

@@ -21,10 +21,10 @@ services:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root_pw
-      MYSQL_DATABASE: test_db
-      MYSQL_USER: test_id
-      MYSQL_PASSWORD: test_pw
+      MYSQL_ROOT_PASSWORD: gfhfhfgh
+      MYSQL_DATABASE: dsgdsfg
+      MYSQL_USER: ghbfghfgh
+      MYSQL_PASSWORD: ghnfghfghft
     ports:
       - "3306:3306"
     volumes:
@@ -35,7 +35,7 @@ services:
         source: ./docker/mysql-init
         target: /docker-entrypoint-initdb.d
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "test_id", "-ptest_pw" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ghbfghfgh", "-pghnfghfghft" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -46,7 +46,7 @@ services:
       - "6379:6379"
     entrypoint: /usr/local/bin/docker-entrypoint.sh
     healthcheck:
-      test: [ "CMD", "valkey-cli", "-u", "valkey://:test_pw@localhost:6379", "ping" ]
+      test: [ "CMD", "valkey-cli", "-u", "valkey://:ghbndfjhgdfjk@localhost:6379", "ping" ]
       interval: 1s
       timeout: 3s
       retries: 30
