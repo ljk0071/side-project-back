@@ -5,6 +5,7 @@ import com.side.domain.model.Role;
 import com.side.domain.model.User;
 import com.side.domain.service.UserService;
 import com.side.security.exception.InvalidTokenException;
+import com.side.security.exception.NotFoundTokenException;
 import com.side.security.jwt.claims.JwtClaims;
 import com.side.security.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -40,6 +42,10 @@ public class JwtRefreshFilter extends OncePerRequestFilter {
         log.debug("## JwtRefreshFilter doFilterInternal ##");
 
         String refreshToken = request.getHeader(REFRESH_TOKEN);
+
+        if (!StringUtils.hasText(refreshToken)) {
+            throw new InvalidTokenException("refresh token을 찾지 못했습니다.", true);
+        }
 
         JwtClaims jwtClaims = jwtService.getJwtClaims(refreshToken);
 
