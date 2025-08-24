@@ -187,8 +187,17 @@ public class PartyApplicationJooqRepository implements PartyApplicationReader {
 
     @Override
     public List<PartyApplication> findResumes(long userUniqueId) {
-        return dsl.select(PARTY_APPLICATION.asterisk(),
-                          RESUME.asterisk())
+
+        User createUser = USER.as("create_user");
+        User modifyUser = USER.as("modify_user");
+
+        return dsl.select(
+                          PARTY_APPLICATION.asterisk(),
+                          PARTY_RECRUIT.asterisk(),
+                          RESUME.asterisk(),
+                          createUser.NAME.as("create_user_name"),
+                          modifyUser.NAME.as("modify_user_name")
+                  )
                   .from(PARTY_APPLICATION)
                   .innerJoin(PARTY_RECRUIT)
                   .on(PARTY_APPLICATION.PARTY_RECRUIT_ID.eq(PARTY_RECRUIT.ID))
