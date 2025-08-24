@@ -1,7 +1,9 @@
 package com.side.rest.advice;
 
 import com.side.domain.exception.DuplicatePartyApplicationException;
+import com.side.domain.exception.InvalidPartyRecruitCreateException;
 import com.side.domain.exception.NotExistException;
+import com.side.domain.exception.NotMyPartyRecruit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -68,6 +70,18 @@ public class GlobalExceptionHandler {
                              .body(Map.of("message", e.getMessage()));
     }
 
+    @ExceptionHandler(NotMyPartyRecruit.class)
+    public ResponseEntity<Map<String, String>> handleNotMyPartyRecruit(NotMyPartyRecruit e) {
+
+        String errorMessage = e.getMessage() + " : " + e.getPartyRecruitId();
+
+        log.error(errorMessage);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .header("Content-Type", "application/json; charset=UTF-8")
+                             .body(Map.of("message", e.getMessage()));
+    }
+
     @ExceptionHandler(NotExistException.class)
     public ResponseEntity<Map<String, String>> handleNotExistException(NotExistException e) {
 
@@ -116,5 +130,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .header("Content-Type", "application/json; charset=UTF-8")
                              .body(Map.of("message", joiner.toString()));
+    }
+
+    @ExceptionHandler(InvalidPartyRecruitCreateException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPartyRecruitCreateException(InvalidPartyRecruitCreateException e) {
+
+        log.error(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .header("Content-Type", "application/json; charset=UTF-8")
+                             .body(Map.of("message", e.getMessage()));
     }
 }

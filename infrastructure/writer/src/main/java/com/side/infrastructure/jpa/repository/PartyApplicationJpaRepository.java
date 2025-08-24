@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import static com.side.infrastructure.jpa.mapper.PartyApplicationMapper.PartyApplicationMapper;

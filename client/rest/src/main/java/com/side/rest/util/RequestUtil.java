@@ -12,15 +12,18 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class RequestUtil {
 
     public static String getServerUrl() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-
-        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        return "https://maple-party.com";
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//
+//        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
     public static String getDomain() {
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        return "https://maple-party.com";
 
-        return request.getScheme() + "://" + request.getServerName();
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//
+//        return request.getScheme() + "://" + request.getServerName();
     }
 }

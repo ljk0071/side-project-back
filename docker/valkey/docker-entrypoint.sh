@@ -13,8 +13,8 @@ shutdown() {
 valkey-server \
     --port 6379 \
     --appendonly yes \
-    --requirepass test_pw \
-    --masterauth test_pw &
+    --requirepass ghbndfjhgdfjk \
+    --masterauth ghbndfjhgdfjk &
 
 # 2. 백그라운드로 실행된 서버의 프로세스 ID(PID)를 저장합니다.
 server_pid=$!
@@ -25,14 +25,14 @@ trap shutdown TERM
 
 # 3. 서버가 준비될 때까지 대기합니다.
 echo "Waiting for Valkey server to start..."
-while ! valkey-cli -h 127.0.0.1 -p 6379 -a test_pw ping > /dev/null 2>&1; do
+while ! valkey-cli -h 127.0.0.1 -p 6379 -a ghbndfjhgdfjk ping > /dev/null 2>&1; do
     sleep 1
 done
 echo "✅ Valkey server is ready."
 
 # 4. 초기화 스크립트를 실행합니다.
 echo "Running initialization script..."
-valkey-cli -h 127.0.0.1 -p 6379 -a test_pw < /init/init_script.redis
+valkey-cli -h 127.0.0.1 -p 6379 -a ghbndfjhgdfjk < /init/init_script.redis
 echo "✅ Initialization complete."
 
 # 5. 이제 wait 명령은 스크립트가 종료 신호를 받을 때까지 여기서 대기합니다.

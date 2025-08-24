@@ -46,4 +46,8 @@ public class PartyRecruitEntity {
 
     @Embedded
     private MetadataEntity metadata;
+
+    public void delete() {
+        status = YesNoDeleteStatus.DELETE;
+    }
 }

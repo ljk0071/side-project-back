@@ -8,8 +8,8 @@ import lombok.Builder;
 public record PartyApplication(
         Long id,
         Long revision,
-        Long partyRecruitId,
-        Long resumeId,
+        PartyRecruit partyRecruit,
+        Resume resume,
         PartyApplicationStatusTypeEnum status,
         Metadata metadata
 ) {

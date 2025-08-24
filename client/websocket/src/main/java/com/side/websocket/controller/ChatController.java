@@ -3,7 +3,7 @@ package com.side.websocket.controller;
 import com.side.domain.model.User;
 import com.side.security.service.SecurityHelper;
 import com.side.websocket.dto.ChatMessageDto;
-import com.side.websocket.dto.ChatRoomDto;
+import com.side.websocket.dto.ChatRoomResponseDto;
 import com.side.websocket.model.ChatMessage;
 import com.side.websocket.model.ChatRoom;
 import com.side.websocket.service.ChatRoomService;
@@ -16,12 +16,16 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static com.side.websocket.mapper.ChatRoomMapper.ChatRoomMapper;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,9 +34,9 @@ public class ChatController {
 
     private final ChatRoomService chatRoomService;
 
-    @MessageMapping("/chat/{roomId}/send")
+    @MessageMapping("/chat/{partyRecruitId}/send")
     public void sendMessage(
-            @DestinationVariable(value = "roomId") String roomId,
+            @DestinationVariable(value = "partyRecruitId") long partyRecruitId,
             @Payload ChatMessageDto messageDto,
             Principal principal
     ) {
@@ -47,19 +51,19 @@ public class ChatController {
 
         ChatMessage message = ChatMessage.builder()
                                          .messageId(generateMessageId())
-                                         .roomId(roomId)
+                                         .partyRecruitId(partyRecruitId)
                                          .senderId(userUniqueId)
                                          .senderName(userName)
-                                         .content(messageDto.getContent())
+                                         .contents(messageDto.getContents())
                                          .type(ChatMessage.MessageType.CHAT)
                                          .build();
 
-        chatRoomService.sendMessage(roomId, message);
+        chatRoomService.sendMessage(partyRecruitId, message);
     }
 
-    @MessageMapping("/chat/{roomId}/join")
+    @MessageMapping("/chat/{partyRecruitId}/join")
     public void joinChatRoom(
-            @DestinationVariable(value = "roomId") String roomId,
+            @DestinationVariable(value = "partyRecruitId") long partyRecruitId,
             Principal principal
     ) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
@@ -71,103 +75,72 @@ public class ChatController {
             return;
         }
 
-        ChatRoom room = chatRoomService.findRoomById(roomId);
-        if (room == null) {
-            log.warn("존재하지 않는 채팅방 입장 시도: {}", roomId);
-            return;
+        boolean isAlreadyJoined = chatRoomService.isAlreadyJoined(partyRecruitId, userUniqueId);
+
+        chatRoomService.enterChatRoom(partyRecruitId, userUniqueId);
+
+        if (!isAlreadyJoined) {
+            ChatMessage joinMessage = ChatMessage.createJoinMessage(partyRecruitId, userName);
+            chatRoomService.sendMessage(partyRecruitId, joinMessage);
         }
-
-        if (room.isFull()) {
-            log.warn("채팅방 정원 초과: {}", roomId);
-            return;
-        }
-
-        chatRoomService.enterChatRoom(roomId, userUniqueId);
-
-        ChatMessage joinMessage = ChatMessage.createJoinMessage(roomId, userUniqueId, userName);
-        chatRoomService.sendMessage(roomId, joinMessage);
     }
 
-    @MessageMapping("/chat/{roomId}/leave")
+    @MessageMapping("/chat/{partyRecruitId}/leave")
     public void leaveChatRoom(
-            @DestinationVariable(value = "roomId") String roomId,
+            @DestinationVariable(value = "partyRecruitId") long partyRecruitId,
             Principal principal
     ) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Long userId = user.uniqueId();
         String userName = user.name();
 
-        chatRoomService.leaveChatRoom(roomId, userId);
+        chatRoomService.leaveChatRoom(partyRecruitId, userId);
 
-        ChatMessage leaveMessage = ChatMessage.createLeaveMessage(roomId, userId, userName);
-        chatRoomService.sendMessage(roomId, leaveMessage);
+        ChatMessage leaveMessage = ChatMessage.createLeaveMessage(partyRecruitId, userId, userName);
+        chatRoomService.sendMessage(partyRecruitId, leaveMessage);
 
-        chatRoomService.sendMessage(roomId, ChatMessage.builder()
-                                                       .roomId(roomId)
-                                                       .content(String.valueOf(chatRoomService.getRoomUsers(roomId)))
-                                                       .build());
+        chatRoomService.sendMessage(partyRecruitId, ChatMessage.builder()
+                                                               .partyRecruitId(partyRecruitId)
+                                                               .contents(String.valueOf(chatRoomService.getRoomUsers(partyRecruitId)))
+                                                               .build());
     }
 
-    @PostMapping("/api/chat/rooms")
+    @PostMapping("/api/chat/rooms/{partyRecruitId}")
     @ResponseBody
-    public ResponseEntity<ChatRoomDto> createChatRoom(@RequestBody ChatRoomDto.CreateRequest request) {
+    public ResponseEntity<ChatRoomResponseDto> createChatRoom(
+            @PathVariable(name = "partyRecruitId") long partyRecruitId
+    ) {
+
         Long creatorId = SecurityHelper.getAuthenticatedUserUniqueId();
 
-        ChatRoom room = chatRoomService.createChatRoom(request.getRoomName(), creatorId);
+        ChatRoom room = chatRoomService.createChatRoom(partyRecruitId, creatorId);
 
-        ChatRoomDto responseDto = ChatRoomDto.builder()
-                                             .roomId(room.getRoomId())
-                                             .roomName(room.getRoomName())
-                                             .creatorId(room.getCreatorId())
-                                             .participantCount(room.getParticipantCount())
-                                             .maxParticipants(room.getMaxParticipants())
-                                             .isActive(room.isActive())
-                                             .createdAt(room.getCreatedAt())
-                                             .build();
+        ChatRoomResponseDto responseDto = ChatRoomMapper.toResponse(room);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping("/api/chat/rooms")
     @ResponseBody
-    public List<ChatRoomDto> getAllChatRooms() {
-        return chatRoomService.findAllRooms()
-                              .stream()
-                              .map(room -> ChatRoomDto.builder()
-                                                      .roomId(room.getRoomId())
-                                                      .roomName(room.getRoomName())
-                                                      .creatorId(room.getCreatorId())
-                                                      .participantCount(room.getParticipantCount())
-                                                      .maxParticipants(room.getMaxParticipants())
-                                                      .isActive(room.isActive())
-                                                      .createdAt(room.getCreatedAt())
-                                                      .build())
-                              .collect(Collectors.toList());
+    public List<ChatRoomResponseDto> getAllChatRooms() {
+        return ChatRoomMapper.toResponseList(chatRoomService.findAllRooms());
     }
 
-    @GetMapping("/api/chat/rooms/{roomId}")
+    @GetMapping("/api/chat/rooms/{partyRecruitId}")
     @ResponseBody
-    public ChatRoomDto getChatRoom(@PathVariable String roomId) {
-        ChatRoom room = chatRoomService.findRoomById(roomId);
+    public ChatRoomResponseDto getChatRoom(@PathVariable String partyRecruitId) {
+        ChatRoom room = chatRoomService.findRoomById(partyRecruitId);
         if (room == null) {
-            throw new RuntimeException("채팅방을 찾을 수 없습니다: " + roomId);
+            throw new RuntimeException("채팅방을 찾을 수 없습니다: " + partyRecruitId);
         }
 
-        return ChatRoomDto.builder()
-                          .roomId(room.getRoomId())
-                          .roomName(room.getRoomName())
-                          .creatorId(room.getCreatorId())
-                          .participantCount(room.getParticipantCount())
-                          .maxParticipants(room.getMaxParticipants())
-                          .isActive(room.isActive())
-                          .createdAt(room.getCreatedAt())
-                          .build();
+        return ChatRoomMapper.toResponse(room);
     }
 
-    @GetMapping("/api/chat/rooms/{roomId}/users")
+    @GetMapping("/api/chat/rooms/{partyRecruitId}/users")
     @ResponseBody
-    public Set<Object> getChatRoomUsers(@PathVariable(value = "roomId") String roomId) {
-        return chatRoomService.getRoomUsers(roomId);
+    public Set<Object> getChatRoomUsers(@PathVariable(name = "partyRecruitId") long partyRecruitId) {
+        return chatRoomService.getRoomUsers(partyRecruitId);
     }
 
     private String generateMessageId() {

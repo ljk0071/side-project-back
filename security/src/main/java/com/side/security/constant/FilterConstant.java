@@ -10,5 +10,6 @@ public class FilterConstant {
     public static final String HTTPS = "https";
     public static final String SAME_SITE = "SameSite";
     public static final String LAX = "Lax";
+    public static final String NONE = "None";
     public static final String ALL_PATH = "/";
 }

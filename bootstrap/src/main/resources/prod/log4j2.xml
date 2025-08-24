@@ -20,8 +20,9 @@
         <!-- Plain 텍스트 형식으로 로그를 파일에 출력하는 Appender 설정 -->
         <RollingFile name="PlainFile" fileName="${LOG_DIR}/${LOG_FILE_NAME}.log"
                      filePattern="${LOG_DIR}/${LOG_FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
-            <PatternLayout
-                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - application=${applicationName}, hostname=${hostname}, env=${sys:spring.profiles.active:-local}, traceId=${ctx:traceId:-}, spanId=${ctx:spanId:-}, userId=${ctx:userId:-} - %msg%n"/>
+            <PatternLayout charset="UTF-8"
+                           disableAnsi="true"
+                           pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - application=${applicationName}, hostname=${hostname}, env=${sys:spring.profiles.active:-local}, traceId=${ctx:traceId:-}, spanId=${ctx:spanId:-}, userId=${ctx:userId:-} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="10 MB"/>

@@ -10,6 +10,7 @@ import com.side.domain.model.Article;
 import com.side.domain.model.PartyRecruit;
 import com.side.domain.repository.PartyRecruitReader;
 import com.side.infrastructure.jooq.generated.tables.User;
+import com.side.security.service.SecurityHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static com.side.infrastructure.jooq.generated.Tables.PARTY_RECRUIT;
+import static com.side.infrastructure.jooq.generated.Tables.*;
 import static com.side.infrastructure.jooq.generated.tables.User.USER;
 
 @Slf4j
@@ -50,6 +51,24 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
                   .fetchOptional(this::toDomainWithUserInfo);
     }
 
+    @Override
+    public Optional<PartyRecruit> findByUserUniqueId(long userUniqueId) {
+        User createUser = USER.as("create_user");
+        User modifyUser = USER.as("modify_user");
+
+        return dsl.select(PARTY_RECRUIT.asterisk(), createUser.NAME.as("create_user_name"), modifyUser.NAME.as("modify_user_name"))
+                  .from(PARTY_RECRUIT)
+                  .leftJoin(createUser)
+                  .on(PARTY_RECRUIT.CREATED_BY.eq(createUser.UNIQUE_ID))
+                  .and(createUser.STATUS.eq(UserStatus.ACTIVE))
+                  .leftJoin(modifyUser)
+                  .on(PARTY_RECRUIT.MODIFIED_BY.eq(modifyUser.UNIQUE_ID))
+                  .and(modifyUser.STATUS.eq(UserStatus.ACTIVE))
+                  .where(PARTY_RECRUIT.USER_UNIQUE_ID.eq(userUniqueId))
+                  .and(PARTY_RECRUIT.STATUS.eq(YesNoDeleteStatus.YES))
+                  .fetchOptional(this::toDomainWithUserInfo);
+    }
+
     private PartyRecruit toDomainWithUserInfo(Record record) {
         return PartyRecruit.builder()
                            .id(record.get(PARTY_RECRUIT.ID))
@@ -74,7 +93,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
 
     public List<PartyRecruit> getActiveRecruits(@NonNull Search search) {
 
-        var query = dsl.select(PARTY_RECRUIT.ID, PARTY_RECRUIT.CONTENTS)
+        var query = dsl.select(PARTY_RECRUIT.ID, PARTY_RECRUIT.CONTENTS, PARTY_RECRUIT.USER_UNIQUE_ID)
                        .from(PARTY_RECRUIT)
                        .where(PARTY_RECRUIT.STATUS.eq(YesNoDeleteStatus.YES));
 
@@ -87,6 +106,7 @@ public class PartyRecruitJooqRepository implements PartyRecruitReader {
         return query.orderBy(PARTY_RECRUIT.CREATED_AT.desc())
                     .fetch(record -> PartyRecruit.builder()
                                                  .id(record.get(PARTY_RECRUIT.ID))
+                                                 .userUniqueId(record.get(PARTY_RECRUIT.USER_UNIQUE_ID))
                                                  .article(Article.builder()
                                                                  .contents(record.get(PARTY_RECRUIT.CONTENTS))
                                                                  .build())

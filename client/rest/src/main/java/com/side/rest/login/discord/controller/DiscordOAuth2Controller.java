@@ -11,11 +11,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -112,8 +115,9 @@ public class DiscordOAuth2Controller {
                     ))
             .forEach(response::addCookie);
 
+        String encodedUserName = URLEncoder.encode(user.name(), StandardCharsets.UTF_8);
 
-        response.sendRedirect(String.format("%s?result=%s&userName=%s&userUniqueId=%s", returnUrl, Boolean.TRUE, user.name(), user.uniqueId()));
+        response.sendRedirect(String.format("%s?result=%s&userName=%s&userUniqueId=%s", returnUrl, Boolean.TRUE, encodedUserName, user.uniqueId()));
     }
 
     private boolean isInvalidRequest(String returnUrl, OAuth2RequestDto dto, HttpServletResponse response) throws IOException {

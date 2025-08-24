@@ -14,8 +14,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws/chat", "/wss/chat")
-                .setAllowedOriginPatterns("http://localhost, http://127.0.0.1")
+        registry.addEndpoint("/ws", "/wss")
+                .setAllowedOriginPatterns("http://localhost, http://127.0.0.1, https://maple-party.com")
                 .withSockJS()
                 .setHeartbeatTime(25_000)
                 .setDisconnectDelay(5_000);

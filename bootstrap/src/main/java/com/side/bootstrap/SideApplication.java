@@ -35,6 +35,7 @@ import java.util.TimeZone;
         "com.side.usecase",
         "com.side.domain.service",
         "com.side.domain.memory",
+        "com.side.domain.config",
         "com.side.infrastructure.datasource",
         "com.side.infrastructure.jooq.config",
         "com.side.infrastructure.jooq.repository",
